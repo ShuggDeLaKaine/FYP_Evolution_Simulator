@@ -41,7 +41,7 @@ int main()
 {
 
 	struct Environment envir[1];
-	struct Creature creat[7];
+	struct Creature creat[8];
 
 	envir[0].energy_available = 500.0f;
 	envir[0].temperature = 12.0f;
@@ -172,7 +172,6 @@ int main()
 	creat[7].temp_tol = true;
 #pragma endregion
 
-
 	std::cout << "Is Creature 0 alive? " << creat[0].alive << std::endl;
 	std::cout << "Is Creature 1 alive? " << creat[1].alive << std::endl;
 
@@ -185,36 +184,94 @@ int main()
 }
 
 //function to determine energy fitness test.
-bool energyFitnessTest(float creature, float environment)
+bool energyFitnessTest(float creatEnergy, float envEnergy)
 {
-	float creat_energy_demand = creature;
-	float envir_energy_available = environment;
-
 	bool survive = true;
 
-	if (creat_energy_demand > envir_energy_available)
-	{
+	float cre_energy_demand = creatEnergy;
+	float envir_energy_available = envEnergy;
+
+	if (cre_energy_demand > envir_energy_available)
 		survive = false;
-	}
 
 	return survive;
 }
 
+//function combining the various parts of the temperature checks
+void temperatureFitnessTest(float creEnergy, float idealMax, float idealMin, float tolMax, float tolMin, float envTemp, bool ideal, bool tolerated)
+{
+	idealTemperatureCheck(idealMax, idealMin, envTemp);
+
+	if(!ideal)
+		toleratedTemperatureCheck(tolMax, tolMin, envTemp);
+
+	if (tolerated)
+		toleratedTemperatureEnergyMultiplier(creEnergy, tolerated);
+
+	surviveTemperature(ideal, tolerated);
+}
 
 //function to determine whether in ideal temperature range fitness check.
-bool idealTemperatureFitnessTest()
+bool idealTemperatureCheck(float idealMax, float idealMin, float envTemp)
 {
 	bool ideal = true;
-	bool toleranted = true;
 
+	float creatIdealTempMax = idealMax;
+	float creatIdealTempMin = idealMin;
+	float environTemp = envTemp;
 
-
+	if (environTemp <= creatIdealTempMax
+		&& environTemp >= creatIdealTempMin)
+		ideal = true;
+	else
+		ideal = false;
+	
 	return ideal;
 }
 
+//function to determine whether in tolerated temperature range fitness check.
+bool toleratedTemperatureCheck(float tolMax, float tolMin, float envTemp)
+{
+	bool tolerated = true;
+
+	float creatIdealTempMax = tolMax;
+	float creatIdealTempMin = tolMin;
+	float environTemp = envTemp;
+
+	if (environTemp <= creatIdealTempMax
+		&& environTemp >= creatIdealTempMin)
+		tolerated = true;
+	else
+		tolerated = false;
+
+	return tolerated;
+}
+
+//function to determine whether creature can survive temperature.
+bool surviveTemperature(bool ideal, bool tolerated)
+{
+	bool survive = true;
+	bool inIdeal = ideal;
+	bool inTolerated = tolerated;
+
+	if (!inIdeal && !inTolerated)
+		survive = false;
+	
+	return survive;
+}
 
 
 //function to apply multiplier to energy demand if in temperature tolerance range. 
+int toleratedTemperatureEnergyMultiplier(float creEnergy, bool tolerated)
+{
+	int result = creEnergy;
 
+	if (tolerated)
+	{
+		result = result * 1.5;
+	}
+
+	return result;
+}
 
 
