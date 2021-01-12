@@ -16,10 +16,22 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="tests">
+      <UniqueIdentifier>{526327e0-b551-45fd-aa6b-e47c3b6deafa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\include">
+      <UniqueIdentifier>{19ddf429-b6a5-42ad-8bcc-e7330c3bed8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\src">
+      <UniqueIdentifier>{455662a8-5d72-4338-9875-511d30ab2bd6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>code\src</Filter>
+    </ClCompile>
+    <ClCompile Include="tests.cpp">
+      <Filter>tests\src</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

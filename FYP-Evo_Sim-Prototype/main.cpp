@@ -8,6 +8,7 @@ struct Environment
 {
 	float energyAvailable;
 	float idealTemp;
+	float oxygenationRate;
 };
 
 struct Creature
@@ -15,38 +16,47 @@ struct Creature
 	//energy vars.
 	float energyDemand;
 
-	//ideal idealTemp vars.
+	//oxygenation vars
+	float oxygenDemand;
+	float oxygenRange;
+
+	//ideal temperature vars.
 	float idealTemp;
 	float idealTempRange;
 	float idealTempRangeMin;
 	float idealTempRangeMax;
 
-	//tolerated idealTemp vars.
+	//tolerated temperature vars.
 	float tolTempRange;
 	float tolTempRangeMin;
 	float tolTempRangeMax;
 
 	//bools for conditions.
-	bool alive;
+	bool isAlive;
 	bool tempIdeal;
 	bool tempTol;
+	bool isOxygenated;
 
 	int creatureNumber;
 };
 
 //declaring functions ***ALL NEED ABSTRACTING***
 void creatureFitnessTests(Creature creature, Environment environment);
+void setCreatureVariables(Creature creature);
+
 bool energyFitnessTest(float creature, float environment);
-bool idealidealTempCheck(float idealMax, float idealMin, float envTemp);
-bool toleratedidealTempCheck(float tolMax, float tolMin, float envTemp);
-bool surviveidealTemp(bool ideal, bool tolerated);
+bool oxygenationFitnessTest(float oxygenReq, float environOxygen);
+
+bool idealTempCheck(float idealMax, float idealMin, float envTemp);
+bool toleratedTempCheck(float tolMax, float tolMin, float envTemp);
+bool temperatureFitnessTest(bool ideal, bool tolerated);
+
 int toleratedidealTempEnergyMultiplier(float creEnergy, bool ideal, bool tolerated);
 
 
 int main()
 {
-
-	struct Environment envir[1];
+	struct Environment envir[3];
 	struct Creature creat[7];
 
 	Environment * p_environments = envir;
@@ -56,6 +66,13 @@ int main()
 
 	envir[0].energyAvailable = 500.0f;
 	envir[0].idealTemp = 12.0f;
+	envir[0].oxygenationRate = 100.0f;
+	envir[1].energyAvailable = 750.0f;
+	envir[1].idealTemp = 16.0f;
+	envir[1].oxygenationRate = 100.0f;
+	envir[2].energyAvailable = 250.0f;
+	envir[2].idealTemp = 8.0f;
+	envir[2].oxygenationRate = 100.0f;
 
 
 #pragma region TEST_ENERGY_AVAILABLE.
@@ -64,15 +81,18 @@ int main()
 	creat[0].idealTemp = 12.0f;			//same as environ temp.
 	creat[0].idealTempRange = 1.0f;
 	creat[0].tolTempRange = 1.0f;
+	creat[0].oxygenDemand = 50.0f;
+	creat[0].oxygenRange = 10.0f;
 
 	creat[0].idealTempRangeMax = creat[0].idealTemp + creat[0].idealTempRange;
 	creat[0].idealTempRangeMin = creat[0].idealTemp - creat[0].idealTempRange;
 	creat[0].tolTempRangeMax = creat[0].idealTempRangeMax + creat[0].tolTempRange;
 	creat[0].tolTempRangeMin = creat[0].idealTempRangeMin - creat[0].tolTempRange;
 
-	creat[0].alive = true;
+	creat[0].isAlive = true;
 	creat[0].tempIdeal = true;
 	creat[0].tempTol = true;
+	creat[0].isOxygenated = true;
 
 	creat[0].creatureNumber = 1;
 
@@ -81,15 +101,18 @@ int main()
 	creat[1].idealTemp = 12.0f;			//same as environ temp.
 	creat[1].idealTempRange = 1.0f;
 	creat[1].tolTempRange = 1.0f;
+	creat[1].oxygenDemand = 50.0f;
+	creat[1].oxygenRange = 10.0f;
 
 	creat[1].idealTempRangeMax = creat[1].idealTemp + creat[1].idealTempRange;
 	creat[1].idealTempRangeMin = creat[1].idealTemp - creat[1].idealTempRange;
 	creat[1].tolTempRangeMax = creat[1].idealTempRangeMax + creat[1].tolTempRange;
 	creat[1].tolTempRangeMin = creat[1].idealTempRangeMin - creat[1].tolTempRange;
 
-	creat[1].alive = true;
+	creat[1].isAlive = true;
 	creat[1].tempIdeal = true;
 	creat[1].tempTol = true;
+	creat[1].isOxygenated = true;
 
 	creat[1].creatureNumber = 2;
 #pragma endregion
@@ -100,15 +123,18 @@ int main()
 	creat[2].idealTemp = 12.0f;			//same as environ temp.
 	creat[2].idealTempRange = 1.0f;		//
 	creat[2].tolTempRange = 1.0f;		//
+	creat[2].oxygenDemand = 50.0f;
+	creat[2].oxygenRange = 10.0f;
 
 	creat[2].idealTempRangeMax = creat[2].idealTemp + creat[2].idealTempRange;
 	creat[2].idealTempRangeMin = creat[2].idealTemp - creat[2].idealTempRange;
 	creat[2].tolTempRangeMax = creat[2].idealTempRangeMax + creat[2].tolTempRange;
 	creat[2].tolTempRangeMin = creat[2].idealTempRangeMin - creat[2].tolTempRange;
 
-	creat[2].alive = true;
+	creat[2].isAlive = true;
 	creat[2].tempIdeal = true;
 	creat[2].tempTol = true;
+	creat[2].isOxygenated = true;
 
 	creat[2].creatureNumber = 3;
 
@@ -117,15 +143,18 @@ int main()
 	creat[3].idealTemp = 20.0f;				//much higher than environ temp.
 	creat[3].idealTempRange = 1.0f;
 	creat[3].tolTempRange = 1.0f;
+	creat[3].oxygenDemand = 50.0f;
+	creat[3].oxygenRange = 10.0f;
 
 	creat[3].idealTempRangeMax = creat[3].idealTemp + creat[3].idealTempRange;
 	creat[3].idealTempRangeMin = creat[3].idealTemp - creat[3].idealTempRange;
 	creat[3].tolTempRangeMax = creat[3].idealTempRangeMax + creat[3].tolTempRange;
 	creat[3].tolTempRangeMin = creat[3].idealTempRangeMin - creat[3].tolTempRange;
 
-	creat[3].alive = true;
+	creat[3].isAlive = true;
 	creat[3].tempIdeal = true;
 	creat[3].tempTol = true;
+	creat[3].isOxygenated = true;
 
 	creat[3].creatureNumber = 4;
 #pragma endregion
@@ -136,15 +165,18 @@ int main()
 	creat[4].idealTemp = 11.5f;			//off environ temp.
 	creat[4].idealTempRange = 1.0f;		//
 	creat[4].tolTempRange = 2.0f;		//
+	creat[4].oxygenDemand = 50.0f;
+	creat[4].oxygenRange = 10.0f;
 
 	creat[4].idealTempRangeMax = creat[4].idealTemp + creat[4].idealTempRange;
 	creat[4].idealTempRangeMin = creat[4].idealTemp - creat[4].idealTempRange;
 	creat[4].tolTempRangeMax = creat[4].idealTempRangeMax + creat[4].tolTempRange;
 	creat[4].tolTempRangeMin = creat[4].idealTempRangeMin - creat[4].tolTempRange;
 
-	creat[4].alive = true;
+	creat[4].isAlive = true;
 	creat[4].tempIdeal = true;
 	creat[4].tempTol = true;
+	creat[4].isOxygenated = true;
 
 	creat[4].creatureNumber = 5;
 
@@ -153,15 +185,18 @@ int main()
 	creat[5].idealTemp = 10.0f;			//off environ temp.
 	creat[5].idealTempRange = 1.0f;		//
 	creat[5].tolTempRange = 2.0f;		//
+	creat[5].oxygenDemand = 50.0f;
+	creat[5].oxygenRange = 10.0f;
 
 	creat[5].idealTempRangeMax = creat[5].idealTemp + creat[5].idealTempRange;
 	creat[5].idealTempRangeMin = creat[5].idealTemp - creat[5].idealTempRange;
 	creat[5].tolTempRangeMax = creat[5].idealTempRangeMax + creat[5].tolTempRange;
 	creat[5].tolTempRangeMin = creat[5].idealTempRangeMin - creat[5].tolTempRange;
 
-	creat[5].alive = true;
+	creat[5].isAlive = true;
 	creat[5].tempIdeal = true;
 	creat[5].tempTol = true;
+	creat[5].isOxygenated = true;
 
 	creat[5].creatureNumber = 6;
 
@@ -170,15 +205,18 @@ int main()
 	creat[6].idealTemp = 10.0f;			//a little off environ temp.
 	creat[6].idealTempRange = 1.0f;		//
 	creat[6].tolTempRange = 2.0f;		//
+	creat[6].oxygenDemand = 50.0f;
+	creat[6].oxygenRange = 10.0f;
 
 	creat[6].idealTempRangeMax = creat[6].idealTemp + creat[6].idealTempRange;
 	creat[6].idealTempRangeMin = creat[6].idealTemp - creat[6].idealTempRange;
 	creat[6].tolTempRangeMax = creat[6].idealTempRangeMax + creat[6].tolTempRange;
 	creat[6].tolTempRangeMin = creat[6].idealTempRangeMin - creat[6].tolTempRange;
 
-	creat[6].alive = true;
+	creat[6].isAlive = true;
 	creat[6].tempIdeal = true;
 	creat[6].tempTol = true;
+	creat[6].isOxygenated = true;
 
 	creat[6].creatureNumber = 7;
 
@@ -199,45 +237,86 @@ int main()
 }
 
 
+//function to set initalised vars for creatures.
+//NOTE - DOESN'T WORK - SORT POINTERS to make changes to creat[n].
+void setCreatureVariables(Creature creature)
+{
+	creature.idealTempRangeMax = creature.idealTemp + creature.idealTempRange;
+	creature.idealTempRangeMin = creature.idealTemp - creature.idealTempRange;
+	creature.tolTempRangeMax = creature.idealTempRangeMax + creature.tolTempRange;
+	creature.tolTempRangeMin = creature.idealTempRangeMin - creature.tolTempRange;
 
+	creature.isAlive = true;
+	creature.tempIdeal = true;
+	creature.tempTol = true;
+}
 
 
 //function to take the creature and environment and then run all the relevant fitness tests on.
+//NOTE - NEEDS ALTERING - POINTERS TO creat[n] to permanently make changes to structs vars.
 void creatureFitnessTests(Creature creature, Environment environment)
 {
-	creature.tempIdeal = idealidealTempCheck(creature.idealTempRangeMax, creature.idealTempRangeMin, environment.idealTemp);
-	creature.tempTol = toleratedidealTempCheck(creature.tolTempRangeMax, creature.tolTempRangeMin, environment.idealTemp);
-	creature.alive = surviveidealTemp(creature.tempIdeal, creature.tempTol);
-
-	if (creature.alive)
+	//check that the creature is alive to do checks on in the first place.
+	if(creature.isAlive)
 	{
-		creature.energyDemand = toleratedidealTempEnergyMultiplier(creature.energyDemand, creature.tempIdeal, creature.tempTol);
-		creature.alive = energyFitnessTest(creature.energyDemand, environment.energyAvailable);
+		//test one - oxygenation fitness test.
+		creature.isOxygenated = oxygenationFitnessTest(creature.oxygenDemand, environment.oxygenationRate);
+
+		if(creature.isAlive)
+		{
+			//test two - temperature fitness test.
+			creature.tempIdeal = idealTempCheck(creature.idealTempRangeMax, creature.idealTempRangeMin, environment.idealTemp);
+			creature.tempTol = toleratedTempCheck(creature.tolTempRangeMax, creature.tolTempRangeMin, environment.idealTemp);
+			creature.isAlive = temperatureFitnessTest(creature.tempIdeal, creature.tempTol);
+
+			if (creature.isAlive)
+			{
+				//test three - energy fitness test.
+				creature.energyDemand = toleratedidealTempEnergyMultiplier(creature.energyDemand, creature.tempIdeal, creature.tempTol);
+				creature.isAlive = energyFitnessTest(creature.energyDemand, environment.energyAvailable);
+			}
+		}
+
+		//console output.
+		std::cout << "Did Creature " << creature.creatureNumber << " survive?   ";
+		if (creature.isAlive)
+			std::cout << "   YES! CREATURE " << creature.creatureNumber << " SURVIVED!" << std::endl;
+		else
+			std::cout << "   NO! CREATURE " << creature.creatureNumber << " IS DEAD!" << std::endl;
 	}
-	
-	std::cout << "Did Creature " << creature.creatureNumber << " survive?   ";
-	if (creature.alive)
-		std::cout << "   YES! CREATURE " << creature.creatureNumber << " SURVIVED!" << std::endl;
-	else
-		std::cout << "   NO! CREATURE " << creature.creatureNumber << " IS DEAD!" << std::endl;
 }
+
 
 //function to determine energy fitness test.
 bool energyFitnessTest(float creatEnergy, float envEnergy)
 {
 	bool survive = true;
 
-	float cre_energy_demand = creatEnergy;
-	float envir_energy_available = envEnergy;
+	float creEnergDemand = creatEnergy;
+	float envirEnergyAvailable = envEnergy;
 
-	if (cre_energy_demand > envir_energy_available)
+	if (creEnergDemand > envirEnergyAvailable)
 		survive = false;
 
 	return survive;
 }
 
+//function to determine the oxygenation fitness test.
+bool oxygenationFitnessTest(float oxygenReq, float environOxygen)
+{
+	bool survive = true;
+
+	float creatOxyRequired = oxygenReq;
+	float environOxyProvided = environOxygen;
+
+	if (environOxyProvided < creatOxyRequired)
+		survive - false;
+
+	return survive;
+}
+
 //function to determine whether in ideal idealTemp range fitness check.
-bool idealidealTempCheck(float idealMax, float idealMin, float envTemp)
+bool idealTempCheck(float idealMax, float idealMin, float envTemp)
 {
 	bool ideal = true;
 
@@ -255,7 +334,7 @@ bool idealidealTempCheck(float idealMax, float idealMin, float envTemp)
 }
 
 //function to determine whether in tolerated idealTemp range fitness check.
-bool toleratedidealTempCheck(float tolMax, float tolMin, float envTemp)
+bool toleratedTempCheck(float tolMax, float tolMin, float envTemp)
 {
 	bool tolerated = true;
 
@@ -273,7 +352,7 @@ bool toleratedidealTempCheck(float tolMax, float tolMin, float envTemp)
 }
 
 //function to determine whether creature can survive idealTemp.
-bool surviveidealTemp(bool ideal, bool tolerated)
+bool temperatureFitnessTest(bool ideal, bool tolerated)
 {
 	bool survive = true;
 	bool inIdeal = ideal;
@@ -291,9 +370,7 @@ int toleratedidealTempEnergyMultiplier(float creEnergy, bool ideal, bool tolerat
 	int result = creEnergy;
 
 	if (!ideal && tolerated)
-	{
 		result = result * 1.5;
-	}
 
 	return result;
 }
