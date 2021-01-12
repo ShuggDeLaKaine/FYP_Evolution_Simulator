@@ -59,7 +59,7 @@ int toleratedTempEnergyMultiplier(float creEnergy, bool ideal, bool tolerated);
 
 int main()
 {
-	struct Environment envir[3];
+	struct Environment envir[6];
 	struct Creature creat[12];
 
 	Environment * p_environments = envir;
@@ -67,18 +67,35 @@ int main()
 	//Environment * p_environments = &envir[0];
 	//Creature * p_creatures = &creat[0];
 
+	//Energy testing environment.
 	envir[0].energyAvailable = 500.0f;
 	envir[0].idealTemp = 12.0f;
 	envir[0].oxygenationRate = 100.0f;
 
+	//Temperature Testing Environment.
 	envir[1].energyAvailable = 750.0f;
 	envir[1].idealTemp = 16.0f;
 	envir[1].oxygenationRate = 50.0f;
 
-	envir[2].energyAvailable = 250.0f;
-	envir[2].idealTemp = 8.0f;
-	envir[2].oxygenationRate = 100.0f;
+	//Oxygen Testing Environment.
+	envir[2].energyAvailable = 800.0f;
+	envir[2].idealTemp = 11.0f;
+	envir[2].oxygenationRate = 70.0f;
 
+	//'EDEN' Testing Environment.
+	envir[3].energyAvailable = 1500.0f;
+	envir[3].idealTemp = 14.0f;
+	envir[3].oxygenationRate = 100.0f;
+
+	//'BAAAAAAD' Testing Environment.
+	envir[4].energyAvailable = 100.0f;
+	envir[4].idealTemp = 6.0f;
+	envir[4].oxygenationRate = 20.0f;
+
+	//'So-So' Testing Environment.
+	envir[5].energyAvailable = 750.0f;
+	envir[5].idealTemp = 13.5f;
+	envir[5].oxygenationRate = 65.0f;
 
 #pragma region TEST_ENERGY_AVAILABLE.
 	//creature 0 - should SURVIVE ideally suited to environment 0.
@@ -86,8 +103,8 @@ int main()
 	creat[0].idealTemp = 12.0f;			//same as environ temp.
 	creat[0].idealTempRange = 1.0f;
 	creat[0].tolTempRange = 1.0f;
-	creat[0].oxygenDemand = 50.0f;
-	creat[0].oxygenRange = 10.0f;
+	creat[0].oxygenDemand = 30.0f;
+	creat[0].oxygenRange = 15.0f;
 
 	creat[0].idealTempRangeMax = creat[0].idealTemp + creat[0].idealTempRange;
 	creat[0].idealTempRangeMin = creat[0].idealTemp - creat[0].idealTempRange;
@@ -107,8 +124,8 @@ int main()
 	creat[1].idealTemp = 12.0f;			//same as environ temp.
 	creat[1].idealTempRange = 1.0f;
 	creat[1].tolTempRange = 1.0f;
-	creat[1].oxygenDemand = 50.0f;
-	creat[1].oxygenRange = 10.0f;
+	creat[1].oxygenDemand = 72.0f;
+	creat[1].oxygenRange = 5.0f;
 
 	creat[1].idealTempRangeMax = creat[1].idealTemp + creat[1].idealTempRange;
 	creat[1].idealTempRangeMin = creat[1].idealTemp - creat[1].idealTempRange;
@@ -130,8 +147,8 @@ int main()
 	creat[2].idealTemp = 12.0f;			//same as environ temp.
 	creat[2].idealTempRange = 1.0f;		//
 	creat[2].tolTempRange = 1.0f;		//
-	creat[2].oxygenDemand = 50.0f;
-	creat[2].oxygenRange = 10.0f;
+	creat[2].oxygenDemand = 40.0f;
+	creat[2].oxygenRange = 5.0f;
 
 	creat[2].idealTempRangeMax = creat[2].idealTemp + creat[2].idealTempRange;
 	creat[2].idealTempRangeMin = creat[2].idealTemp - creat[2].idealTempRange;
@@ -151,8 +168,8 @@ int main()
 	creat[3].idealTemp = 20.0f;				//much higher than environ temp.
 	creat[3].idealTempRange = 1.0f;
 	creat[3].tolTempRange = 1.0f;
-	creat[3].oxygenDemand = 50.0f;
-	creat[3].oxygenRange = 10.0f;
+	creat[3].oxygenDemand = 85.0f;
+	creat[3].oxygenRange = 20.0f;
 
 	creat[3].idealTempRangeMax = creat[3].idealTemp + creat[3].idealTempRange;
 	creat[3].idealTempRangeMin = creat[3].idealTemp - creat[3].idealTempRange;
@@ -174,7 +191,7 @@ int main()
 	creat[4].idealTemp = 11.5f;			//off environ temp.
 	creat[4].idealTempRange = 1.0f;		//
 	creat[4].tolTempRange = 2.0f;		//
-	creat[4].oxygenDemand = 50.0f;
+	creat[4].oxygenDemand = 20.0f;
 	creat[4].oxygenRange = 10.0f;
 
 	creat[4].idealTempRangeMax = creat[4].idealTemp + creat[4].idealTempRange;
@@ -195,8 +212,8 @@ int main()
 	creat[5].idealTemp = 10.0f;			//off environ temp.
 	creat[5].idealTempRange = 1.0f;		//
 	creat[5].tolTempRange = 2.0f;		//
-	creat[5].oxygenDemand = 50.0f;
-	creat[5].oxygenRange = 10.0f;
+	creat[5].oxygenDemand = 90.0f;
+	creat[5].oxygenRange = 25.0f;
 
 	creat[5].idealTempRangeMax = creat[5].idealTemp + creat[5].idealTempRange;
 	creat[5].idealTempRangeMin = creat[5].idealTemp - creat[5].idealTempRange;
@@ -216,8 +233,8 @@ int main()
 	creat[6].idealTemp = 10.0f;			//a little off environ temp.
 	creat[6].idealTempRange = 1.0f;		//
 	creat[6].tolTempRange = 2.0f;		//
-	creat[6].oxygenDemand = 50.0f;
-	creat[6].oxygenRange = 10.0f;
+	creat[6].oxygenDemand = 60.0f;
+	creat[6].oxygenRange = 50.0f;
 
 	creat[6].idealTempRangeMax = creat[6].idealTemp + creat[6].idealTempRange;
 	creat[6].idealTempRangeMin = creat[6].idealTemp - creat[6].idealTempRange;
@@ -343,7 +360,7 @@ int main()
 	creat[11].creatureNumber = 12;
 #pragma endregion
 
-	/*
+	std::cout << "Testing of energy, temperature & oxygenation levels." << std::endl;
 	//TESTING - energy levels.
 	creatureFitnessTests(creat[0], envir[0]);
 	creatureFitnessTests(creat[1], envir[0]);
@@ -360,12 +377,39 @@ int main()
 	//TESTING - oxygenation levels, just in or out.
 	creatureFitnessTests(creat[7], envir[1]);
 	creatureFitnessTests(creat[8], envir[1]);
-	*/
+	
 	//TESTING - oxygenation tolerance and energy demand multiplier
 	creatureFitnessTests(creat[9], envir[1]);
 	creatureFitnessTests(creat[10], envir[1]);
 	creatureFitnessTests(creat[11], envir[1]);
+	
 
+	int i = 0;
+	std::cout << std::endl;
+	std::cout << "'EDEN' testing environment." << std::endl;
+	//int arraySize = sizeof(creat);	//NOT WORKING - getting 624??? rather than 12 expected...???
+	for (i = 0; i <= 11; i++)
+	{
+
+		creatureFitnessTests(creat[i], envir[3]);
+	}
+
+	i = 0;
+	std::cout << std::endl;
+	std::cout << "'BAAAAAAAAAD' testing environment." << std::endl;
+	for (i = 0; i <= 11; i++)
+	{
+		creatureFitnessTests(creat[i], envir[4]);
+	}
+
+	i = 0;
+	std::cout << std::endl;
+	std::cout << "'So-So' testing environment." << std::endl;
+	for (i = 0; i <= 11; i++)
+	{
+		creatureFitnessTests(creat[i], envir[5]);
+	}
+	
 }
 
 
@@ -537,3 +581,4 @@ int toleratedOxygenEnergyMultiplier(float creEnergy, bool oxygenTolerated)
 
 	return result;
 }
+
