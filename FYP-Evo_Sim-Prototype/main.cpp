@@ -6,39 +6,41 @@
 
 struct Environment
 {
-	float energy_available;
-	float temperature;
+	float energyAvailable;
+	float idealTemp;
 };
 
 struct Creature
 {
 	//energy vars.
-	float energy_demand;
+	float energyDemand;
 
-	//ideal temperature vars.
-	float ideal_temp;
-	float ideal_temp_range;
-	float ideal_temp_range_min;
-	float ideal_temp_range_max;
+	//ideal idealTemp vars.
+	float idealTemp;
+	float idealTempRange;
+	float idealTempRangeMin;
+	float idealTempRangeMax;
 
-	//tolerated temperature vars.
-	float tol_temp_range;
-	float tol_temp_range_min;
-	float tol_temp_range_max;
+	//tolerated idealTemp vars.
+	float tolTempRange;
+	float tolTempRangeMin;
+	float tolTempRangeMax;
 
 	//bools for conditions.
 	bool alive;
-	bool temp_ideal;
-	bool temp_tol;
+	bool tempIdeal;
+	bool tempTol;
+
+	int creatureNumber;
 };
 
-
+//declaring functions ***ALL NEED ABSTRACTING***
+void creatureFitnessTests(Creature creature, Environment environment);
 bool energyFitnessTest(float creature, float environment);
-bool temperatureFitnessTest(float creEnergy, float idealMax, float idealMin, float tolMax, float tolMin, float envTemp, bool ideal, bool tolerated);
-bool idealTemperatureCheck(float idealMax, float idealMin, float envTemp);
-bool toleratedTemperatureCheck(float tolMax, float tolMin, float envTemp);
-bool surviveTemperature(bool ideal, bool tolerated);
-int toleratedTemperatureEnergyMultiplier(float creEnergy, bool ideal, bool tolerated);
+bool idealidealTempCheck(float idealMax, float idealMin, float envTemp);
+bool toleratedidealTempCheck(float tolMax, float tolMin, float envTemp);
+bool surviveidealTemp(bool ideal, bool tolerated);
+int toleratedidealTempEnergyMultiplier(float creEnergy, bool ideal, bool tolerated);
 
 
 int main()
@@ -47,217 +49,177 @@ int main()
 	struct Environment envir[1];
 	struct Creature creat[7];
 
-	envir[0].energy_available = 500.0f;
-	envir[0].temperature = 12.0f;
+	Environment * p_environments = envir;
+	Creature * p_creatures = creat;
+	//Environment * p_environments = &envir[0];
+	//Creature * p_creatures = &creat[0];
+
+	envir[0].energyAvailable = 500.0f;
+	envir[0].idealTemp = 12.0f;
 
 
 #pragma region TEST_ENERGY_AVAILABLE.
 	//creature 0 - should SURVIVE ideally suited to environment 0.
-	creat[0].energy_demand = 400.0f;		//in range of environ energy.
-	creat[0].ideal_temp = 12.0f;			//same as environ temp.
-	creat[0].ideal_temp_range = 1.0f;
-	creat[0].tol_temp_range = 1.0f;
+	creat[0].energyDemand = 400.0f;		//in range of environ energy.
+	creat[0].idealTemp = 12.0f;			//same as environ temp.
+	creat[0].idealTempRange = 1.0f;
+	creat[0].tolTempRange = 1.0f;
 
-	creat[0].ideal_temp_range_max = creat[0].ideal_temp + creat[0].ideal_temp_range;
-	creat[0].ideal_temp_range_min = creat[0].ideal_temp - creat[0].ideal_temp_range;
-	creat[0].tol_temp_range_max = creat[0].ideal_temp_range_max + creat[0].tol_temp_range;
-	creat[0].tol_temp_range_min = creat[0].ideal_temp_range_min - creat[0].tol_temp_range;
+	creat[0].idealTempRangeMax = creat[0].idealTemp + creat[0].idealTempRange;
+	creat[0].idealTempRangeMin = creat[0].idealTemp - creat[0].idealTempRange;
+	creat[0].tolTempRangeMax = creat[0].idealTempRangeMax + creat[0].tolTempRange;
+	creat[0].tolTempRangeMin = creat[0].idealTempRangeMin - creat[0].tolTempRange;
 
 	creat[0].alive = true;
-	creat[0].temp_ideal = true;
-	creat[0].temp_tol = true;
+	creat[0].tempIdeal = true;
+	creat[0].tempTol = true;
+
+	creat[0].creatureNumber = 1;
 
 	//creature 1 - should NOT SURVIVE be suited to environment 0.
-	creat[1].energy_demand = 650.0f;		//over the range, not even environ energy.
-	creat[1].ideal_temp = 12.0f;			//same as environ temp.
-	creat[1].ideal_temp_range = 1.0f;
-	creat[1].tol_temp_range = 1.0f;
+	creat[1].energyDemand = 650.0f;		//over the range, not even environ energy.
+	creat[1].idealTemp = 12.0f;			//same as environ temp.
+	creat[1].idealTempRange = 1.0f;
+	creat[1].tolTempRange = 1.0f;
 
-	creat[1].ideal_temp_range_max = creat[1].ideal_temp + creat[1].ideal_temp_range;
-	creat[1].ideal_temp_range_min = creat[1].ideal_temp - creat[1].ideal_temp_range;
-	creat[1].tol_temp_range_max = creat[1].ideal_temp_range_max + creat[1].tol_temp_range;
-	creat[1].tol_temp_range_min = creat[1].ideal_temp_range_min - creat[1].tol_temp_range;
+	creat[1].idealTempRangeMax = creat[1].idealTemp + creat[1].idealTempRange;
+	creat[1].idealTempRangeMin = creat[1].idealTemp - creat[1].idealTempRange;
+	creat[1].tolTempRangeMax = creat[1].idealTempRangeMax + creat[1].tolTempRange;
+	creat[1].tolTempRangeMin = creat[1].idealTempRangeMin - creat[1].tolTempRange;
 
 	creat[1].alive = true;
-	creat[1].temp_ideal = true;
-	creat[1].temp_tol = true;
+	creat[1].tempIdeal = true;
+	creat[1].tempTol = true;
+
+	creat[1].creatureNumber = 2;
 #pragma endregion
 
-#pragma region TEST_TEMPERATURE
+#pragma region TEST_idealTemp
 	//creature 2 - should SURVIVE suited to environment 0.
-	creat[2].energy_demand = 200.0f;		//over the range, not even environ energy.
-	creat[2].ideal_temp = 12.0f;			//same as environ temp.
-	creat[2].ideal_temp_range = 1.0f;		//
-	creat[2].tol_temp_range = 1.0f;			//
+	creat[2].energyDemand = 200.0f;		//over the range, not even environ energy.
+	creat[2].idealTemp = 12.0f;			//same as environ temp.
+	creat[2].idealTempRange = 1.0f;		//
+	creat[2].tolTempRange = 1.0f;		//
 
-	creat[2].ideal_temp_range_max = creat[2].ideal_temp + creat[2].ideal_temp_range;
-	creat[2].ideal_temp_range_min = creat[2].ideal_temp - creat[2].ideal_temp_range;
-	creat[2].tol_temp_range_max = creat[2].ideal_temp_range_max + creat[2].tol_temp_range;
-	creat[2].tol_temp_range_min = creat[2].ideal_temp_range_min - creat[2].tol_temp_range;
+	creat[2].idealTempRangeMax = creat[2].idealTemp + creat[2].idealTempRange;
+	creat[2].idealTempRangeMin = creat[2].idealTemp - creat[2].idealTempRange;
+	creat[2].tolTempRangeMax = creat[2].idealTempRangeMax + creat[2].tolTempRange;
+	creat[2].tolTempRangeMin = creat[2].idealTempRangeMin - creat[2].tolTempRange;
 
 	creat[2].alive = true;
-	creat[2].temp_ideal = true;
-	creat[2].temp_tol = true;
+	creat[2].tempIdeal = true;
+	creat[2].tempTol = true;
+
+	creat[2].creatureNumber = 3;
 
 	//creature 3 - should NOT SURVIVE be suited to environment 0.
-	creat[3].energy_demand = 200.0f;			//over the range, not even environ energy.
-	creat[3].ideal_temp = 20.0f;				//much higher than environ temp.
-	creat[3].ideal_temp_range = 1.0f;
-	creat[3].tol_temp_range = 1.0f;
+	creat[3].energyDemand = 200.0f;			//over the range, not even environ energy.
+	creat[3].idealTemp = 20.0f;				//much higher than environ temp.
+	creat[3].idealTempRange = 1.0f;
+	creat[3].tolTempRange = 1.0f;
 
-	creat[3].ideal_temp_range_max = creat[3].ideal_temp + creat[3].ideal_temp_range;
-	creat[3].ideal_temp_range_min = creat[3].ideal_temp - creat[3].ideal_temp_range;
-	creat[3].tol_temp_range_max = creat[3].ideal_temp_range_max + creat[3].tol_temp_range;
-	creat[3].tol_temp_range_min = creat[3].ideal_temp_range_min - creat[3].tol_temp_range;
+	creat[3].idealTempRangeMax = creat[3].idealTemp + creat[3].idealTempRange;
+	creat[3].idealTempRangeMin = creat[3].idealTemp - creat[3].idealTempRange;
+	creat[3].tolTempRangeMax = creat[3].idealTempRangeMax + creat[3].tolTempRange;
+	creat[3].tolTempRangeMin = creat[3].idealTempRangeMin - creat[3].tolTempRange;
 
 	creat[3].alive = true;
-	creat[3].temp_ideal = true;
-	creat[3].temp_tol = true;
+	creat[3].tempIdeal = true;
+	creat[3].tempTol = true;
+
+	creat[3].creatureNumber = 4;
 #pragma endregion
 
-#pragma region TEST_TEMPERATURE_TOLERANCE_RANGES.
-	//creature 4 - should SURVIVE, instead ideal temperature range.
-	creat[4].energy_demand = 200.0f;		//in range of environ energy.
-	creat[4].ideal_temp = 11.5f;			//off environ temp.
-	creat[4].ideal_temp_range = 1.0f;		//
-	creat[4].tol_temp_range = 2.0f;			//
+#pragma region TEST_idealTemp_TOLERANCE_RANGES.
+	//creature 4 - should SURVIVE, instead ideal idealTemp range.
+	creat[4].energyDemand = 200.0f;		//in range of environ energy.
+	creat[4].idealTemp = 11.5f;			//off environ temp.
+	creat[4].idealTempRange = 1.0f;		//
+	creat[4].tolTempRange = 2.0f;		//
 
-	creat[4].ideal_temp_range_max = creat[4].ideal_temp + creat[4].ideal_temp_range;
-	creat[4].ideal_temp_range_min = creat[4].ideal_temp - creat[4].ideal_temp_range;
-	creat[4].tol_temp_range_max = creat[4].ideal_temp_range_max + creat[4].tol_temp_range;
-	creat[4].tol_temp_range_min = creat[4].ideal_temp_range_min - creat[4].tol_temp_range;
+	creat[4].idealTempRangeMax = creat[4].idealTemp + creat[4].idealTempRange;
+	creat[4].idealTempRangeMin = creat[4].idealTemp - creat[4].idealTempRange;
+	creat[4].tolTempRangeMax = creat[4].idealTempRangeMax + creat[4].tolTempRange;
+	creat[4].tolTempRangeMin = creat[4].idealTempRangeMin - creat[4].tolTempRange;
 
 	creat[4].alive = true;
-	creat[4].temp_ideal = true;
-	creat[4].temp_tol = true;
+	creat[4].tempIdeal = true;
+	creat[4].tempTol = true;
 
-	//creature 5 - should SURVIVE, inside tolerated temperature range and still enough energy remaining after multiplier.
-	creat[5].energy_demand = 200.0f;		//in range of environ energy.
-	creat[5].ideal_temp = 10.0f;			//off environ temp.
-	creat[5].ideal_temp_range = 1.0f;		//
-	creat[5].tol_temp_range = 2.0f;			//
+	creat[4].creatureNumber = 5;
 
-	creat[5].ideal_temp_range_max = creat[5].ideal_temp + creat[5].ideal_temp_range;
-	creat[5].ideal_temp_range_min = creat[5].ideal_temp - creat[5].ideal_temp_range;
-	creat[5].tol_temp_range_max = creat[5].ideal_temp_range_max + creat[5].tol_temp_range;
-	creat[5].tol_temp_range_min = creat[5].ideal_temp_range_min - creat[5].tol_temp_range;
+	//creature 5 - should SURVIVE, inside tolerated idealTemp range and still enough energy remaining after multiplier.
+	creat[5].energyDemand = 200.0f;		//in range of environ energy.
+	creat[5].idealTemp = 10.0f;			//off environ temp.
+	creat[5].idealTempRange = 1.0f;		//
+	creat[5].tolTempRange = 2.0f;		//
+
+	creat[5].idealTempRangeMax = creat[5].idealTemp + creat[5].idealTempRange;
+	creat[5].idealTempRangeMin = creat[5].idealTemp - creat[5].idealTempRange;
+	creat[5].tolTempRangeMax = creat[5].idealTempRangeMax + creat[5].tolTempRange;
+	creat[5].tolTempRangeMin = creat[5].idealTempRangeMin - creat[5].tolTempRange;
 
 	creat[5].alive = true;
-	creat[5].temp_ideal = true;
-	creat[5].temp_tol = true;
+	creat[5].tempIdeal = true;
+	creat[5].tempTol = true;
 
-	//creature 6 - should NOT SURVIVE, inside tolerated temperature range but NOT enough energy remaining after multiplier.
-	creat[6].energy_demand = 450.0f;		//in range of environ energy.
-	creat[6].ideal_temp = 10.0f;			//a little off environ temp.
-	creat[6].ideal_temp_range = 1.0f;		//
-	creat[6].tol_temp_range = 2.0f;			//
+	creat[5].creatureNumber = 6;
 
-	creat[6].ideal_temp_range_max = creat[6].ideal_temp + creat[6].ideal_temp_range;
-	creat[6].ideal_temp_range_min = creat[6].ideal_temp - creat[6].ideal_temp_range;
-	creat[6].tol_temp_range_max = creat[6].ideal_temp_range_max + creat[6].tol_temp_range;
-	creat[6].tol_temp_range_min = creat[6].ideal_temp_range_min - creat[6].tol_temp_range;
+	//creature 6 - should NOT SURVIVE, inside tolerated idealTemp range but NOT enough energy remaining after multiplier.
+	creat[6].energyDemand = 450.0f;		//in range of environ energy.
+	creat[6].idealTemp = 10.0f;			//a little off environ temp.
+	creat[6].idealTempRange = 1.0f;		//
+	creat[6].tolTempRange = 2.0f;		//
+
+	creat[6].idealTempRangeMax = creat[6].idealTemp + creat[6].idealTempRange;
+	creat[6].idealTempRangeMin = creat[6].idealTemp - creat[6].idealTempRange;
+	creat[6].tolTempRangeMax = creat[6].idealTempRangeMax + creat[6].tolTempRange;
+	creat[6].tolTempRangeMin = creat[6].idealTempRangeMin - creat[6].tolTempRange;
 
 	creat[6].alive = true;
-	creat[6].temp_ideal = true;
-	creat[6].temp_tol = true;
+	creat[6].tempIdeal = true;
+	creat[6].tempTol = true;
+
+	creat[6].creatureNumber = 7;
 
 #pragma endregion
 
-#pragma region TESTING 1 - TWO CREATURES ON ENERGY LEVELS.
 	//TESTING - energy levels.
-	creat[0].alive = energyFitnessTest(creat[0].energy_demand, envir[0].energy_available);
-		std::cout << "Did Creature 0 survive?   "; 
-	if(creat[0].alive)
-		std::cout << "   YES! CREATURE 0 SURVIVED!" << std::endl;
-	else
-		std::cout << "   NO! CREATURE 0 IS DEAD!" << std::endl;
+	creatureFitnessTests(creat[0], envir[0]);
+	creatureFitnessTests(creat[1], envir[0]);
 
-	creat[1].alive = energyFitnessTest(creat[1].energy_demand, envir[0].energy_available);
-	std::cout << "Did Creature 1 survive?   ";
-	if (creat[1].alive)
-		std::cout << "   YES! CREATURE 1 SURVIVED!" << std::endl;
-	else
-		std::cout << "   NO! CREATURE 1 IS DEAD!" << std::endl;
-#pragma endregion
+	//TESTING - idealTemp levels.
+	creatureFitnessTests(creat[2], envir[0]);
+	creatureFitnessTests(creat[3], envir[0]);
 
-#pragma region TESTING 2 - TWO CREATURES ON TEMPERATURE LEVELS
-	//TESTING - temperature levels.
-	creat[2].temp_ideal = idealTemperatureCheck(creat[2].ideal_temp_range_max, creat[2].ideal_temp_range_min, envir[0].temperature);
-	creat[2].temp_tol = toleratedTemperatureCheck(creat[2].tol_temp_range_max, creat[2].tol_temp_range_min, envir[0].temperature);
-	creat[2].alive = surviveTemperature(creat[2].temp_ideal, creat[2].temp_tol);
-	if (creat[2].alive)
+	//TESTING - idealTemp tolerance and energy demand multiplier.
+	creatureFitnessTests(creat[4], envir[0]);
+	creatureFitnessTests(creat[5], envir[0]);
+	creatureFitnessTests(creat[6], envir[0]);
+}
+
+
+
+
+
+//function to take the creature and environment and then run all the relevant fitness tests on.
+void creatureFitnessTests(Creature creature, Environment environment)
+{
+	creature.tempIdeal = idealidealTempCheck(creature.idealTempRangeMax, creature.idealTempRangeMin, environment.idealTemp);
+	creature.tempTol = toleratedidealTempCheck(creature.tolTempRangeMax, creature.tolTempRangeMin, environment.idealTemp);
+	creature.alive = surviveidealTemp(creature.tempIdeal, creature.tempTol);
+
+	if (creature.alive)
 	{
-		creat[2].energy_demand = toleratedTemperatureEnergyMultiplier(creat[2].energy_demand, creat[4].temp_ideal, creat[2].temp_tol);
-		creat[2].alive = energyFitnessTest(creat[2].energy_demand, envir[0].energy_available);
+		creature.energyDemand = toleratedidealTempEnergyMultiplier(creature.energyDemand, creature.tempIdeal, creature.tempTol);
+		creature.alive = energyFitnessTest(creature.energyDemand, environment.energyAvailable);
 	}
-	std::cout << "Did Creature 2 survive?   "; 
-	if(creat[2].alive)
-		std::cout << "   YES! CREATURE 2 SURVIVED!" << std::endl;
-	else
-		std::cout << "   NO! CREATURE 2 IS DEAD!" << std::endl;
 	
-
-	creat[3].temp_ideal = idealTemperatureCheck(creat[3].ideal_temp_range_max, creat[3].ideal_temp_range_min, envir[0].temperature);
-	creat[3].temp_tol = toleratedTemperatureCheck(creat[3].tol_temp_range_max, creat[3].tol_temp_range_min, envir[0].temperature);
-	creat[3].alive = surviveTemperature(creat[3].temp_ideal, creat[3].temp_tol);
-	if(creat[3].alive)
-	{
-		creat[3].energy_demand = toleratedTemperatureEnergyMultiplier(creat[3].energy_demand, creat[4].temp_ideal, creat[3].temp_tol);
-		creat[3].alive = energyFitnessTest(creat[3].energy_demand, envir[0].energy_available);
-	}
-	std::cout << "Did Creature 3 survive?   ";
-	if (creat[3].alive)
-		std::cout << "   YES! CREATURE 3 SURVIVED!" << std::endl;
+	std::cout << "Did Creature " << creature.creatureNumber << " survive?   ";
+	if (creature.alive)
+		std::cout << "   YES! CREATURE " << creature.creatureNumber << " SURVIVED!" << std::endl;
 	else
-		std::cout << "   NO! CREATURE 3 IS DEAD!" << std::endl;
-#pragma endregion
-
-#pragma region TESTING 3 - THREE CREATURES FOR TEMP TOLERANCE AND ENERGY DEMAND MODIFIERS
-	//TESTING - temperature tolerance and energy demand multiplier.
-	creat[4].temp_ideal = idealTemperatureCheck(creat[4].ideal_temp_range_max, creat[4].ideal_temp_range_min, envir[0].temperature);
-	creat[4].temp_tol = toleratedTemperatureCheck(creat[4].tol_temp_range_max, creat[4].tol_temp_range_min, envir[0].temperature);
-	creat[4].alive = surviveTemperature(creat[4].temp_ideal, creat[4].temp_tol);
-	if (creat[4].alive)
-	{
-		creat[4].energy_demand = toleratedTemperatureEnergyMultiplier(creat[4].energy_demand, creat[4].temp_ideal, creat[4].temp_tol);
-		creat[4].alive = energyFitnessTest(creat[4].energy_demand, envir[0].energy_available);
-	}
-	std::cout << "Did Creature 4 survive?   ";
-	if (creat[4].alive)
-		std::cout << "   YES! CREATURE 4 SURVIVED!" << std::endl;
-	else
-		std::cout << "   NO! CREATURE 4 IS DEAD!" << std::endl;
-
-	creat[5].temp_ideal = idealTemperatureCheck(creat[5].ideal_temp_range_max, creat[5].ideal_temp_range_min, envir[0].temperature);
-	creat[5].temp_tol = toleratedTemperatureCheck(creat[5].tol_temp_range_max, creat[5].tol_temp_range_min, envir[0].temperature);
-	creat[5].alive = surviveTemperature(creat[5].temp_ideal, creat[5].temp_tol);
-	if (creat[5].alive)
-	{
-		creat[5].energy_demand = toleratedTemperatureEnergyMultiplier(creat[5].energy_demand, creat[5].temp_ideal, creat[5].temp_tol);
-		creat[5].alive = energyFitnessTest(creat[5].energy_demand, envir[0].energy_available);
-	}
-	std::cout << "Did Creature 5 survive?   ";
-	if (creat[5].alive)
-		std::cout << "   YES! CREATURE 5 SURVIVED!" << std::endl;
-	else
-		std::cout << "   NO! CREATURE 5 IS DEAD!" << std::endl;
-
-	creat[6].temp_ideal = idealTemperatureCheck(creat[6].ideal_temp_range_max, creat[6].ideal_temp_range_min, envir[0].temperature);
-	creat[6].temp_tol = toleratedTemperatureCheck(creat[6].tol_temp_range_max, creat[6].tol_temp_range_min, envir[0].temperature);
-	creat[6].alive = surviveTemperature(creat[6].temp_ideal, creat[6].temp_tol);
-	if (creat[6].alive)
-	{
-		creat[6].energy_demand = toleratedTemperatureEnergyMultiplier(creat[6].energy_demand, creat[6].temp_ideal, creat[6].temp_tol);
-		creat[6].alive = energyFitnessTest(creat[6].energy_demand, envir[0].energy_available);
-	}
-	std::cout << "Did Creature 6 survive?   ";
-	if (creat[6].alive)
-		std::cout << "   YES! CREATURE 6 SURVIVED!" << std::endl;
-	else
-		std::cout << "   NO! CREATURE 6 IS DEAD!" << std::endl;
-#pragma endregion
-
-
+		std::cout << "   NO! CREATURE " << creature.creatureNumber << " IS DEAD!" << std::endl;
 }
 
 //function to determine energy fitness test.
@@ -274,43 +236,8 @@ bool energyFitnessTest(float creatEnergy, float envEnergy)
 	return survive;
 }
 
-//function combining the various parts of the temperature checks
-bool temperatureFitnessTest(float creEnergy, float idealMax, float idealMin, float tolMax, float tolMin, float envTemp, bool ideal, bool tolerated)
-{
-	bool survive = true;
-
-	bool inIdeal = ideal;
-	bool inTolerated = tolerated;
-
-	float environTemp = envTemp;
-	float creatIdealTempMax = idealMax;
-	float creatIdealTempMin = idealMin;
-	float creatTolTempMax = tolMax;
-	float creatTolTempMin = tolMin;
-
-	//check whether in ideal temperature range.
-	if (environTemp <= creatIdealTempMax
-		&& environTemp >= creatIdealTempMin)
-		inIdeal = true;
-	else
-		inIdeal = false;
-
-	if (environTemp <= creatTolTempMax
-		&& environTemp >= creatTolTempMin)
-		tolerated = true;
-	else
-		tolerated = false;
-
-	//check whether can survive in this temperature.
-	if (!inIdeal && !inTolerated)
-		survive = false;
-
-	//return whether they survived.
-	return survive;
-}
-
-//function to determine whether in ideal temperature range fitness check.
-bool idealTemperatureCheck(float idealMax, float idealMin, float envTemp)
+//function to determine whether in ideal idealTemp range fitness check.
+bool idealidealTempCheck(float idealMax, float idealMin, float envTemp)
 {
 	bool ideal = true;
 
@@ -327,8 +254,8 @@ bool idealTemperatureCheck(float idealMax, float idealMin, float envTemp)
 	return ideal;
 }
 
-//function to determine whether in tolerated temperature range fitness check.
-bool toleratedTemperatureCheck(float tolMax, float tolMin, float envTemp)
+//function to determine whether in tolerated idealTemp range fitness check.
+bool toleratedidealTempCheck(float tolMax, float tolMin, float envTemp)
 {
 	bool tolerated = true;
 
@@ -345,8 +272,8 @@ bool toleratedTemperatureCheck(float tolMax, float tolMin, float envTemp)
 	return tolerated;
 }
 
-//function to determine whether creature can survive temperature.
-bool surviveTemperature(bool ideal, bool tolerated)
+//function to determine whether creature can survive idealTemp.
+bool surviveidealTemp(bool ideal, bool tolerated)
 {
 	bool survive = true;
 	bool inIdeal = ideal;
@@ -358,8 +285,8 @@ bool surviveTemperature(bool ideal, bool tolerated)
 	return survive;
 }
 
-//function to apply multiplier to energy demand if in temperature tolerance range. 
-int toleratedTemperatureEnergyMultiplier(float creEnergy, bool ideal, bool tolerated)
+//function to apply multiplier to energy demand if in idealTemp tolerance range. 
+int toleratedidealTempEnergyMultiplier(float creEnergy, bool ideal, bool tolerated)
 {
 	int result = creEnergy;
 
