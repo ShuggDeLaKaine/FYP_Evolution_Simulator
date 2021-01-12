@@ -36,7 +36,6 @@ struct Creature
 	bool isAlive;
 	bool tempIdeal;
 	bool tempTol;
-	bool idealOxygen;
 	bool tolOxygen;
 
 	int creatureNumber;
@@ -46,7 +45,7 @@ struct Creature
 void creatureFitnessTests(Creature creature, Environment environment);
 void setCreatureVariables(Creature creature);
 
-bool oxygenationFitnessTest(float oxygenReq, float environOxygen);
+bool oxygenationFitnessTest(float oxygenReq, float environOxygen, bool tolerated);
 bool temperatureFitnessTest(bool ideal, bool tolerated);
 bool energyFitnessTest(float creature, float environment);
 
@@ -61,7 +60,7 @@ int toleratedTempEnergyMultiplier(float creEnergy, bool ideal, bool tolerated);
 int main()
 {
 	struct Environment envir[3];
-	struct Creature creat[9];
+	struct Creature creat[12];
 
 	Environment * p_environments = envir;
 	Creature * p_creatures = creat;
@@ -99,7 +98,6 @@ int main()
 	creat[0].isAlive = true;
 	creat[0].tempIdeal = true;
 	creat[0].tempTol = true;
-	creat[0].idealOxygen = true;
 	creat[0].tolOxygen = true;
 
 	creat[0].creatureNumber = 1;
@@ -121,7 +119,6 @@ int main()
 	creat[1].isAlive = true;
 	creat[1].tempIdeal = true;
 	creat[1].tempTol = true;
-	creat[1].idealOxygen = true;
 	creat[1].tolOxygen = true;
 
 	creat[1].creatureNumber = 2;
@@ -145,7 +142,6 @@ int main()
 	creat[2].isAlive = true;
 	creat[2].tempIdeal = true;
 	creat[2].tempTol = true;
-	creat[2].idealOxygen = true;
 	creat[2].tolOxygen = true;
 
 	creat[2].creatureNumber = 3;
@@ -167,7 +163,6 @@ int main()
 	creat[3].isAlive = true;
 	creat[3].tempIdeal = true;
 	creat[3].tempTol = true;
-	creat[3].idealOxygen = true;
 	creat[3].tolOxygen = true;
 
 	creat[3].creatureNumber = 4;
@@ -191,7 +186,6 @@ int main()
 	creat[4].isAlive = true;
 	creat[4].tempIdeal = true;
 	creat[4].tempTol = true;
-	creat[4].idealOxygen = true;
 	creat[4].tolOxygen = true;
 
 	creat[4].creatureNumber = 5;
@@ -213,7 +207,6 @@ int main()
 	creat[5].isAlive = true;
 	creat[5].tempIdeal = true;
 	creat[5].tempTol = true;
-	creat[5].idealOxygen = true;
 	creat[5].tolOxygen = true;
 
 	creat[5].creatureNumber = 6;
@@ -235,7 +228,6 @@ int main()
 	creat[6].isAlive = true;
 	creat[6].tempIdeal = true;
 	creat[6].tempTol = true;
-	creat[6].idealOxygen = true;
 	creat[6].tolOxygen = true;
 
 	creat[6].creatureNumber = 7;
@@ -244,50 +236,114 @@ int main()
 
 #pragma region OXYGENATION_TESTING
 	//creature 8 - should SURVIVE - tested again Envir[1], provides 50.0f oxygen, creature demands just 40.0f.
-	creat[7].energyDemand = 450.0f;		//in range of environ energy.
-	creat[7].idealTemp = 16.0f;			//a little off environ temp.
-	creat[7].idealTempRange = 1.0f;		//
-	creat[7].tolTempRange = 2.0f;		//
+	creat[7].energyDemand = 450.0f;		
+	creat[7].idealTemp = 16.0f;			
+	creat[7].idealTempRange = 1.0f;		
+	creat[7].tolTempRange = 2.0f;		
 	creat[7].oxygenDemand = 40.0f;
 	creat[7].oxygenRange = 0.0f;
 		  
-	creat[7].idealTempRangeMax = creat[6].idealTemp + creat[6].idealTempRange;
-	creat[7].idealTempRangeMin = creat[6].idealTemp - creat[6].idealTempRange;
-	creat[7].tolTempRangeMax = creat[6].idealTempRangeMax + creat[6].tolTempRange;
-	creat[7].tolTempRangeMin = creat[6].idealTempRangeMin - creat[6].tolTempRange;
-	creat[7].oxygenTolMin = creat[6].oxygenDemand - creat[6].oxygenRange;
+	creat[7].idealTempRangeMax = creat[7].idealTemp + creat[7].idealTempRange;
+	creat[7].idealTempRangeMin = creat[7].idealTemp - creat[7].idealTempRange;
+	creat[7].tolTempRangeMax = creat[7].idealTempRangeMax + creat[7].tolTempRange;
+	creat[7].tolTempRangeMin = creat[7].idealTempRangeMin - creat[7].tolTempRange;
+	creat[7].oxygenTolMin = creat[7].oxygenDemand - creat[7].oxygenRange;
 		  
 	creat[7].isAlive = true;
 	creat[7].tempIdeal = true;
 	creat[7].tempTol = true;
-	creat[7].idealOxygen = true;
 	creat[7].tolOxygen = true;
 		  
 	creat[7].creatureNumber = 8;
 
 	//creature 9- should NOT SURVIVE - tested again Envir[1], provides 50.0f oxygen, creature demands 60.0f.
-	creat[8].energyDemand = 450.0f;		//in range of environ energy.
-	creat[8].idealTemp = 16.0f;			//a little off environ temp.
-	creat[8].idealTempRange = 1.0f;		//
-	creat[8].tolTempRange = 2.0f;		//
+	creat[8].energyDemand = 450.0f;		
+	creat[8].idealTemp = 16.0f;			
+	creat[8].idealTempRange = 1.0f;		
+	creat[8].tolTempRange = 2.0f;		
 	creat[8].oxygenDemand = 60.0f;
 	creat[8].oxygenRange = 0.0f;
 		  
-	creat[8].idealTempRangeMax = creat[6].idealTemp + creat[6].idealTempRange;
-	creat[8].idealTempRangeMin = creat[6].idealTemp - creat[6].idealTempRange;
-	creat[8].tolTempRangeMax = creat[6].idealTempRangeMax + creat[6].tolTempRange;
-	creat[8].tolTempRangeMin = creat[6].idealTempRangeMin - creat[6].tolTempRange;
-	creat[8].oxygenTolMin = creat[6].oxygenDemand - creat[6].oxygenRange;
+	creat[8].idealTempRangeMax = creat[8].idealTemp + creat[8].idealTempRange;
+	creat[8].idealTempRangeMin = creat[8].idealTemp - creat[8].idealTempRange;
+	creat[8].tolTempRangeMax = creat[8].idealTempRangeMax + creat[8].tolTempRange;
+	creat[8].tolTempRangeMin = creat[8].idealTempRangeMin - creat[8].tolTempRange;
+	creat[8].oxygenTolMin = creat[8].oxygenDemand - creat[8].oxygenRange;
 		  
 	creat[8].isAlive = true;
 	creat[8].tempIdeal = true;
 	creat[8].tempTol = true;
-	creat[8].idealOxygen = true;
 	creat[8].tolOxygen = true;
 		  
 	creat[8].creatureNumber = 9;
 #pragma endregion
 
+#pragma region TESTING_OXYGENATION_RANGES
+	//creature 10 - should SURVIVE - within oxygenation tolerance range, will get multiplier, will still have enough energy to survive
+	creat[9].energyDemand = 300.0f;
+	creat[9].idealTemp = 16.0f;
+	creat[9].idealTempRange = 1.0f;
+	creat[9].tolTempRange = 2.0f;
+	creat[9].oxygenDemand = 55.0f;
+	creat[9].oxygenRange = 10.0f;
+		  
+	creat[9].idealTempRangeMax = creat[9].idealTemp + creat[9].idealTempRange;
+	creat[9].idealTempRangeMin = creat[9].idealTemp - creat[9].idealTempRange;
+	creat[9].tolTempRangeMax = creat[9].idealTempRangeMax + creat[9].tolTempRange;
+	creat[9].tolTempRangeMin = creat[9].idealTempRangeMin - creat[9].tolTempRange;
+	creat[9].oxygenTolMin = creat[9].oxygenDemand - creat[9].oxygenRange;
+		  
+	creat[9].isAlive = true;
+	creat[9].tempIdeal = true;
+	creat[9].tempTol = true;
+	creat[9].tolOxygen = true;
+		  
+	creat[9].creatureNumber = 10;
+
+	//creature 11 - should NOT SURVIVE - outside of oxygenation range even with tolerance.
+	creat[10].energyDemand = 450.0f;
+	creat[10].idealTemp = 16.0f;
+	creat[10].idealTempRange = 1.0f;
+	creat[10].tolTempRange = 2.0f;
+	creat[10].oxygenDemand = 60.0f;
+	creat[10].oxygenRange = 5.0f;
+		  
+	creat[10].idealTempRangeMax = creat[10].idealTemp + creat[10].idealTempRange;
+	creat[10].idealTempRangeMin = creat[10].idealTemp - creat[10].idealTempRange;
+	creat[10].tolTempRangeMax = creat[10].idealTempRangeMax + creat[10].tolTempRange;
+	creat[10].tolTempRangeMin = creat[10].idealTempRangeMin - creat[10].tolTempRange;
+	creat[10].oxygenTolMin = creat[10].oxygenDemand - creat[10].oxygenRange;
+		  
+	creat[10].isAlive = true;
+	creat[10].tempIdeal = true;
+	creat[10].tempTol = true;
+	creat[10].tolOxygen = true;
+		  
+	creat[10].creatureNumber = 11;
+
+	//creature 11 - should NOT SURVIVE - inside oxygen tolerance range BUT energy multiplier will take outside of energy provided by environment.
+	creat[11].energyDemand = 800.0f;
+	creat[11].idealTemp = 16.0f;
+	creat[11].idealTempRange = 1.0f;
+	creat[11].tolTempRange = 2.0f;
+	creat[11].oxygenDemand = 60.0f;
+	creat[11].oxygenRange = 15.0f;
+		   
+	creat[11].idealTempRangeMax = creat[11].idealTemp + creat[11].idealTempRange;
+	creat[11].idealTempRangeMin = creat[11].idealTemp - creat[11].idealTempRange;
+	creat[11].tolTempRangeMax = creat[11].idealTempRangeMax + creat[11].tolTempRange;
+	creat[11].tolTempRangeMin = creat[11].idealTempRangeMin - creat[11].tolTempRange;
+	creat[11].oxygenTolMin = creat[11].oxygenDemand - creat[11].oxygenRange;
+		   
+	creat[11].isAlive = true;
+	creat[11].tempIdeal = true;
+	creat[11].tempTol = true;
+	creat[11].tolOxygen = true;
+		   
+	creat[11].creatureNumber = 12;
+#pragma endregion
+
+	/*
 	//TESTING - energy levels.
 	creatureFitnessTests(creat[0], envir[0]);
 	creatureFitnessTests(creat[1], envir[0]);
@@ -300,11 +356,15 @@ int main()
 	creatureFitnessTests(creat[4], envir[0]);
 	creatureFitnessTests(creat[5], envir[0]);
 	creatureFitnessTests(creat[6], envir[0]);
-
+	
 	//TESTING - oxygenation levels, just in or out.
-
-
+	creatureFitnessTests(creat[7], envir[1]);
+	creatureFitnessTests(creat[8], envir[1]);
+	*/
 	//TESTING - oxygenation tolerance and energy demand multiplier
+	creatureFitnessTests(creat[9], envir[1]);
+	creatureFitnessTests(creat[10], envir[1]);
+	creatureFitnessTests(creat[11], envir[1]);
 
 }
 
@@ -333,7 +393,7 @@ void creatureFitnessTests(Creature creature, Environment environment)
 	{
 		//test one - oxygenation fitness test.
 		creature.tolOxygen = toleratedOxygenCheck(creature.oxygenTolMin, creature.oxygenDemand, environment.oxygenationRate);
-		creature.idealOxygen = oxygenationFitnessTest(creature.oxygenDemand, environment.oxygenationRate);
+		creature.isAlive = oxygenationFitnessTest(creature.oxygenDemand, environment.oxygenationRate, creature.tolOxygen);
 
 		if(creature.isAlive)
 		{
@@ -389,15 +449,17 @@ bool temperatureFitnessTest(bool ideal, bool tolerated)
 }
 
 //function to determine the oxygenation fitness test.
-bool oxygenationFitnessTest(float oxygenReq, float environOxygen)
+bool oxygenationFitnessTest(float oxygenReq, float environOxygen, bool tolerated)
 {
 	bool survive = true;
 
 	float creatOxyRequired = oxygenReq;
 	float environOxyProvided = environOxygen;
+	bool inToleratedRange = tolerated;
 
-	if (environOxyProvided < creatOxyRequired)
-		survive - false;
+	if (environOxyProvided < creatOxyRequired
+		&& inToleratedRange == false)
+		survive = false;
 
 	return survive;
 }
@@ -441,7 +503,7 @@ bool toleratedTempCheck(float tolMax, float tolMin, float envTemp)
 //function to check whether oxygen level of environment is in the tolerated range of a creature.
 bool toleratedOxygenCheck(float minOxyTolerance, float idealMinOxy, float envirOxyProv)
 {
-	bool tolerated = true;
+	bool tolerated = false;
 
 	float creatOxyTolMin = minOxyTolerance;
 	float creatOxyIdealMin = idealMinOxy;
