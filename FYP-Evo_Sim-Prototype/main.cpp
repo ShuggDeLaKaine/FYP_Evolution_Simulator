@@ -7,7 +7,7 @@
 struct Environment
 {
 	float energyAvailable;
-	float idealTemp;
+	float temperature;
 	float oxygenationRate;
 };
 
@@ -69,32 +69,32 @@ int main()
 
 	//Energy testing environment.
 	envir[0].energyAvailable = 500.0f;
-	envir[0].idealTemp = 12.0f;
+	envir[0].temperature = 12.0f;
 	envir[0].oxygenationRate = 100.0f;
 
 	//Temperature Testing Environment.
 	envir[1].energyAvailable = 750.0f;
-	envir[1].idealTemp = 16.0f;
+	envir[1].temperature = 13.0f;
 	envir[1].oxygenationRate = 50.0f;
 
 	//Oxygen Testing Environment.
 	envir[2].energyAvailable = 800.0f;
-	envir[2].idealTemp = 11.0f;
-	envir[2].oxygenationRate = 70.0f;
+	envir[2].temperature = 11.0f;
+	envir[2].oxygenationRate = 50.0f;
 
 	//'EDEN' Testing Environment.
 	envir[3].energyAvailable = 1500.0f;
-	envir[3].idealTemp = 14.0f;
+	envir[3].temperature = 14.0f;
 	envir[3].oxygenationRate = 100.0f;
 
 	//'BAAAAAAD' Testing Environment.
 	envir[4].energyAvailable = 100.0f;
-	envir[4].idealTemp = 6.0f;
+	envir[4].temperature = 6.0f;
 	envir[4].oxygenationRate = 20.0f;
 
 	//'So-So' Testing Environment.
 	envir[5].energyAvailable = 750.0f;
-	envir[5].idealTemp = 13.5f;
+	envir[5].temperature = 13.5f;
 	envir[5].oxygenationRate = 65.0f;
 
 #pragma region TEST_ENERGY_AVAILABLE.
@@ -145,7 +145,7 @@ int main()
 	//creature 2 - should SURVIVE suited to environment 0.
 	creat[2].energyDemand = 200.0f;		//over the range, not even environ energy.
 	creat[2].idealTemp = 12.0f;			//same as environ temp.
-	creat[2].idealTempRange = 1.0f;		//
+	creat[2].idealTempRange = 2.0f;		//
 	creat[2].tolTempRange = 1.0f;		//
 	creat[2].oxygenDemand = 40.0f;
 	creat[2].oxygenRange = 5.0f;
@@ -186,11 +186,11 @@ int main()
 #pragma endregion
 
 #pragma region TEST_TEMPERATURE_TOLERANCE_RANGES
-	//creature 4 - should SURVIVE, instead ideal idealTemp range.
-	creat[4].energyDemand = 200.0f;		//in range of environ energy.
-	creat[4].idealTemp = 11.5f;			//off environ temp.
-	creat[4].idealTempRange = 1.0f;		//
-	creat[4].tolTempRange = 2.0f;		//
+	//creature 4 - should SURVIVE, inside ideal idealTemp range.
+	creat[4].energyDemand = 200.0f;		
+	creat[4].idealTemp = 11.5f;			
+	creat[4].idealTempRange = 1.0f;		
+	creat[4].tolTempRange = 2.0f;		
 	creat[4].oxygenDemand = 20.0f;
 	creat[4].oxygenRange = 10.0f;
 
@@ -208,10 +208,10 @@ int main()
 	creat[4].creatureNumber = 5;
 
 	//creature 5 - should SURVIVE, inside tolerated idealTemp range and still enough energy remaining after multiplier.
-	creat[5].energyDemand = 200.0f;		//in range of environ energy.
-	creat[5].idealTemp = 10.0f;			//off environ temp.
-	creat[5].idealTempRange = 1.0f;		//
-	creat[5].tolTempRange = 2.0f;		//
+	creat[5].energyDemand = 200.0f;		
+	creat[5].idealTemp = 10.0f;			
+	creat[5].idealTempRange = 1.0f;		
+	creat[5].tolTempRange = 2.0f;		
 	creat[5].oxygenDemand = 90.0f;
 	creat[5].oxygenRange = 25.0f;
 
@@ -229,10 +229,10 @@ int main()
 	creat[5].creatureNumber = 6;
 
 	//creature 6 - should NOT SURVIVE, inside tolerated idealTemp range but NOT enough energy remaining after multiplier.
-	creat[6].energyDemand = 450.0f;		//in range of environ energy.
-	creat[6].idealTemp = 10.0f;			//a little off environ temp.
-	creat[6].idealTempRange = 1.0f;		//
-	creat[6].tolTempRange = 2.0f;		//
+	creat[6].energyDemand = 600.0f;		
+	creat[6].idealTemp = 10.0f;			
+	creat[6].idealTempRange = 1.0f;		
+	creat[6].tolTempRange = 2.0f;		
 	creat[6].oxygenDemand = 60.0f;
 	creat[6].oxygenRange = 50.0f;
 
@@ -252,7 +252,7 @@ int main()
 #pragma endregion
 
 #pragma region OXYGENATION_TESTING
-	//creature 8 - should SURVIVE - tested again Envir[1], provides 50.0f oxygen, creature demands just 40.0f.
+	//creature 8 - should SURVIVE - tested again Envir[2], provides 50.0f oxygen, creature demands just 40.0f.
 	creat[7].energyDemand = 450.0f;		
 	creat[7].idealTemp = 16.0f;			
 	creat[7].idealTempRange = 1.0f;		
@@ -273,7 +273,7 @@ int main()
 		  
 	creat[7].creatureNumber = 8;
 
-	//creature 9- should NOT SURVIVE - tested again Envir[1], provides 50.0f oxygen, creature demands 60.0f.
+	//creature 9- should NOT SURVIVE - tested again Envir[2], provides 50.0f oxygen, creature demands 60.0f.
 	creat[8].energyDemand = 450.0f;		
 	creat[8].idealTemp = 16.0f;			
 	creat[8].idealTempRange = 1.0f;		
@@ -442,8 +442,8 @@ void creatureFitnessTests(Creature creature, Environment environment)
 		if(creature.isAlive)
 		{
 			//test two - temperature fitness test.
-			creature.tempIdeal = idealTempCheck(creature.idealTempRangeMax, creature.idealTempRangeMin, environment.idealTemp);
-			creature.tempTol = toleratedTempCheck(creature.tolTempRangeMax, creature.tolTempRangeMin, environment.idealTemp);
+			creature.tempIdeal = idealTempCheck(creature.idealTempRangeMax, creature.idealTempRangeMin, environment.temperature);
+			creature.tempTol = toleratedTempCheck(creature.tolTempRangeMax, creature.tolTempRangeMin, environment.temperature);
 			creature.isAlive = temperatureFitnessTest(creature.tempIdeal, creature.tempTol);
 
 			if (creature.isAlive)
