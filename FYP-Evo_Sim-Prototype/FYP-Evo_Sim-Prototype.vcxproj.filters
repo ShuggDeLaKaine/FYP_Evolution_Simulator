@@ -33,5 +33,13 @@
     <ClCompile Include="tests.cpp">
       <Filter>tests\src</Filter>
     </ClCompile>
+    <ClCompile Include="fitnessFunctions.cpp">
+      <Filter>code\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="fitnessFunctions.h">
+      <Filter>code\include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
