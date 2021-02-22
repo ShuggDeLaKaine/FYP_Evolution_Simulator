@@ -12,6 +12,7 @@ struct Environment
 	float energyAvailable;
 	float temperature;
 	float oxygenationRate;
+	int environmentNumber;
 };
 
 struct Creature
@@ -67,7 +68,7 @@ std::shared_ptr<GeneralFunctions> genFunc;
 int main()
 {
 	struct Environment envir[6];
-	struct Creature creat[1000];
+	struct Creature creat[10000];
 
 
 	genFunc.reset(new GeneralFunctions);
@@ -91,43 +92,81 @@ int main()
 	envir[0].energyAvailable = 500.0f;
 	envir[0].temperature = 12.0f;
 	envir[0].oxygenationRate = 100.0f;
+	envir[0].environmentNumber = 1;
 
 	//Temperature Testing Environment.
 	envir[1].energyAvailable = 750.0f;
 	envir[1].temperature = 13.0f;
 	envir[1].oxygenationRate = 50.0f;
+	envir[1].environmentNumber = 2;
 
 	//Oxygen Testing Environment.
 	envir[2].energyAvailable = 800.0f;
 	envir[2].temperature = 11.0f;
 	envir[2].oxygenationRate = 50.0f;
+	envir[2].environmentNumber = 3;
 
 	//'EDEN' Testing Environment.
 	envir[3].energyAvailable = 1500.0f;
 	envir[3].temperature = 14.0f;
 	envir[3].oxygenationRate = 100.0f;
+	envir[3].environmentNumber = 4;
 
 	//'BAAAAAAD' Testing Environment.
 	envir[4].energyAvailable = 100.0f;
 	envir[4].temperature = 6.0f;
 	envir[4].oxygenationRate = 20.0f;
+	envir[4].environmentNumber = 5;
 
 	//'So-So' Testing Environment.
 	envir[5].energyAvailable = 750.0f;
 	envir[5].temperature = 13.5f;
 	envir[5].oxygenationRate = 65.0f;
+	envir[5].environmentNumber = 6;
 #pragma endregion
 
+	int populationSize = (sizeof(creat) / sizeof(*creat));
+	int environmentSize = (sizeof(envir) / sizeof(*envir));
+	int aliveList = 0;
+	int deadList = 0;
+
 	//loop through creature array, create variables and print them to screen.
-	for (int i = 0; i < (sizeof(creat) / sizeof(*creat)); i++)
+	for (int i = 0; i < populationSize; i++)
 	{
 		setCreatureVariables(creat[i], energyCentre, energyGauss, idealTempCentre, idealTempGuass, idealTempRangeMin, idealTempRangeMax,
 			tolTempRangeMin, tolTempRangeMax, oxyCentre, oxyGauss, oxyRangeMin, oxyRangeMax);
 		creat[i].creatureNumber = i + 1;
-		std::cout << "CREATURE " << creat[i].creatureNumber << std::endl;
-		printCreatureVariables(creat[i]);
-		std::cout << std::endl << std::endl;
+		//std::cout << "CREATURE " << creat[i].creatureNumber << std::endl;
+		//printCreatureVariables(creat[i]);
+		//std::cout << std::endl << std::endl;
 	}
+
+	//loop through this population and run the fitness tests against them.
+	for (int i = 0; i < populationSize; i++)
+	{
+		creatureFitnessTests(creat[i], envir[4]);
+
+		if (creat[i].isAlive == true)
+		{
+			aliveList++;
+
+			std::cout << "CREATURE " << creat[i].creatureNumber << std::endl;
+			printCreatureVariables(creat[i]);
+			std::cout << std::endl << std::endl;
+		}
+		else if (creat[i].isAlive == false)
+			deadList++;
+		else
+			std::cout << "ERROR: Creature " << creat[i].creatureNumber << " has NULL value to bool isAlive" << std::endl;
+	}
+
+	std::cout << "Population left alive is: " << aliveList << std::endl;
+	std::cout << "Population number dead is: " << deadList << std::endl;
+
+	float percentageSurvived = static_cast<float>(aliveList) / static_cast<float>(populationSize) * 100;
+	percentageSurvived = genFunc->roundFloat(percentageSurvived);
+	std::cout << "Survival Chance in environment " << envir[4].environmentNumber << " is: " << percentageSurvived << "%" << std::endl;
+
 }
 
 void printCreatureVariables(Creature &creature)
@@ -195,12 +234,14 @@ void creatureFitnessTests(Creature &creature, Environment &environment)
 			}
 		}
 
+		/*
 		//console output.
 		std::cout << "Did Creature " << creature.creatureNumber << " survive?   ";
 		if (creature.isAlive)
 			std::cout << "   YES! CREATURE " << creature.creatureNumber << " SURVIVED!" << std::endl;
 		else
 			std::cout << "   NO! CREATURE " << creature.creatureNumber << " IS DEAD!" << std::endl;
+		*/
 	}
 }
 
