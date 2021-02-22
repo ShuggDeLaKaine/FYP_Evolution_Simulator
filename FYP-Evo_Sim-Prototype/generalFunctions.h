@@ -5,10 +5,10 @@
 #include "system.h"
 
 
-/*	\class UsefulFunctions
+/*	\class GeneralFunctions
 *	\brief Class...
 */
-class UsefulFunctions : public System
+class	GeneralFunctions : public System
 {
 public:
 	virtual void start(SystemSignal init = SystemSignal::None, ...);	//!< start the system.
