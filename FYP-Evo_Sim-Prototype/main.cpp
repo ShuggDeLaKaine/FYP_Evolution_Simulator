@@ -42,8 +42,10 @@ struct Creature
 };
 
 //declaring functions ***ALL NEED ABSTRACTING***
-void creatureFitnessTests(Creature creature, Environment environment);
-void setCreatureVariables(Creature creature);
+void creatureFitnessTests(Creature &creature, Environment &environment);
+void setCreatureVariables(Creature &creature);
+float randomFloat(float min, float max);
+float round(float val);
 
 bool oxygenationFitnessTest(float oxygenReq, float environOxygen, bool tolerated);
 bool temperatureFitnessTest(bool ideal, bool tolerated);
@@ -57,16 +59,18 @@ int toleratedOxygenEnergyMultiplier(float creEnergy, bool oxygenTolerated);
 int toleratedTempEnergyMultiplier(float creEnergy, bool ideal, bool tolerated);
 
 
+
 int main()
 {
 	struct Environment envir[6];
-	struct Creature creat[12];
+	struct Creature creat[13];
 
 	Environment * p_environments = envir;
 	Creature * p_creatures = creat;
 	//Environment * p_environments = &envir[0];
 	//Creature * p_creatures = &creat[0];
 
+#pragma region ENVIRONMENTS
 	//Energy testing environment.
 	envir[0].energyAvailable = 500.0f;
 	envir[0].temperature = 12.0f;
@@ -96,8 +100,21 @@ int main()
 	envir[5].energyAvailable = 750.0f;
 	envir[5].temperature = 13.5f;
 	envir[5].oxygenationRate = 65.0f;
+#pragma endregion
 
 #pragma region TEST_ENERGY_AVAILABLE.
+	creat[12].energyDemand = 400.0f;		
+	creat[12].idealTemp = 10.0f;			
+	creat[12].idealTempRange = 3.0f;
+	creat[12].tolTempRange = 1.0f;
+	creat[12].oxygenDemand = 30.0f;
+	creat[12].oxygenRange = 15.0f;
+
+	setCreatureVariables(creat[12]);
+
+	creat[0].creatureNumber = 13;
+
+
 	//creature 0 - should SURVIVE ideally suited to environment 0.
 	creat[0].energyDemand = 400.0f;		//in range of environ energy.
 	creat[0].idealTemp = 12.0f;			//same as environ temp.
@@ -360,6 +377,33 @@ int main()
 	creat[11].creatureNumber = 12;
 #pragma endregion
 
+
+	std::cout << "Creature 13s min ideal temp range should be 7.0c" << std::endl;
+	std::cout << "It is: " << creat[12].idealTempRangeMin << std::endl;
+
+
+	/*
+	//TESTING --- new passing by reference functions working as required. 
+	std::cout << "PRE-FITNESS TESTS --- Creature 2 is alive = ";
+	if (creat[1].isAlive == true)
+		std::cout << "TRUE" << std::endl;
+	else if (creat[1].isAlive == false)
+		std::cout << "FALSE" << std::endl;
+	else
+		std::cout << "ERROR --- no value" << std::endl;
+
+	creatureFitnessTests(creat[1], envir[0]);
+
+	std::cout << "POST-FITNESS TESTS --- Creature 2 is alive = ";
+	if (creat[1].isAlive == true)
+		std::cout << "TRUE" << std::endl;
+	else if (creat[1].isAlive == false)
+		std::cout << "FALSE" << std::endl;
+	else
+		std::cout << "ERROR --- no value" << std::endl;
+	*/
+
+	/*
 	std::cout << "Testing of energy, temperature & oxygenation levels." << std::endl;
 	//TESTING - energy levels.
 	creatureFitnessTests(creat[0], envir[0]);
@@ -382,18 +426,20 @@ int main()
 	creatureFitnessTests(creat[9], envir[1]);
 	creatureFitnessTests(creat[10], envir[1]);
 	creatureFitnessTests(creat[11], envir[1]);
-	
+	*/
 
+	/*
+	//EDEN environment testing
 	int i = 0;
 	std::cout << std::endl;
 	std::cout << "'EDEN' testing environment." << std::endl;
 	//int arraySize = sizeof(creat);	//NOT WORKING - getting 624??? rather than 12 expected...???
 	for (i = 0; i <= 11; i++)
 	{
-
 		creatureFitnessTests(creat[i], envir[3]);
 	}
 
+	//BAAAAAAD environment testing
 	i = 0;
 	std::cout << std::endl;
 	std::cout << "'BAAAAAAAAAD' testing environment." << std::endl;
@@ -402,6 +448,7 @@ int main()
 		creatureFitnessTests(creat[i], envir[4]);
 	}
 
+	//So-So environment testing
 	i = 0;
 	std::cout << std::endl;
 	std::cout << "'So-So' testing environment." << std::endl;
@@ -409,28 +456,51 @@ int main()
 	{
 		creatureFitnessTests(creat[i], envir[5]);
 	}
-	
+	*/
+
 }
 
 
 //function to set initalised vars for creatures.
-//NOTE - DOESN'T WORK - SORT POINTERS to make changes to creat[n].
-void setCreatureVariables(Creature creature)
+void setCreatureVariables(Creature &creature)
 {
 	creature.idealTempRangeMax = creature.idealTemp + creature.idealTempRange;
 	creature.idealTempRangeMin = creature.idealTemp - creature.idealTempRange;
 	creature.tolTempRangeMax = creature.idealTempRangeMax + creature.tolTempRange;
 	creature.tolTempRangeMin = creature.idealTempRangeMin - creature.tolTempRange;
 
+	creature.oxygenTolMin = creature.oxygenDemand - creature.oxygenRange;
+
 	creature.isAlive = true;
 	creature.tempIdeal = true;
 	creature.tempTol = true;
 }
 
+//function to get random range from params.
+float randomFloat(float min, float max)
+{
+	float result = 0.0f;
+
+
+	round(result);
+
+	return result;
+}
+
+float round(float val)
+{
+	//example: 
+	//5.88888 * 100 = 588.888
+	//588.888 + 0.5 = 589.388	//for rounding off the value
+	//type cast to int = 589
+	//divide by 100 = 5.89
+	float value = (int)(val * 100 + 0.5f);
+	return (float)value / 100;
+}
+
 
 //function to take the creature and environment and then run all the relevant fitness tests on.
-//NOTE - NEEDS ALTERING - POINTERS TO creat[n] to permanently make changes to structs vars.
-void creatureFitnessTests(Creature creature, Environment environment)
+void creatureFitnessTests(Creature &creature, Environment &environment)
 {
 	//check that the creature is alive to do checks on in the first place.
 	if(creature.isAlive)
@@ -582,3 +652,18 @@ int toleratedOxygenEnergyMultiplier(float creEnergy, bool oxygenTolerated)
 	return result;
 }
 
+/*
+void swap(int x, int y)
+{
+	int z = x;
+	x = y;
+	y = z;
+}
+*/
+
+void swap(int &x, int &y)
+{
+	int temp = x;
+	x = y;
+	y = temp;
+}
