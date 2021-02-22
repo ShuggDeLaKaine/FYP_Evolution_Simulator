@@ -3,6 +3,9 @@
 #include <iostream>
 #include <vector>
 
+#include "generalFunctions.h"
+#include "fitnessFunctions.h"
+
 
 struct Environment
 {
@@ -44,8 +47,6 @@ struct Creature
 //declaring functions ***ALL NEED ABSTRACTING***
 void creatureFitnessTests(Creature &creature, Environment &environment);
 void setCreatureVariables(Creature &creature);
-float randomFloat(float min, float max);
-float round(float val);
 
 bool oxygenationFitnessTest(float oxygenReq, float environOxygen, bool tolerated);
 bool temperatureFitnessTest(bool ideal, bool tolerated);
@@ -58,17 +59,16 @@ bool toleratedOxygenCheck(float minOxyTolerance, float idealMinOxy, float envirO
 int toleratedOxygenEnergyMultiplier(float creEnergy, bool oxygenTolerated);
 int toleratedTempEnergyMultiplier(float creEnergy, bool ideal, bool tolerated);
 
-
+//RandomNumberGenerator randNum;
+std::shared_ptr<UsefulFunctions> useFunc;
 
 int main()
 {
 	struct Environment envir[6];
 	struct Creature creat[13];
 
-	Environment * p_environments = envir;
-	Creature * p_creatures = creat;
-	//Environment * p_environments = &envir[0];
-	//Creature * p_creatures = &creat[0];
+	useFunc.reset(new UsefulFunctions);
+	useFunc->start();
 
 #pragma region ENVIRONMENTS
 	//Energy testing environment.
@@ -101,8 +101,10 @@ int main()
 	envir[5].temperature = 13.5f;
 	envir[5].oxygenationRate = 65.0f;
 #pragma endregion
-
+	
 #pragma region TEST_ENERGY_AVAILABLE.
+
+	//extra creature 13 to test the new creature creation functions.
 	creat[12].energyDemand = 400.0f;		
 	creat[12].idealTemp = 10.0f;			
 	creat[12].idealTempRange = 3.0f;
@@ -378,8 +380,25 @@ int main()
 #pragma endregion
 
 
-	std::cout << "Creature 13s min ideal temp range should be 7.0c" << std::endl;
-	std::cout << "It is: " << creat[12].idealTempRangeMin << std::endl;
+	
+	float randomFloat = 0.0f;
+	std::cout << "Initalised randomFloat is: " << randomFloat << std::endl;
+	for (int i = 0; i < 200; i++)
+	{
+		randomFloat = useFunc->normalFloatBetween(10.0f, 2.0f);
+		randomFloat = useFunc->roundFloat(randomFloat);
+		std::cout << randomFloat << std::endl;
+	}
+
+	/*
+	int randomInt = 0;
+	std::cout << "Initalised randomInt is: " << randomInt << std::endl;
+	for (int i = 0; i < 20; i++)
+	{
+		randomInt = useFunc->uniformIntBetween(0, 100);
+		std::cout << "randomInt is: " << randomInt << std::endl;
+	}
+	*/
 
 
 	/*
@@ -476,28 +495,16 @@ void setCreatureVariables(Creature &creature)
 	creature.tempTol = true;
 }
 
-//function to get random range from params.
-float randomFloat(float min, float max)
+void setCreatureMain(Creature &creature)
 {
-	float result = 0.0f;
+	creature.energyDemand = 400.0f;		
+	creature.idealTemp = 12.0f;			
+	creature.idealTempRange = 1.0f;
+	creature.tolTempRange = 1.0f;
+	creature.oxygenDemand = 30.0f;
+	creature.oxygenRange = 15.0f;
 
-
-	round(result);
-
-	return result;
 }
-
-float round(float val)
-{
-	//example: 
-	//5.88888 * 100 = 588.888
-	//588.888 + 0.5 = 589.388	//for rounding off the value
-	//type cast to int = 589
-	//divide by 100 = 5.89
-	float value = (int)(val * 100 + 0.5f);
-	return (float)value / 100;
-}
-
 
 //function to take the creature and environment and then run all the relevant fitness tests on.
 void creatureFitnessTests(Creature &creature, Environment &environment)

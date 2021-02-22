@@ -36,9 +36,18 @@
     <ClCompile Include="fitnessFunctions.cpp">
       <Filter>code\src</Filter>
     </ClCompile>
+    <ClCompile Include="generalFunctions.cpp">
+      <Filter>code\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fitnessFunctions.h">
+      <Filter>code\include</Filter>
+    </ClInclude>
+    <ClInclude Include="generalFunctions.h">
+      <Filter>code\include</Filter>
+    </ClInclude>
+    <ClInclude Include="system.h">
       <Filter>code\include</Filter>
     </ClInclude>
   </ItemGroup>
