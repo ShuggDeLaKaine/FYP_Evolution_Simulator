@@ -19,20 +19,21 @@ bool RangeChecks::inRangeCheck(float max, float min, float env)
 }
 
 
-/*
-//function to check whether oxygen level of environment is in the tolerated range of a creature.
-bool toleratedOxygenCheck(float minOxyTolerance, float idealMinOxy, float envirOxyProv)
+float RangeChecks::multiplier(float energy, bool tolerated, bool ideal)
 {
-	bool tolerated = false;
-
-	float creatOxyTolMin = minOxyTolerance;
-	float creatOxyIdealMin = idealMinOxy;
-	float environOxyProvided = envirOxyProv;
-
-	if (environOxyProvided >= creatOxyTolMin
-		&& environOxyProvided <= creatOxyIdealMin)
-		tolerated = true;
-
-	return tolerated;
+	float result = energy;
+	//check if there is a 2nd bool in the params, ideal. If so then do this...
+	if (ideal != NULL)
+	{
+		if (!ideal && tolerated)
+			result = result * 1.5f;
+		return result;
+	}
+	else
+	{
+		if (tolerated)
+			result = result * 1.5f;
+		return result;
+	}
 }
-*/
+

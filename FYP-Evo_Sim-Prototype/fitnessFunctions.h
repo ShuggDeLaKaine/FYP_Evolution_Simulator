@@ -1,6 +1,9 @@
 /** \file fitnessFunctions.h*/
 #pragma once
 
+#include <stdint.h>
+
+
 /*	\class FitnessFunctions
 *	\brief Class...
 */
@@ -13,4 +16,9 @@ public:
 	
 	virtual bool inRangeCheck(float max, float min, float env) = 0;
 
+	virtual float multiplier(float energy, bool tolerated, bool ideal = NULL) = 0;
 };
+
+
+//int toleratedTempEnergyMultiplier(float creEnergy, bool ideal, bool tolerated)
+//int toleratedOxygenEnergyMultiplier(float creEnergy, bool oxygenTolerated)

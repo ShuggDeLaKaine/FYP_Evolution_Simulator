@@ -25,6 +25,7 @@ struct Creature
 	float oxygenDemand;
 	float oxygenRange;
 	float oxygenTolMin;
+	float oxygenTolMax;
 
 	//ideal temperature vars.
 	float idealTemp;
@@ -41,7 +42,8 @@ struct Creature
 	bool isAlive;
 	bool tempIdeal;
 	bool tempTol;
-	bool tolOxygen;
+	bool oxyIdeal;
+	bool oxyTol;
 
 	int creatureNumber;
 };
@@ -55,11 +57,6 @@ void printCreatureVariables(Creature &creature);
 bool oxygenationFitnessTest(float oxygenReq, float environOxygen, bool tolerated);
 bool temperatureFitnessTest(bool ideal, bool tolerated);
 bool energyFitnessTest(float creature, float environment);
-
-bool toleratedOxygenCheck(float minOxyTolerance, float idealMinOxy, float envirOxyProv);
-
-int toleratedOxygenEnergyMultiplier(float creEnergy, bool oxygenTolerated);
-int toleratedTempEnergyMultiplier(float creEnergy, bool ideal, bool tolerated);
 
 std::shared_ptr<GeneralFunctions> genFunc;
 RangeChecks ffChecks;
@@ -202,10 +199,13 @@ void setCreatureVariables(Creature &creature, float energyCentre, float energyGa
 	creature.tolTempRangeMax = creature.idealTempRangeMax + creature.tolTempRange;
 	creature.tolTempRangeMin = creature.idealTempRangeMin - creature.tolTempRange;
 	creature.oxygenTolMin = creature.oxygenDemand - creature.oxygenRange;
+	creature.oxygenTolMax = creature.oxygenDemand;
 
 	creature.isAlive = true;
 	creature.tempIdeal = true;
 	creature.tempTol = true;
+	creature.oxyIdeal = true;
+	creature.oxyTol = true;
 }
 
 //function to take the creature and environment and then run all the relevant fitness tests on.
@@ -215,8 +215,9 @@ void creatureFitnessTests(Creature &creature, Environment &environment)
 	if(creature.isAlive)
 	{
 		//test one - oxygenation fitness test.
-		creature.tolOxygen = toleratedOxygenCheck(creature.oxygenTolMin, creature.oxygenDemand, environment.oxygenationRate);
-		creature.isAlive = oxygenationFitnessTest(creature.oxygenDemand, environment.oxygenationRate, creature.tolOxygen);
+		creature.oxyIdeal = ffChecks.inRangeCheck(100.0f, creature.oxygenTolMax, environment.oxygenationRate);
+		creature.oxyTol = ffChecks.inRangeCheck(creature.oxygenTolMax, creature.oxygenTolMin, environment.oxygenationRate);
+		creature.isAlive = oxygenationFitnessTest(creature.oxygenDemand, environment.oxygenationRate, creature.oxyTol);
 
 		if(creature.isAlive)
 		{
@@ -228,8 +229,10 @@ void creatureFitnessTests(Creature &creature, Environment &environment)
 			if (creature.isAlive)
 			{
 				//test three - energy fitness test.
-				creature.energyDemand = toleratedOxygenEnergyMultiplier(creature.energyDemand, creature.tolOxygen);
-				creature.energyDemand = toleratedTempEnergyMultiplier(creature.energyDemand, creature.tempIdeal, creature.tempTol);
+				//creature.energyDemand = toleratedOxygenEnergyMultiplier(creature.energyDemand, creature.tolOxygen);
+				creature.energyDemand = ffChecks.multiplier(creature.energyDemand, creature.oxyTol);
+				//creature.energyDemand = toleratedTempEnergyMultiplier(creature.energyDemand, creature.tempIdeal, creature.tempTol);
+				creature.energyDemand = ffChecks.multiplier(creature.energyDemand, creature.tempTol, creature.tempIdeal);
 				creature.isAlive = energyFitnessTest(creature.energyDemand, environment.energyAvailable);
 			}
 		}
@@ -288,53 +291,6 @@ bool oxygenationFitnessTest(float oxygenReq, float environOxygen, bool tolerated
 
 	return survive;
 }
-
-//function to check whether oxygen level of environment is in the tolerated range of a creature.
-bool toleratedOxygenCheck(float minOxyTolerance, float idealMinOxy, float envirOxyProv)
-{
-	bool tolerated = false;
-
-	float creatOxyTolMin = minOxyTolerance;
-	float creatOxyIdealMin = idealMinOxy;
-	float environOxyProvided = envirOxyProv;
-
-	if (environOxyProvided >= creatOxyTolMin
-		&& environOxyProvided <= creatOxyIdealMin)
-		tolerated = true;
-
-	return tolerated;
-}
-
-//function to apply multiplier to energy demand if in idealTemp tolerance range. 
-int toleratedTempEnergyMultiplier(float creEnergy, bool ideal, bool tolerated)
-{
-	int result = creEnergy;
-
-	if (!ideal && tolerated)
-		result = result * 1.5;
-
-	return result;
-}
-
-//function to apply multiplier to energy demand if in tolOxygen range.
-int toleratedOxygenEnergyMultiplier(float creEnergy, bool oxygenTolerated)
-{
-	int result = creEnergy;
-
-	if (oxygenTolerated)
-		result = result * 1.5;
-
-	return result;
-}
-
-void swap(int &x, int &y)
-{
-	int temp = x;
-	x = y;
-	y = temp;
-}
-
-
 
 //hand built creatures for testing.
 	/*
@@ -608,7 +564,6 @@ void swap(int &x, int &y)
 	creat[11].creatureNumber = 12;
 #pragma endregion
 */
-
 
 //testing stuff
 	/*
