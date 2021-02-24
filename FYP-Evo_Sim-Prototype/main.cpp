@@ -4,8 +4,7 @@
 #include <vector>
 
 #include "generalFunctions.h"
-#include "fitnessFunctions.h"
-#include "rangeChecks.h"
+#include "fitnessTests.h"
 
 
 struct Environment
@@ -54,12 +53,9 @@ void setCreatureVariables(Creature &creature, float energyCentre, float energyGa
 	float idealTempRangeMax, float tolTempRangeMin, float tolTempRangeMax, float oxyCentre, float oxyGauss, float oxyRangeMin, float oxyRangeMax);
 void printCreatureVariables(Creature &creature);
 
-bool oxygenationFitnessTest(float oxygenReq, float environOxygen, bool tolerated);
-bool temperatureFitnessTest(bool ideal, bool tolerated);
-bool energyFitnessTest(float creature, float environment);
 
 std::shared_ptr<GeneralFunctions> genFunc;
-RangeChecks ffChecks;
+FitnessTests ffTests;
 
 
 int main()
@@ -215,82 +211,29 @@ void creatureFitnessTests(Creature &creature, Environment &environment)
 	if(creature.isAlive)
 	{
 		//test one - oxygenation fitness test.
-		creature.oxyIdeal = ffChecks.inRangeCheck(100.0f, creature.oxygenTolMax, environment.oxygenationRate);
-		creature.oxyTol = ffChecks.inRangeCheck(creature.oxygenTolMax, creature.oxygenTolMin, environment.oxygenationRate);
-		creature.isAlive = oxygenationFitnessTest(creature.oxygenDemand, environment.oxygenationRate, creature.oxyTol);
+		creature.oxyIdeal = ffTests.inRangeCheck(100.0f, creature.oxygenTolMax, environment.oxygenationRate);
+		creature.oxyTol = ffTests.inRangeCheck(creature.oxygenTolMax, creature.oxygenTolMin, environment.oxygenationRate);
+		creature.isAlive = ffTests.fitnessTest(creature.oxygenDemand, environment.oxygenationRate, creature.oxyTol);
 
 		if(creature.isAlive)
 		{
 			//test two - temperature fitness test.
-			creature.tempIdeal = ffChecks.inRangeCheck(creature.idealTempRangeMax, creature.idealTempRangeMin, environment.temperature);
-			creature.tempTol = ffChecks.inRangeCheck(creature.tolTempRangeMax, creature.tolTempRangeMin, environment.temperature);
-			creature.isAlive = temperatureFitnessTest(creature.tempIdeal, creature.tempTol);
+			creature.tempIdeal = ffTests.inRangeCheck(creature.idealTempRangeMax, creature.idealTempRangeMin, environment.temperature);
+			creature.tempTol = ffTests.inRangeCheck(creature.tolTempRangeMax, creature.tolTempRangeMin, environment.temperature);
+			creature.isAlive = ffTests.fitnessTest(creature.tempIdeal, creature.tempTol);
 
 			if (creature.isAlive)
 			{
 				//test three - energy fitness test.
-				//creature.energyDemand = toleratedOxygenEnergyMultiplier(creature.energyDemand, creature.tolOxygen);
-				creature.energyDemand = ffChecks.multiplier(creature.energyDemand, creature.oxyTol);
-				//creature.energyDemand = toleratedTempEnergyMultiplier(creature.energyDemand, creature.tempIdeal, creature.tempTol);
-				creature.energyDemand = ffChecks.multiplier(creature.energyDemand, creature.tempTol, creature.tempIdeal);
-				creature.isAlive = energyFitnessTest(creature.energyDemand, environment.energyAvailable);
+				creature.energyDemand = ffTests.multiplier(creature.energyDemand, creature.oxyTol);
+				creature.energyDemand = ffTests.multiplier(creature.energyDemand, creature.tempTol, creature.tempIdeal);
+				creature.isAlive = ffTests.fitnessTest(creature.energyDemand, environment.energyAvailable);
 			}
 		}
-
-		/*
-		//console output.
-		std::cout << "Did Creature " << creature.creatureNumber << " survive?   ";
-		if (creature.isAlive)
-			std::cout << "   YES! CREATURE " << creature.creatureNumber << " SURVIVED!" << std::endl;
-		else
-			std::cout << "   NO! CREATURE " << creature.creatureNumber << " IS DEAD!" << std::endl;
-		*/
 	}
 }
 
 
-//function to determine energy fitness test.
-bool energyFitnessTest(float creatEnergy, float envEnergy)
-{
-	bool survive = true;
-
-	float creEnergDemand = creatEnergy;
-	float envirEnergyAvailable = envEnergy;
-
-	if (creEnergDemand > envirEnergyAvailable)
-		survive = false;
-
-	return survive;
-}
-
-//function to determine whether creature can survive idealTemp.
-bool temperatureFitnessTest(bool ideal, bool tolerated)
-{
-	bool survive = true;
-	bool inIdeal = ideal;
-	bool inTolerated = tolerated;
-
-	if (!inIdeal && !inTolerated)
-		survive = false;
-
-	return survive;
-}
-
-//function to determine the oxygenation fitness test.
-bool oxygenationFitnessTest(float oxygenReq, float environOxygen, bool tolerated)
-{
-	bool survive = true;
-
-	float creatOxyRequired = oxygenReq;
-	float environOxyProvided = environOxygen;
-	bool inToleratedRange = tolerated;
-
-	if (environOxyProvided < creatOxyRequired
-		&& inToleratedRange == false)
-		survive = false;
-
-	return survive;
-}
 
 //hand built creatures for testing.
 	/*
@@ -650,4 +593,14 @@ bool oxygenationFitnessTest(float oxygenReq, float environOxygen, bool tolerated
 	{
 		creatureFitnessTests(creat[i], envir[5]);
 	}
+	*/
+
+
+	/*
+	//console output.
+	std::cout << "Did Creature " << creature.creatureNumber << " survive?   ";
+	if (creature.isAlive)
+		std::cout << "   YES! CREATURE " << creature.creatureNumber << " SURVIVED!" << std::endl;
+	else
+		std::cout << "   NO! CREATURE " << creature.creatureNumber << " IS DEAD!" << std::endl;
 	*/

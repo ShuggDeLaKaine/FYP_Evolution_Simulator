@@ -42,7 +42,7 @@
     <ClCompile Include="generalFunctions.cpp">
       <Filter>code\src</Filter>
     </ClCompile>
-    <ClCompile Include="rangeChecks.cpp">
+    <ClCompile Include="fitnessTests.cpp">
       <Filter>code\src\fitness</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,7 +56,7 @@
     <ClInclude Include="fitnessFunctions.h">
       <Filter>code\include\fitness</Filter>
     </ClInclude>
-    <ClInclude Include="rangeChecks.h">
+    <ClInclude Include="fitnessTests.h">
       <Filter>code\include\fitness</Filter>
     </ClInclude>
   </ItemGroup>
