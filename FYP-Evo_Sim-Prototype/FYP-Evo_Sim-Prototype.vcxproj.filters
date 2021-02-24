@@ -25,6 +25,12 @@
     <Filter Include="tests\src">
       <UniqueIdentifier>{455662a8-5d72-4338-9875-511d30ab2bd6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="code\include\fitness">
+      <UniqueIdentifier>{5709ff25-13c4-46a1-ba8c-4208920ea7f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="code\src\fitness">
+      <UniqueIdentifier>{1bc1450b-23ff-47f1-bd97-c4576a0a9a16}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -33,22 +39,25 @@
     <ClCompile Include="tests.cpp">
       <Filter>tests\src</Filter>
     </ClCompile>
-    <ClCompile Include="fitnessFunctions.cpp">
-      <Filter>code\src</Filter>
-    </ClCompile>
     <ClCompile Include="generalFunctions.cpp">
       <Filter>code\src</Filter>
     </ClCompile>
+    <ClCompile Include="rangeChecks.cpp">
+      <Filter>code\src\fitness</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="fitnessFunctions.h">
-      <Filter>code\include</Filter>
-    </ClInclude>
     <ClInclude Include="generalFunctions.h">
       <Filter>code\include</Filter>
     </ClInclude>
     <ClInclude Include="system.h">
       <Filter>code\include</Filter>
+    </ClInclude>
+    <ClInclude Include="fitnessFunctions.h">
+      <Filter>code\include\fitness</Filter>
+    </ClInclude>
+    <ClInclude Include="rangeChecks.h">
+      <Filter>code\include\fitness</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -151,14 +151,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="fitnessFunctions.cpp" />
     <ClCompile Include="generalFunctions.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="rangeChecks.cpp" />
     <ClCompile Include="tests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fitnessFunctions.h" />
     <ClInclude Include="generalFunctions.h" />
+    <ClInclude Include="rangeChecks.h" />
     <ClInclude Include="system.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

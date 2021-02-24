@@ -5,6 +5,7 @@
 
 #include "generalFunctions.h"
 #include "fitnessFunctions.h"
+#include "rangeChecks.h"
 
 
 struct Environment
@@ -55,20 +56,19 @@ bool oxygenationFitnessTest(float oxygenReq, float environOxygen, bool tolerated
 bool temperatureFitnessTest(bool ideal, bool tolerated);
 bool energyFitnessTest(float creature, float environment);
 
-bool idealTempCheck(float idealMax, float idealMin, float envTemp);
-bool toleratedTempCheck(float tolMax, float tolMin, float envTemp);
 bool toleratedOxygenCheck(float minOxyTolerance, float idealMinOxy, float envirOxyProv);
 
 int toleratedOxygenEnergyMultiplier(float creEnergy, bool oxygenTolerated);
 int toleratedTempEnergyMultiplier(float creEnergy, bool ideal, bool tolerated);
 
 std::shared_ptr<GeneralFunctions> genFunc;
+RangeChecks ffChecks;
 
 
 int main()
 {
 	struct Environment envir[6];
-	struct Creature creat[10000];
+	struct Creature creat[5];
 
 
 	genFunc.reset(new GeneralFunctions);
@@ -136,15 +136,15 @@ int main()
 		setCreatureVariables(creat[i], energyCentre, energyGauss, idealTempCentre, idealTempGuass, idealTempRangeMin, idealTempRangeMax,
 			tolTempRangeMin, tolTempRangeMax, oxyCentre, oxyGauss, oxyRangeMin, oxyRangeMax);
 		creat[i].creatureNumber = i + 1;
-		//std::cout << "CREATURE " << creat[i].creatureNumber << std::endl;
-		//printCreatureVariables(creat[i]);
-		//std::cout << std::endl << std::endl;
+		std::cout << "CREATURE " << creat[i].creatureNumber << std::endl;
+		printCreatureVariables(creat[i]);
+		std::cout << std::endl << std::endl;
 	}
 
 	//loop through this population and run the fitness tests against them.
 	for (int i = 0; i < populationSize; i++)
 	{
-		creatureFitnessTests(creat[i], envir[4]);
+		creatureFitnessTests(creat[i], envir[5]);
 
 		if (creat[i].isAlive == true)
 		{
@@ -221,8 +221,8 @@ void creatureFitnessTests(Creature &creature, Environment &environment)
 		if(creature.isAlive)
 		{
 			//test two - temperature fitness test.
-			creature.tempIdeal = idealTempCheck(creature.idealTempRangeMax, creature.idealTempRangeMin, environment.temperature);
-			creature.tempTol = toleratedTempCheck(creature.tolTempRangeMax, creature.tolTempRangeMin, environment.temperature);
+			creature.tempIdeal = ffChecks.inRangeCheck(creature.idealTempRangeMax, creature.idealTempRangeMin, environment.temperature);
+			creature.tempTol = ffChecks.inRangeCheck(creature.tolTempRangeMax, creature.tolTempRangeMin, environment.temperature);
 			creature.isAlive = temperatureFitnessTest(creature.tempIdeal, creature.tempTol);
 
 			if (creature.isAlive)
@@ -287,42 +287,6 @@ bool oxygenationFitnessTest(float oxygenReq, float environOxygen, bool tolerated
 		survive = false;
 
 	return survive;
-}
-
-//function to determine whether in ideal idealTemp range fitness check.
-bool idealTempCheck(float idealMax, float idealMin, float envTemp)
-{
-	bool ideal = true;
-
-	float creatIdealTempMax = idealMax;
-	float creatIdealTempMin = idealMin;
-	float environTemp = envTemp;
-
-	if (environTemp <= creatIdealTempMax
-		&& environTemp >= creatIdealTempMin)
-		ideal = true;
-	else
-		ideal = false;
-
-	return ideal;
-}
-
-//function to determine whether in tolerated idealTemp range fitness check.
-bool toleratedTempCheck(float tolMax, float tolMin, float envTemp)
-{
-	bool tolerated = true;
-
-	float creatTolTempMax = tolMax;
-	float creatTolTempMin = tolMin;
-	float environTemp = envTemp;
-
-	if (environTemp <= creatTolTempMax
-		&& environTemp >= creatTolTempMin)
-		tolerated = true;
-	else
-		tolerated = false;
-
-	return tolerated;
 }
 
 //function to check whether oxygen level of environment is in the tolerated range of a creature.
