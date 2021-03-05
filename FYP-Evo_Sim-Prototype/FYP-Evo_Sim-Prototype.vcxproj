@@ -72,12 +72,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\FYP-Evo_Sim-Prototype\include;$(IncludePath)</IncludePath>
+    <SourcePath>C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\FYP-Evo_Sim-Prototype\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\FYP-Evo_Sim-Prototype\include;$(IncludePath)</IncludePath>
+    <SourcePath>C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\FYP-Evo_Sim-Prototype\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -151,16 +155,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="fitnessTests.cpp" />
-    <ClCompile Include="generalFunctions.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\core\generalFunctions.cpp" />
+    <ClCompile Include="src\core\main.cpp" />
+    <ClCompile Include="src\creatures\creature.cpp" />
+    <ClCompile Include="src\fitness\energyFitnessTest.cpp" />
+    <ClCompile Include="src\fitness\oxygenFitnessTest.cpp" />
+    <ClCompile Include="src\fitness\temperatureFitnessTest.cpp" />
     <ClCompile Include="tests.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="fitnessFunctions.h" />
-    <ClInclude Include="fitnessTests.h" />
-    <ClInclude Include="generalFunctions.h" />
-    <ClInclude Include="system.h" />
+    <ClInclude Include="include\core\generalFunctions.h" />
+    <ClInclude Include="include\core\headerList.h" />
+    <ClInclude Include="include\core\system.h" />
+    <ClInclude Include="include\creatures\creature.h" />
+    <ClInclude Include="include\fitness\energyFitnessTest.h" />
+    <ClInclude Include="include\fitness\fitnessFunctions.h" />
+    <ClInclude Include="include\fitness\fitnessHeaderList.h" />
+    <ClInclude Include="include\fitness\oxygenFitnessTest.h" />
+    <ClInclude Include="include\fitness\temperatureFitnessTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

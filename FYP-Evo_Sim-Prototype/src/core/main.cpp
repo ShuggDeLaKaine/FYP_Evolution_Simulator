@@ -3,8 +3,7 @@
 #include <iostream>
 #include <vector>
 
-#include "generalFunctions.h"
-#include "fitnessTests.h"
+#include "core/headerList.h"
 
 
 struct Environment
@@ -53,15 +52,17 @@ void setCreatureVariables(Creature &creature, float energyCentre, float energyGa
 	float idealTempRangeMax, float tolTempRangeMin, float tolTempRangeMax, float oxyCentre, float oxyGauss, float oxyRangeMin, float oxyRangeMax);
 void printCreatureVariables(Creature &creature);
 
-
 std::shared_ptr<GeneralFunctions> genFunc;
-FitnessTests ffTests;
+EnergyFitnessTest energyTests;
+TemperatureFitnessTest tempTests;
+OxygenFitnessTest oxygenTests;
+Creature creature;
 
 
 int main()
 {
 	struct Environment envir[6];
-	struct Creature creat[5];
+	struct Creature creat[10000];
 
 
 	genFunc.reset(new GeneralFunctions);
@@ -129,15 +130,15 @@ int main()
 		setCreatureVariables(creat[i], energyCentre, energyGauss, idealTempCentre, idealTempGuass, idealTempRangeMin, idealTempRangeMax,
 			tolTempRangeMin, tolTempRangeMax, oxyCentre, oxyGauss, oxyRangeMin, oxyRangeMax);
 		creat[i].creatureNumber = i + 1;
-		std::cout << "CREATURE " << creat[i].creatureNumber << std::endl;
-		printCreatureVariables(creat[i]);
-		std::cout << std::endl << std::endl;
+		//std::cout << "CREATURE " << creat[i].creatureNumber << std::endl;
+		//printCreatureVariables(creat[i]);
+		//std::cout << std::endl << std::endl;
 	}
 
 	//loop through this population and run the fitness tests against them.
 	for (int i = 0; i < populationSize; i++)
 	{
-		creatureFitnessTests(creat[i], envir[5]);
+		creatureFitnessTests(creat[i], envir[4]);
 
 		if (creat[i].isAlive == true)
 		{
@@ -182,6 +183,18 @@ void setCreatureVariables(Creature &creature, float energyCentre, float energyGa
 {
 	creature.energyDemand = genFunc->normalFloatBetween(energyCentre, energyGauss);
 	creature.energyDemand = genFunc->roundFloat(creature.energyDemand);
+	//check if energyDemand is less than 0... 
+	if (creature.energyDemand <= 0.0f)
+	{
+		//CHOICE!!!
+		//do we remove the creature if the energy demand is less than 0...
+		//or, do we randomly pick a constrained low number?
+
+		float min = genFunc->uniformFloatBetween(1.0f, 20.0f);
+		float max = genFunc->uniformFloatBetween(60.0f, 80.0f);
+		creature.energyDemand = genFunc->uniformFloatBetween(min, max);
+	}
+
 	creature.idealTemp = genFunc->normalFloatBetween(idealTempCentre, idealTempGuass);
 	creature.idealTemp = genFunc->roundFloat(creature.idealTemp);
 	creature.idealTempRange = genFunc->uniformFloatBetween(idealTempRangeMin, idealTempRangeMax);
@@ -192,10 +205,33 @@ void setCreatureVariables(Creature &creature, float energyCentre, float energyGa
 
 	creature.idealTempRangeMax = creature.idealTemp + creature.idealTempRange;
 	creature.idealTempRangeMin = creature.idealTemp - creature.idealTempRange;
+	//check if idealTempRangeMin is less than 0...
+	if (creature.idealTempRangeMin <= 0.0f)
+	{
+		float min = genFunc->uniformFloatBetween(0.05f, 1.0f);
+		float max = genFunc->uniformFloatBetween(3.0f,  6.0f);
+		creature.idealTempRangeMin = genFunc->uniformFloatBetween(min, max);
+	}
+
 	creature.tolTempRangeMax = creature.idealTempRangeMax + creature.tolTempRange;
 	creature.tolTempRangeMin = creature.idealTempRangeMin - creature.tolTempRange;
-	creature.oxygenTolMin = creature.oxygenDemand - creature.oxygenRange;
+	//check if idealTempRangeMin is less than 0...
+	if (creature.tolTempRangeMin <= 0.0f)
+	{
+		float min = genFunc->uniformFloatBetween(0.05f, 1.0f);
+		float max = genFunc->uniformFloatBetween(3.0f, 6.0f);
+		creature.tolTempRangeMin = genFunc->uniformFloatBetween(min, max);
+	}
+
 	creature.oxygenTolMax = creature.oxygenDemand;
+	creature.oxygenTolMin = creature.oxygenDemand - creature.oxygenRange;
+	//check if idealTempRangeMin is less than 0...
+	if (creature.oxygenTolMin <= 0.0f)
+	{
+		float min = genFunc->uniformFloatBetween(0.05f, 1.0f);
+		float max = genFunc->uniformFloatBetween(3.0f, 6.0f);
+		creature.oxygenTolMin = genFunc->uniformFloatBetween(min, max);
+	}
 
 	creature.isAlive = true;
 	creature.tempIdeal = true;
@@ -211,23 +247,23 @@ void creatureFitnessTests(Creature &creature, Environment &environment)
 	if(creature.isAlive)
 	{
 		//test one - oxygenation fitness test.
-		creature.oxyIdeal = ffTests.inRangeCheck(100.0f, creature.oxygenTolMax, environment.oxygenationRate);
-		creature.oxyTol = ffTests.inRangeCheck(creature.oxygenTolMax, creature.oxygenTolMin, environment.oxygenationRate);
-		creature.isAlive = ffTests.fitnessTest(creature.oxygenDemand, environment.oxygenationRate, creature.oxyTol);
+		creature.oxyIdeal = oxygenTests.inRangeCheck(100.0f, creature.oxygenTolMax, environment.oxygenationRate);
+		creature.oxyTol = oxygenTests.inRangeCheck(creature.oxygenTolMax, creature.oxygenTolMin, environment.oxygenationRate);
+		creature.isAlive = oxygenTests.fitnessTest(creature.oxygenDemand, environment.oxygenationRate, creature.oxyTol);
 
 		if(creature.isAlive)
 		{
 			//test two - temperature fitness test.
-			creature.tempIdeal = ffTests.inRangeCheck(creature.idealTempRangeMax, creature.idealTempRangeMin, environment.temperature);
-			creature.tempTol = ffTests.inRangeCheck(creature.tolTempRangeMax, creature.tolTempRangeMin, environment.temperature);
-			creature.isAlive = ffTests.fitnessTest(creature.tempIdeal, creature.tempTol);
+			creature.tempIdeal = tempTests.inRangeCheck(creature.idealTempRangeMax, creature.idealTempRangeMin, environment.temperature);
+			creature.tempTol = tempTests.inRangeCheck(creature.tolTempRangeMax, creature.tolTempRangeMin, environment.temperature);
+			creature.isAlive = tempTests.fitnessTest(creature.tempIdeal, creature.tempTol);
 
 			if (creature.isAlive)
 			{
 				//test three - energy fitness test.
-				creature.energyDemand = ffTests.multiplier(creature.energyDemand, creature.oxyTol);
-				creature.energyDemand = ffTests.multiplier(creature.energyDemand, creature.tempTol, creature.tempIdeal);
-				creature.isAlive = ffTests.fitnessTest(creature.energyDemand, environment.energyAvailable);
+				creature.energyDemand = oxygenTests.multiplier(creature.energyDemand, creature.oxyTol);
+				creature.energyDemand = tempTests.multiplier(creature.energyDemand, creature.tempTol, creature.tempIdeal);
+				creature.isAlive = energyTests.fitnessTest(creature.energyDemand, environment.energyAvailable);
 			}
 		}
 	}

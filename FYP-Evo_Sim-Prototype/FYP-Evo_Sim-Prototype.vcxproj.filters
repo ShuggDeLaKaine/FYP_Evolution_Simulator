@@ -31,33 +31,63 @@
     <Filter Include="code\src\fitness">
       <UniqueIdentifier>{1bc1450b-23ff-47f1-bd97-c4576a0a9a16}</UniqueIdentifier>
     </Filter>
+    <Filter Include="code\include\core">
+      <UniqueIdentifier>{c816ef14-0cc4-4291-a2be-fc8b437dc191}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="code\src\core">
+      <UniqueIdentifier>{49e0786d-c605-4dd5-bf9c-901f1ad111b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>code\src</Filter>
-    </ClCompile>
     <ClCompile Include="tests.cpp">
       <Filter>tests\src</Filter>
     </ClCompile>
-    <ClCompile Include="generalFunctions.cpp">
+    <ClCompile Include="src\core\generalFunctions.cpp">
+      <Filter>code\src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\main.cpp">
+      <Filter>code\src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fitness\energyFitnessTest.cpp">
       <Filter>code\src</Filter>
     </ClCompile>
-    <ClCompile Include="fitnessTests.cpp">
-      <Filter>code\src\fitness</Filter>
+    <ClCompile Include="src\fitness\oxygenFitnessTest.cpp">
+      <Filter>code\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fitness\temperatureFitnessTest.cpp">
+      <Filter>code\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\creatures\creature.cpp">
+      <Filter>code\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="generalFunctions.h">
-      <Filter>code\include</Filter>
-    </ClInclude>
-    <ClInclude Include="system.h">
-      <Filter>code\include</Filter>
-    </ClInclude>
-    <ClInclude Include="fitnessFunctions.h">
+    <ClInclude Include="include\fitness\fitnessFunctions.h">
       <Filter>code\include\fitness</Filter>
     </ClInclude>
-    <ClInclude Include="fitnessTests.h">
-      <Filter>code\include\fitness</Filter>
+    <ClInclude Include="include\core\generalFunctions.h">
+      <Filter>code\include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\system.h">
+      <Filter>code\include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fitness\energyFitnessTest.h">
+      <Filter>code\include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fitness\oxygenFitnessTest.h">
+      <Filter>code\include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fitness\temperatureFitnessTest.h">
+      <Filter>code\include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\headerList.h">
+      <Filter>code\include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fitness\fitnessHeaderList.h">
+      <Filter>code\include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\creatures\creature.h">
+      <Filter>code\include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,5 +1,5 @@
 /** \file generalFunctions.cpp */
-#include "generalFunctions.h"
+#include "core/generalFunctions.h"
 #include <chrono>
 
 
