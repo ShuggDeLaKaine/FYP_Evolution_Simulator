@@ -2,7 +2,12 @@
 #include "creatures/creature.h"
 
 
-CreatureCreation::CreatureCreation(Creature & creature, float energyCentre, float energyGauss, float idealTempCentre, float idealTempGuass, float idealTempRangeMin, float idealTempRangeMax, float tolTempRangeMin, float tolTempRangeMax, float oxyCentre, float oxyGauss, float oxyRangeMin, float oxyRangeMax)
+CreatureCreation::~CreatureCreation()
+{
+
+}
+
+void CreatureCreation::creatureCreation(Creature & creature, float energyCentre, float energyGauss, float idealTempCentre, float idealTempGuass, float idealTempRangeMin, float idealTempRangeMax, float tolTempRangeMin, float tolTempRangeMax, float oxyCentre, float oxyGauss, float oxyRangeMin, float oxyRangeMax)
 {
 	creature.energyDemand = genFunc->normalFloatBetween(energyCentre, energyGauss);
 	creature.energyDemand = genFunc->roundFloat(creature.energyDemand);
@@ -44,8 +49,10 @@ CreatureCreation::CreatureCreation(Creature & creature, float energyCentre, floa
 	creature.oxyTol = true;
 }
 
-CreatureCreation::~CreatureCreation()
+void CreatureCreation::createInitialPopulation(Creature &creature, const uint32_t populationSize)
 {
+	//struct Creature creat[10000];
+
 
 }
 

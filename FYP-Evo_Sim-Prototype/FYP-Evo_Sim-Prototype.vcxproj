@@ -155,12 +155,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="include\environments\savedCode.cpp" />
     <ClCompile Include="src\core\generalFunctions.cpp" />
     <ClCompile Include="src\core\main.cpp" />
     <ClCompile Include="src\creatures\creature.cpp" />
     <ClCompile Include="src\fitness\energyFitnessTest.cpp" />
     <ClCompile Include="src\fitness\oxygenFitnessTest.cpp" />
     <ClCompile Include="src\fitness\temperatureFitnessTest.cpp" />
+    <ClCompile Include="savedCode.cpp" />
     <ClCompile Include="tests.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +170,7 @@
     <ClInclude Include="include\core\headerList.h" />
     <ClInclude Include="include\core\system.h" />
     <ClInclude Include="include\creatures\creature.h" />
+    <ClInclude Include="include\environments\environment.h" />
     <ClInclude Include="include\fitness\energyFitnessTest.h" />
     <ClInclude Include="include\fitness\fitnessFunctions.h" />
     <ClInclude Include="include\fitness\fitnessHeaderList.h" />

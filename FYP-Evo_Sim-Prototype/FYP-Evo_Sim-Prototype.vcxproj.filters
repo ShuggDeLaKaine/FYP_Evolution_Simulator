@@ -60,6 +60,12 @@
     <ClCompile Include="src\creatures\creature.cpp">
       <Filter>code\src</Filter>
     </ClCompile>
+    <ClCompile Include="include\environments\savedCode.cpp">
+      <Filter>code\src</Filter>
+    </ClCompile>
+    <ClCompile Include="savedCode.cpp">
+      <Filter>code\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\fitness\fitnessFunctions.h">
@@ -87,6 +93,9 @@
       <Filter>code\include</Filter>
     </ClInclude>
     <ClInclude Include="include\creatures\creature.h">
+      <Filter>code\include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\environments\environment.h">
       <Filter>code\include</Filter>
     </ClInclude>
   </ItemGroup>
