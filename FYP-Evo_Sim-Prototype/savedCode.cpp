@@ -1,6 +1,47 @@
 
 
-//hand built creatures for testing.
+//hand-built testing environments.
+/*
+#pragma region ENVIRONMENTS
+	//Energy testing environment.
+	envir[0].energyAvailable = 500.0f;
+	envir[0].temperature = 12.0f;
+	envir[0].oxygenationRate = 100.0f;
+	envir[0].ID = 1;
+
+	//Temperature Testing Environment.
+	envir[1].energyAvailable = 750.0f;
+	envir[1].temperature = 13.0f;
+	envir[1].oxygenationRate = 50.0f;
+	envir[1].ID = 2;
+
+	//Oxygen Testing Environment.
+	envir[2].energyAvailable = 800.0f;
+	envir[2].temperature = 11.0f;
+	envir[2].oxygenationRate = 50.0f;
+	envir[2].ID = 3;
+
+	//'EDEN' Testing Environment.
+	envir[3].energyAvailable = 1500.0f;
+	envir[3].temperature = 14.0f;
+	envir[3].oxygenationRate = 100.0f;
+	envir[3].ID = 4;
+
+	//'BAAAAAAD' Testing Environment.
+	envir[4].energyAvailable = 100.0f;
+	envir[4].temperature = 6.0f;
+	envir[4].oxygenationRate = 20.0f;
+	envir[4].ID = 5;
+
+	//'So-So' Testing Environment.
+	envir[5].energyAvailable = 750.0f;
+	envir[5].temperature = 13.5f;
+	envir[5].oxygenationRate = 65.0f;
+	envir[5].ID = 6;
+#pragma endregion
+*/
+
+//hand-built creatures for testing.
 	/*
 #pragma region TEST_ENERGY_AVAILABLE.
 
@@ -273,7 +314,7 @@
 #pragma endregion
 */
 
-//testing stuff
+//testing stuff.
 	/*
 	//TESTING --- pre-created creature, seeing if setCreatureVariables changes these initial values and how.
 	std::cout << "PRE AUTOMATED CHANGED" << std::endl;
@@ -360,7 +401,7 @@
 	}
 	*/
 
-
+//output code.
 	/*
 	//console output.
 	std::cout << "Did Creature " << creature.creatureNumber << " survive?   ";

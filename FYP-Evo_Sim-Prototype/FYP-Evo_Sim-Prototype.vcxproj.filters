@@ -60,10 +60,13 @@
     <ClCompile Include="src\creatures\creature.cpp">
       <Filter>code\src</Filter>
     </ClCompile>
-    <ClCompile Include="include\environments\savedCode.cpp">
+    <ClCompile Include="savedCode.cpp">
       <Filter>code\src</Filter>
     </ClCompile>
-    <ClCompile Include="savedCode.cpp">
+    <ClCompile Include="src\fitness\fullFitnessTest.cpp">
+      <Filter>code\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\environments\environment.cpp">
       <Filter>code\src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -96,6 +99,9 @@
       <Filter>code\include</Filter>
     </ClInclude>
     <ClInclude Include="include\environments\environment.h">
+      <Filter>code\include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fitness\fullFitnessTest.h">
       <Filter>code\include</Filter>
     </ClInclude>
   </ItemGroup>

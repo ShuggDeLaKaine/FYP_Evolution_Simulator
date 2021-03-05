@@ -13,7 +13,7 @@ void CreatureCreation::creatureCreation(Creature & creature, float energyCentre,
 	creature.energyDemand = genFunc->roundFloat(creature.energyDemand);
 	if (creature.energyDemand <= 0.0f)
 	{	//CHOICE!!!
-		//do we remove the creature if the energy demand is less than 0...
+		//do we remove the creature if their energy demand is less than 0...
 			//add to remove and delete list.
 		//or, do we randomly pick a constrained low number?
 		creature.energyDemand = resetVariable(1.0f, 20.0f, 60.0f, 80.0f);
@@ -25,6 +25,13 @@ void CreatureCreation::creatureCreation(Creature & creature, float energyCentre,
 	creature.tolTempRange = genFunc->uniformFloatBetween(tolTempRangeMin, tolTempRangeMax);
 	creature.oxygenDemand = genFunc->normalFloatBetween(oxyCentre, oxyGauss);
 	creature.oxygenDemand = genFunc->roundFloat(creature.oxygenDemand);
+	if (creature.oxygenDemand <= 0.0f)
+	{	//CHOICE!!!
+		//do we remove the creature if their oxygen demand is less than 0...
+			//add to remove and delete list.
+		//or, do we randomly pick a constrained low number?
+		creature.oxygenDemand = resetVariable(1.0f, 5.0f, 15.0f, 20.0f);
+	}
 	creature.oxygenRange = genFunc->uniformFloatBetween(oxyRangeMin, oxyRangeMax);
 
 	creature.idealTempRangeMax = creature.idealTemp + creature.idealTempRange;
