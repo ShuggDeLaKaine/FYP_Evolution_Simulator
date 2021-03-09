@@ -4,6 +4,13 @@
 #include <vector>
 #include "core/headerList.h"
 
+//display functions for purpose of debugging.
+void displayCreatureVariables(Creature creat[], int element);
+void displaySeedPopulationResult(int alive, int dead);
+void displayFirstPopulation(Creature creat[], int pop);
+void displaySurvivedPercentage(Environment envir, int alive, int popSize);
+
+//reference to classes.
 FullFitnessTest ft;
 CreatureCreation cc;
 EnvironmentCreation ec;
@@ -20,7 +27,7 @@ int main()
 	genFunc.reset(new GeneralFunctions);
 	genFunc->start();
 
-	//setting 
+	//hard-set creature variables (for constrained-random creature creation). 
 	float energyCentre = 300.0f;
 	float energyGauss = 100.0f;
 	float idealTempCentre = 15.0f;
@@ -42,13 +49,12 @@ int main()
 	envir[0].ID = 1;
 #pragma endregion
 
-	uint32_t populationSize = (sizeof(seedPopulation) / sizeof(*seedPopulation));
+	int populationSize = (sizeof(seedPopulation) / sizeof(*seedPopulation));
 	int environmentSize = (sizeof(envir) / sizeof(*envir));
-	bool tempArrayInUse = false;
 	int firstPopulationList = 0;
 	int deadList = 0;
 
-	//loop through creature array and create creatures with variables.
+	//loop through creature array and create creatures with constrained random variables.
 	for (int i = 0; i < populationSize; i++)
 	{
 		cc.creatureCreation(seedPopulation[i], energyCentre, energyGauss, idealTempCentre, idealTempGuass, idealTempRangeMin, idealTempRangeMax,
@@ -56,11 +62,13 @@ int main()
 		seedPopulation[i].creatureNumber = i + 1;
 	}
 
-	//loop through this population and run the fitness tests against them.
+	//loop through this population and run the fitness tests against them to determine which of the seed population will survive and populate the start population.
 	for (int i = 0; i < populationSize; i++)
 	{
+		//run the fitness tests between the creature and the environment.
 		ft.creatureFitnessTests(seedPopulation[i], envir[0]);
 
+		//if the creature has survived and is alive.
 		if (seedPopulation[i].isAlive == true)
 		{
 			//add this creature from seedPopulation[] to startPopulation[]
@@ -68,9 +76,7 @@ int main()
 			firstPopulationList++;
 
 			//print surviving creature info to console.
-			std::cout << "CREATURE " << seedPopulation[i].creatureNumber << std::endl;
-			cc.printCreatureVariables(seedPopulation[i]);
-			std::cout << std::endl << std::endl;
+			displayCreatureVariables(seedPopulation, i);
 		}
 		else if (seedPopulation[i].isAlive == false)
 			deadList++;
@@ -78,19 +84,39 @@ int main()
 			std::cout << "ERROR: Creature " << seedPopulation[i].creatureNumber << " has NULL value to bool isAlive" << std::endl;
 	}
 
-	std::cout << "Population left alive is: " << firstPopulationList << std::endl;
-	std::cout << "Population number dead is: " << deadList << std::endl;
-
-	float percentageSurvived = static_cast<float>(firstPopulationList) / static_cast<float>(populationSize) * 100;
-	percentageSurvived = genFunc->roundFloat(percentageSurvived);
-	std::cout << "Survival chance in Environment " << envir[0].ID << " is: " << percentageSurvived << "%" << std::endl;
-
-	//print to console the creatures within the surviving list.
-	uint32_t firstPopulation = firstPopulationList;
-	std::cout << std::endl << "In the surviving start population is: " << std::endl;
-	for (int i = 0; i < firstPopulation; i++)
-	{
-		std::cout << "CREATURE " << startPopulation[i].creatureNumber << std::endl;
-	}
+	//display required information about survival and populations.
+	displaySeedPopulationResult(firstPopulationList, deadList);
+	displaySurvivedPercentage(envir[0], firstPopulationList, populationSize);
+	displayFirstPopulation(startPopulation, firstPopulationList);
 }
 
+
+
+
+
+void displayCreatureVariables(Creature creat[], int element)
+{
+	std::cout << "CREATURE " << creat[element].creatureNumber << std::endl;
+	cc.printCreatureVariables(creat[element]);
+	std::cout << std::endl << std::endl;
+}
+
+void displaySeedPopulationResult(int alive, int dead)
+{
+	std::cout << "Population left alive is: " << alive << std::endl;
+	std::cout << "Population number dead is: " << dead << std::endl;
+}
+
+void displaySurvivedPercentage(Environment envir, int alive, int popSize)
+{
+	float percentageSurvived = static_cast<float>(alive) / static_cast<float>(popSize) * 100;
+	percentageSurvived = genFunc->roundFloat(percentageSurvived);
+	std::cout << "Survival chance in Environment " << envir.ID << " is: " << percentageSurvived << "%" << std::endl;
+}
+
+void displayFirstPopulation(Creature creat[], int pop)
+{
+	std::cout << std::endl << "In the surviving start population is: " << std::endl;
+	for (int i = 0; i < pop; i++)
+		std::cout << "CREATURE " << creat[i].creatureNumber << std::endl;
+}
