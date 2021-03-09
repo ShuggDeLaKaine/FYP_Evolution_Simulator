@@ -92,13 +92,15 @@ int main()
 
 
 	//debugging/testing stuff for mutation functions.
-	int MUT_CHANCE = 3;
+	int MUT_CHANCE = 2;
+	int TEST_NUM = 100000;
 	float yesMutation = 0;
 	float noMutation = 0;
-	for (int i = 0; i < 1000; i++)
+	for (int i = 0; i < TEST_NUM; i++)
 		mut.mutationChance(MUT_CHANCE, yesMutation, noMutation);
 
-	std::cout << std::endl << "Number of YES mutated: " << yesMutation << std::endl;
+	std::cout << std::endl << std::endl << "MUTATION FUNCTION TESTING" << std::endl;
+	std::cout << "Number of YES mutated: " << yesMutation << std::endl;
 	std::cout << "Number of NO mutated: "  << noMutation << std::endl;
 	float mutationChance = (yesMutation / (yesMutation + noMutation)) * 100;
 	std::cout << "Percentage chance of mutation is: " << mutationChance << std::endl;
@@ -130,7 +132,7 @@ void displaySurvivedPercentage(Environment envir, int alive, int popSize)
 
 void displayFirstPopulation(Creature creat[], int pop)
 {
-	std::cout << std::endl << "In the surviving start population is: " << std::endl;
+	std::cout << std::endl << "Creatures in the surviving start population are: " << std::endl;
 	for (int i = 0; i < pop; i++)
 		std::cout << "CREATURE " << creat[i].creatureNumber << std::endl;
 }
