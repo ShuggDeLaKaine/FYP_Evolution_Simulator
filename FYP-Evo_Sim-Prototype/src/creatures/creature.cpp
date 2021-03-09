@@ -1,5 +1,6 @@
 /** \file creatures.cpp */
 #include "creatures/creature.h"
+#include "..\..\include\creatures\creature.h"
 
 
 CreatureCreation::~CreatureCreation()
@@ -61,6 +62,20 @@ void CreatureCreation::createInitialPopulation(Creature &creature, const uint32_
 	//struct Creature creat[10000];
 
 
+}
+
+void CreatureCreation::passCreatureElement(const Creature sourceArray[], int sourceElement, Creature destinationArray[], int destinationSize)
+{
+	destinationArray[destinationSize - 1] = sourceArray[sourceElement];
+}
+
+void CreatureCreation::passCreatureArray(const Creature sourceArray[], Creature destinationArray[], int size)
+{
+	int i;
+	for (i = 0; i < size; i++)
+	{
+		destinationArray[i] = sourceArray[i];
+	}
 }
 
 void CreatureCreation::printCreatureVariables(Creature & creature)

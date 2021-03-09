@@ -69,6 +69,9 @@ public:
 
 	void createInitialPopulation(Creature &creature, const uint32_t populationSize);
 
+	void passCreatureElement(const Creature sourceArray[], int sourceElement, Creature destinationArray[], int destinationSize);
+	void passCreatureArray(const Creature sourceArray[], Creature destinationArray[], int size);
+
 	void printCreatureVariables(Creature &creature);
 	float resetVariable(float minLow, float minHigh, float maxLow, float maxHigh);
 private:

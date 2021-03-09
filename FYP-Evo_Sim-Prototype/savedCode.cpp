@@ -1,5 +1,15 @@
 
 
+
+//testing for automated environmental creation.
+/*
+for (int i = 1; i < environmentSize; i++)
+{
+	std::cout << std::endl << std::endl;
+	ec.environmentCreation(envir[i], 300.0f, 600.0f, 5.0f, 15.0f, 20.0f, 80.0f);
+}
+*/
+
 //hand-built testing environments.
 /*
 #pragma region ENVIRONMENTS

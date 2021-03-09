@@ -9,12 +9,14 @@ CreatureCreation cc;
 EnvironmentCreation ec;
 std::shared_ptr<GeneralFunctions> genFunc;
 
+const int MAX_POP = 10000000;
+Creature seedPopulation[MAX_POP / 1000];
+Creature startPopulation[MAX_POP];
+Environment envir[10];
+
 
 int main()
 {
-	Environment envir[10];
-	Creature creat[10000];
-
 	genFunc.reset(new GeneralFunctions);
 	genFunc->start();
 
@@ -40,52 +42,55 @@ int main()
 	envir[0].ID = 1;
 #pragma endregion
 
-	uint32_t populationSize = (sizeof(creat) / sizeof(*creat));
+	uint32_t populationSize = (sizeof(seedPopulation) / sizeof(*seedPopulation));
 	int environmentSize = (sizeof(envir) / sizeof(*envir));
-	int aliveList = 0;
+	bool tempArrayInUse = false;
+	int firstPopulationList = 0;
 	int deadList = 0;
 
 	//loop through creature array and create creatures with variables.
 	for (int i = 0; i < populationSize; i++)
 	{
-		cc.creatureCreation(creat[i], energyCentre, energyGauss, idealTempCentre, idealTempGuass, idealTempRangeMin, idealTempRangeMax,
+		cc.creatureCreation(seedPopulation[i], energyCentre, energyGauss, idealTempCentre, idealTempGuass, idealTempRangeMin, idealTempRangeMax,
 			tolTempRangeMin, tolTempRangeMax, oxyCentre, oxyGauss, oxyRangeMin, oxyRangeMax);
-		creat[i].creatureNumber = i + 1;
+		seedPopulation[i].creatureNumber = i + 1;
 	}
 
 	//loop through this population and run the fitness tests against them.
 	for (int i = 0; i < populationSize; i++)
 	{
-		ft.creatureFitnessTests(creat[i], envir[0]);
+		ft.creatureFitnessTests(seedPopulation[i], envir[0]);
 
-		if (creat[i].isAlive == true)
+		if (seedPopulation[i].isAlive == true)
 		{
-			aliveList++;
+			//add this creature from seedPopulation[] to startPopulation[]
+			startPopulation[firstPopulationList] = seedPopulation[i];			
+			firstPopulationList++;
 
-			std::cout << "CREATURE " << creat[i].creatureNumber << std::endl;
-			cc.printCreatureVariables(creat[i]);
+			//print surviving creature info to console.
+			std::cout << "CREATURE " << seedPopulation[i].creatureNumber << std::endl;
+			cc.printCreatureVariables(seedPopulation[i]);
 			std::cout << std::endl << std::endl;
 		}
-		else if (creat[i].isAlive == false)
+		else if (seedPopulation[i].isAlive == false)
 			deadList++;
 		else
-			std::cout << "ERROR: Creature " << creat[i].creatureNumber << " has NULL value to bool isAlive" << std::endl;
+			std::cout << "ERROR: Creature " << seedPopulation[i].creatureNumber << " has NULL value to bool isAlive" << std::endl;
 	}
 
-	std::cout << "Population left alive is: " << aliveList << std::endl;
+	std::cout << "Population left alive is: " << firstPopulationList << std::endl;
 	std::cout << "Population number dead is: " << deadList << std::endl;
 
-	float percentageSurvived = static_cast<float>(aliveList) / static_cast<float>(populationSize) * 100;
+	float percentageSurvived = static_cast<float>(firstPopulationList) / static_cast<float>(populationSize) * 100;
 	percentageSurvived = genFunc->roundFloat(percentageSurvived);
-	std::cout << "Survival Chance in environment " << envir[0].ID << " is: " << percentageSurvived << "%" << std::endl;
+	std::cout << "Survival chance in Environment " << envir[0].ID << " is: " << percentageSurvived << "%" << std::endl;
 
-
-	//testing for automated environmental creation.
-	/*
-	for (int i = 1; i < environmentSize; i++)
+	//print to console the creatures within the surviving list.
+	uint32_t firstPopulation = firstPopulationList;
+	std::cout << std::endl << "In the surviving start population is: " << std::endl;
+	for (int i = 0; i < firstPopulation; i++)
 	{
-		std::cout << std::endl << std::endl;
-		ec.environmentCreation(envir[i], 300.0f, 600.0f, 5.0f, 15.0f, 20.0f, 80.0f);
+		std::cout << "CREATURE " << startPopulation[i].creatureNumber << std::endl;
 	}
-	*/
 }
+
