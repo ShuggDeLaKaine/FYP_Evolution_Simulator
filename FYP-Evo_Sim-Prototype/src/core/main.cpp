@@ -14,6 +14,7 @@ void displaySurvivedPercentage(Environment envir, int alive, int popSize);
 FullFitnessTest ft;
 CreatureCreation cc;
 EnvironmentCreation ec;
+Mutation mut;
 std::shared_ptr<GeneralFunctions> genFunc;
 
 const int MAX_POP = 10000000;
@@ -88,6 +89,19 @@ int main()
 	displaySeedPopulationResult(firstPopulationList, deadList);
 	displaySurvivedPercentage(envir[0], firstPopulationList, populationSize);
 	displayFirstPopulation(startPopulation, firstPopulationList);
+
+
+	//debugging/testing stuff for mutation functions.
+	int MUT_CHANCE = 3;
+	float yesMutation = 0;
+	float noMutation = 0;
+	for (int i = 0; i < 1000; i++)
+		mut.mutationChance(MUT_CHANCE, yesMutation, noMutation);
+
+	std::cout << std::endl << "Number of YES mutated: " << yesMutation << std::endl;
+	std::cout << "Number of NO mutated: "  << noMutation << std::endl;
+	float mutationChance = (yesMutation / (yesMutation + noMutation)) * 100;
+	std::cout << "Percentage chance of mutation is: " << mutationChance << std::endl;
 }
 
 

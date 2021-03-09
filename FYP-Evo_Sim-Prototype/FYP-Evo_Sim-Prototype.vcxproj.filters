@@ -69,6 +69,12 @@
     <ClCompile Include="src\environments\environment.cpp">
       <Filter>code\src</Filter>
     </ClCompile>
+    <ClCompile Include="src\reproduction\mutation.cpp">
+      <Filter>code\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reproduction\crossover.cpp">
+      <Filter>code\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\fitness\fitnessFunctions.h">
@@ -102,6 +108,12 @@
       <Filter>code\include</Filter>
     </ClInclude>
     <ClInclude Include="include\fitness\fullFitnessTest.h">
+      <Filter>code\include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\reproduction\mutation.h">
+      <Filter>code\include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\reproduction\crossover.h">
       <Filter>code\include</Filter>
     </ClInclude>
   </ItemGroup>

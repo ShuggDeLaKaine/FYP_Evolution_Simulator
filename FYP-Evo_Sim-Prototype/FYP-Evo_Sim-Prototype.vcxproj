@@ -164,6 +164,8 @@
     <ClCompile Include="src\fitness\oxygenFitnessTest.cpp" />
     <ClCompile Include="src\fitness\temperatureFitnessTest.cpp" />
     <ClCompile Include="savedCode.cpp" />
+    <ClCompile Include="src\reproduction\crossover.cpp" />
+    <ClCompile Include="src\reproduction\mutation.cpp" />
     <ClCompile Include="tests.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +180,8 @@
     <ClInclude Include="include\fitness\fullFitnessTest.h" />
     <ClInclude Include="include\fitness\oxygenFitnessTest.h" />
     <ClInclude Include="include\fitness\temperatureFitnessTest.h" />
+    <ClInclude Include="include\reproduction\crossover.h" />
+    <ClInclude Include="include\reproduction\mutation.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

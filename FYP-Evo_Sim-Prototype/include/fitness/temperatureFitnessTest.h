@@ -16,5 +16,4 @@ private:
 	bool fitnessTest(float creatRequired, float envirProvided) { return false; };
 	bool fitnessTest(float creatRequired, float envirProvided, bool tolerated) { return false; };
 	float multiplier(float energy, bool tolerated) { return 0.0f; };
-	
 };
