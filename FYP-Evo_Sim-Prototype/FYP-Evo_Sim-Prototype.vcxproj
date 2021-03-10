@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\display.cpp" />
     <ClCompile Include="src\core\generalFunctions.cpp" />
     <ClCompile Include="src\core\main.cpp" />
     <ClCompile Include="src\creatures\creature.cpp" />
@@ -169,6 +170,7 @@
     <ClCompile Include="tests.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\core\display.h" />
     <ClInclude Include="include\core\generalFunctions.h" />
     <ClInclude Include="include\core\headerList.h" />
     <ClInclude Include="include\core\system.h" />
