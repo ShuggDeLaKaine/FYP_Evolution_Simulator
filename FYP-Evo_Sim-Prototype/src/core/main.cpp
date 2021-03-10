@@ -73,7 +73,7 @@ int main()
 			vecStartPopulation.push_back(seedPopulationPool[i]);
 
 			//print surviving creature info to console.
-			ds.displayCreatureVariables(seedPopulationPool, i);
+			ds.displayCreatureVariables(vecStartPopulation);
 			
 			//update isAlive.
 			isAlive++;

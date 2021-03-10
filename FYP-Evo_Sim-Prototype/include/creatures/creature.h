@@ -72,7 +72,7 @@ public:
 	void passCreatureElement(const Creature sourceArray[], int sourceElement, Creature destinationArray[], int destinationSize);
 	void passCreatureArray(const Creature sourceArray[], Creature destinationArray[], int size);
 
-	void printCreatureVariables(Creature &creature);
+	void printCreatureVariables(const Creature creature);
 	float resetVariable(float minLow, float minHigh, float maxLow, float maxHigh);
 private:
 	std::shared_ptr<GeneralFunctions> genFunc;

@@ -8,6 +8,13 @@ void Display::displayCreatureVariables(Creature creat[], int element)
 	std::cout << std::endl << std::endl;
 }
 
+void Display::displayCreatureVariables(const std::vector<Creature> creat)
+{
+	std::cout << "CREATURE " << creat.back().creatureNumber << std::endl;
+	cc.printCreatureVariables(creat.back());
+	std::cout << std::endl << std::endl;
+}
+
 void Display::displaySeedPopulationPoolResult(int alive, int dead)
 {
 	std::cout << "Population left alive is: " << alive << std::endl;

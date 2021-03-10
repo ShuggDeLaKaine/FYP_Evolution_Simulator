@@ -78,7 +78,7 @@ void CreatureCreation::passCreatureArray(const Creature sourceArray[], Creature 
 	}
 }
 
-void CreatureCreation::printCreatureVariables(Creature & creature)
+void CreatureCreation::printCreatureVariables(const Creature creature)
 {
 	std::cout << "energyDemand: " << creature.energyDemand << std::endl;
 	std::cout << "idealTemp: " << creature.idealTemp << std::endl;

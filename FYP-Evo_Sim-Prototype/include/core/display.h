@@ -11,6 +11,7 @@ class Display
 {
 public:
 	void displayCreatureVariables(Creature creat[], int element);					//!< 
+	void displayCreatureVariables(const std::vector<Creature> creat);				//!< will display last Creature element in a vector.
 	void displaySeedPopulationPoolResult(int alive, int dead);						//!< 
 	void displayFirstPopulation(const Creature creat[], int pop);					//!< 
 	void displayFirstPopulation(const std::vector<Creature> creat);					//!< 
