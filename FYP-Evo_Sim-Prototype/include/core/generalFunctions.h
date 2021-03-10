@@ -2,6 +2,7 @@
 #pragma once
 
 #include <random>
+#include <string>
 #include "system.h"
 
 
@@ -21,6 +22,8 @@ public:
 	static float   normalFloatBetween(float c, float sigma);			//!< get an float from a gaussian distribution described by C & sigma.
 
 	static float roundFloat(float val);									//!< func to round a float to 2 decimal floats.
+
+	static int createNewCreatureID(int id, int gen, int child);			//!< 
 
 private:
 	static std::shared_ptr<std::mt19937> s_generator;					//!< random number generating engine.

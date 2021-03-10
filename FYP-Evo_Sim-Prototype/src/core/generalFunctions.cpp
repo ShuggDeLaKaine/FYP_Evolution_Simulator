@@ -68,3 +68,20 @@ float GeneralFunctions::roundFloat(float val)
 	float value = (int)(val * 100 + 0.5f);
 	return (float)value / 100;
 }
+
+int GeneralFunctions::createNewCreatureID(int id, int gen, int child)
+{
+	//convert ints to strings.
+	std::string s1 = std::to_string(id);
+	std::string s2 = std::to_string(gen);
+	std::string s3 = std::to_string(child);
+
+	//concatenate the strings.
+	std::string finalString = s1 + s2 + s3;
+
+	//convert concatenated string back into an int.
+	int result = stoi(finalString);
+
+	//return the resulting int.
+	return result;
+}

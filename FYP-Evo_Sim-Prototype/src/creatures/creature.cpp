@@ -10,14 +10,14 @@ CreatureCreation::~CreatureCreation()
 
 void CreatureCreation::creatureCreation(Creature & creature, float energyCentre, float energyGauss, float idealTempCentre, float idealTempGuass, float idealTempRangeMin, float idealTempRangeMax, float tolTempRangeMin, float tolTempRangeMax, float oxyCentre, float oxyGauss, float oxyRangeMin, float oxyRangeMax)
 {
-	creature.energyDemand = genFunc->normalFloatBetween(energyCentre, energyGauss);
-	creature.energyDemand = genFunc->roundFloat(creature.energyDemand);
-	if (creature.energyDemand <= 0.0f)
+	creature.initialEnergyDemand = genFunc->normalFloatBetween(energyCentre, energyGauss);
+	creature.initialEnergyDemand = genFunc->roundFloat(creature.initialEnergyDemand);
+	if (creature.initialEnergyDemand <= 0.0f)
 	{	//CHOICE!!!
 		//do we remove the creature if their energy demand is less than 0...
 			//add to remove and delete list.
 		//or, do we randomly pick a constrained low number?
-		creature.energyDemand = resetVariable(1.0f, 20.0f, 60.0f, 80.0f);
+		creature.initialEnergyDemand = resetVariable(1.0f, 20.0f, 60.0f, 80.0f);
 	}
 
 	creature.idealTemp = genFunc->normalFloatBetween(idealTempCentre, idealTempGuass);
@@ -57,9 +57,50 @@ void CreatureCreation::creatureCreation(Creature & creature, float energyCentre,
 	creature.oxyTol = true;
 }
 
+void CreatureCreation::duplicateCreature(std::vector<Creature> &tempPopulationVec, Creature creatToDup)
+{
+	//add first child creature.
+	tempPopulationVec.push_back(creatToDup);
+	/*
+	//create a new ID based for this creature, which is will the end element of the vector so using .back().
+	tempPopulationVec.back().generationNumber = tempPopulationVec.back().generationNumber + 1;
+	tempPopulationVec.back().childNumber = 1;
+	tempPopulationVec.back().creatureNumber = genFunc->createNewCreatureID(
+		tempPopulationVec.back().creatureNumber, tempPopulationVec.back().generationNumber, tempPopulationVec.back().childNumber);
+	//TESTING stuff...
+	//size = tempPopulationVec.size();
+	//std::cout << "TempPopVec size after FIRST CHILD added: " << size << std::endl;
+	*/
+
+	//do it all again for the second child creature.
+	tempPopulationVec.push_back(creatToDup);
+	/*
+	//create a new ID based for this creature, which is will the end element of the vector so using .back().
+	tempPopulationVec.back().generationNumber = tempPopulationVec.back().generationNumber + 1;
+	tempPopulationVec.back().childNumber = 2;
+	tempPopulationVec.back().creatureNumber = genFunc->createNewCreatureID(
+		tempPopulationVec.back().creatureNumber, tempPopulationVec.back().generationNumber, tempPopulationVec.back().childNumber);;
+	//TESTING stuff...
+	//size = tempPopulationVec.size();
+	//std::cout << "TempPopVec size after SECOND CHILD added: " << size << std::endl;
+	*/
+}
+
+void CreatureCreation::duplicatePopulationVectors(std::vector<Creature>& mainPopulationVec, std::vector<Creature>& tempPopulationVec)
+{
+	//empty the main population vector as going to refilled.
+	mainPopulationVec.clear(); 
+
+	//know the size it is going to be, so reserve this size, saves having to do the whole vector 'create a new array' everytime it expands, which it potentially do A LOT here.
+	mainPopulationVec.reserve(tempPopulationVec.size());	
+
+	//assign() used rather than copy(), as happy for it to be set exactly the same.
+	mainPopulationVec.assign(tempPopulationVec.begin(), tempPopulationVec.end());	
+}
+
 void CreatureCreation::createInitialPopulation(Creature &creature, const uint32_t populationSize)
 {
-	//struct Creature creat[10000];
+	
 
 
 }
@@ -80,7 +121,12 @@ void CreatureCreation::passCreatureArray(const Creature sourceArray[], Creature 
 
 void CreatureCreation::printCreatureVariables(const Creature creature)
 {
-	std::cout << "energyDemand: " << creature.energyDemand << std::endl;
+	std::cout << "initialEnergyDemand: " << creature.initialEnergyDemand << std::endl;
+	std::cout << "finalEnergyDemand: " << creature.finalEnergyDemand << std::endl;
+	if(creature.initialEnergyDemand != creature.finalEnergyDemand)
+		std::cout << "multipliers have been applied == TRUE" << std::endl;
+	else
+		std::cout << "multipliers have been applied == FALSE" << std::endl;
 	std::cout << "idealTemp: " << creature.idealTemp << std::endl;
 	std::cout << "idealTempRange: " << creature.idealTempRange << std::endl;
 	std::cout << "tolTempRange: " << creature.tolTempRange << std::endl;

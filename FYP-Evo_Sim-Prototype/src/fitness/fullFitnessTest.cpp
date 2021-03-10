@@ -20,9 +20,9 @@ void FullFitnessTest::creatureFitnessTests(CREAT &creature, Environment& environ
 			if (creature.isAlive)
 			{
 				//test three - energy fitness test.
-				creature.energyDemand = oxyFF.multiplier(creature.energyDemand, creature.oxyTol);
-				creature.energyDemand = tempFF.multiplier(creature.energyDemand, creature.tempTol, creature.tempIdeal);
-				creature.isAlive = energyFF.fitnessTest(creature.energyDemand, environment.energyAvailable);
+				creature.finalEnergyDemand = oxyFF.multiplier(creature.initialEnergyDemand, creature.oxyTol);
+				creature.finalEnergyDemand = tempFF.multiplier(creature.initialEnergyDemand, creature.tempTol, creature.tempIdeal);
+				creature.isAlive = energyFF.fitnessTest(creature.finalEnergyDemand, environment.energyAvailable);
 			}
 		}
 	}

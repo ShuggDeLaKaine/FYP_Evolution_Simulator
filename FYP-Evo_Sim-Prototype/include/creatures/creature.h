@@ -2,6 +2,9 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <iterator>
+
 #include "fitness/fitnessHeaderList.h"
 #include "core/generalFunctions.h"
 
@@ -9,7 +12,8 @@
 struct Creature
 {
 	//energy vars.
-	float energyDemand;
+	float initialEnergyDemand;		//!< initial energy demand of creature.
+	float finalEnergyDemand;		//!< final energy demand of creature, with mutlipliers applying to this.
 
 	//oxygenation vars
 	float oxygenDemand;
@@ -36,6 +40,9 @@ struct Creature
 	bool oxyTol;
 
 	int creatureNumber;
+	int generationNumber = 1;		//!< initialise to 1, as the first lot of seed population that survive will be generation 1.
+	int childNumber = 0;			//!< initialise to 0, as above, but 0 because not a child creature, an original seed one.
+	int creatureID;
 };
 
 struct CreatureSettings
@@ -66,6 +73,9 @@ public:
 	void creatureCreation(Creature &creature, float energyCentre, float energyGauss, float idealTempCentre, float idealTempGuass,
 		float idealTempRangeMin, float idealTempRangeMax, float tolTempRangeMin, float tolTempRangeMax, float oxyCentre, float oxyGauss,
 		float oxyRangeMin, float oxyRangeMax);
+
+	void duplicateCreature(std::vector<Creature> &tempPopulationVec, Creature creatToDup);
+	void duplicatePopulationVectors(std::vector<Creature> &mainPopulationVec, std::vector<Creature> &tempPopulationVec);		//!< move the temp vector into the main vector.
 
 	void createInitialPopulation(Creature &creature, const uint32_t populationSize);
 
