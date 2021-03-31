@@ -11,9 +11,8 @@
 
 struct SpeciesInfo
 {
-	int speciesID;
-
 	std::vector<Creature> speciesMembers;
+	int speciesID;
 
 };
 

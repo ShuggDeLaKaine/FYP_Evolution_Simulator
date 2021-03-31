@@ -41,16 +41,13 @@ bool Mutation::mutationTest(float mutationChance)
 	}
 }
 
-void Mutation::mutationIntensity(float mutIntensity, float &eleToMut, float envirMulti)
+void Mutation::mutationIntensity(float mutPercent, float &eleToMut, float envirMulti)
 {
-	//make mutation intensity a % of the element to mutate, so 10 intensity of element 5, gives a result of 0.5
-
+	//get the value of the mutPercent of the elementToMutate so 10 intensity of element 5, gives a result of 0.5
+	float mutPercentValue = (eleToMut * 0.01f) * mutPercent;
 
 	//get a random float using a gaussian function, the element to mutate being the centre and the sigma (range) being the mutation intensity.
-	float fMutElement = genFunc->normalFloatBetween(eleToMut, mutIntensity);
-
-	//round it off.
-	fMutElement = genFunc->roundFloat(fMutElement);
+	float fMutElement = genFunc->normalFloatBetween(eleToMut, mutPercentValue);
 
 	//get the difference between the original element to mutate.
 	float fDiff = eleToMut - fMutElement;

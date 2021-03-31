@@ -128,5 +128,8 @@
     <ClInclude Include="include\creatures\species.h">
       <Filter>code\include</Filter>
     </ClInclude>
+    <ClInclude Include="include\core\main.h">
+      <Filter>code\include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

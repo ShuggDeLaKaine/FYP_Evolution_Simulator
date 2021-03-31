@@ -8,12 +8,6 @@
 #include "fitness/fitnessHeaderList.h"
 #include "core/generalFunctions.h"
 
-struct Species
-{
-	int speciesID;
-
-
-};
 
 struct Creature
 {
@@ -81,6 +75,8 @@ public:
 	void creatureCreation(Creature &creature, float energyCentre, float energyGauss, float idealTempCentre, float idealTempGuass,
 		float idealTempRangeMin, float idealTempRangeMax, float tolTempRangeMin, float tolTempRangeMax, float oxyCentre, float oxyGauss,
 		float oxyRangeMin, float oxyRangeMax);
+
+	void updateCreatureWithMutations(Creature &creature);
 
 	void duplicateCreature(std::vector<Creature> &tempPopulationVec, Creature creatToDup);
 	void duplicatePopulationVectors(std::vector<Creature> &mainPopulationVec, std::vector<Creature> &tempPopulationVec);		//!< move the temp vector into the main vector.

@@ -10,7 +10,6 @@ CreatureCreation::~CreatureCreation()
 
 void CreatureCreation::creatureCreation(Creature & creature, float energyCentre, float energyGauss, float idealTempCentre, float idealTempGuass, float idealTempRangeMin, float idealTempRangeMax, float tolTempRangeMin, float tolTempRangeMax, float oxyCentre, float oxyGauss, float oxyRangeMin, float oxyRangeMax)
 {
-
 	creature.initialEnergyDemand = genFunc->normalFloatBetween(energyCentre, energyGauss);
 	creature.initialEnergyDemand = genFunc->roundFloat(creature.initialEnergyDemand);
 	if (creature.initialEnergyDemand <= 0.0f)
@@ -66,6 +65,40 @@ void CreatureCreation::creatureCreation(Creature & creature, float energyCentre,
 	creature.tempTol = true;
 	creature.oxyIdeal = true;
 	creature.oxyTol = true;
+}
+
+void CreatureCreation::updateCreatureWithMutations(Creature & creature)
+{
+	//Creature mutations have taken place, update the geneStack with these new values.
+	//geneStack elements = e0-initialEnergyDemand / e1-idealTemp / e2-idealTempRange / e3-tolTempRange / e4-oxyenDemand / e5-oxygenRange
+	creature.initialEnergyDemand = creature.geneStack.at(0);
+	creature.idealTemp = creature.geneStack.at(1);
+	creature.idealTempRange = creature.geneStack.at(2);
+	creature.tolTempRange = creature.geneStack.at(3);
+	creature.oxygenDemand = creature.geneStack.at(4);
+	if (creature.oxygenDemand <= 0.0f)
+	{	//CHOICE!!!
+		//do we remove the creature if their oxygen demand is less than 0...
+			//add to remove and delete list.
+		//or, do we randomly pick a constrained low number?
+		creature.oxygenDemand = resetVariable(1.0f, 5.0f, 15.0f, 20.0f);
+	}
+	creature.oxygenRange = creature.geneStack.at(5);
+
+	creature.idealTempRangeMax = creature.idealTemp + creature.idealTempRange;
+	creature.idealTempRangeMin = creature.idealTemp - creature.idealTempRange;
+	if (creature.idealTempRangeMin <= 0.0f)
+		creature.idealTempRangeMin = resetVariable(0.05f, 1.0f, 3.0f, 6.0f);
+
+	creature.tolTempRangeMax = creature.idealTempRangeMax + creature.tolTempRange;
+	creature.tolTempRangeMin = creature.idealTempRangeMin - creature.tolTempRange;
+	if (creature.tolTempRangeMin <= 0.0f)
+		creature.tolTempRangeMin = resetVariable(0.05f, 1.0f, 3.0f, 6.0f);
+
+	creature.oxygenTolMax = creature.oxygenDemand;
+	creature.oxygenTolMin = creature.oxygenDemand - creature.oxygenRange;
+	if (creature.oxygenTolMin <= 0.0f)
+		creature.oxygenTolMin = resetVariable(0.05f, 1.0f, 3.0f, 6.0f);
 }
 
 void CreatureCreation::duplicateCreature(std::vector<Creature> &tempPopulationVec, Creature creatToDup)
