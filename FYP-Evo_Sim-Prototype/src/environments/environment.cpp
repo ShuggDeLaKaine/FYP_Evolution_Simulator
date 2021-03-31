@@ -2,6 +2,11 @@
 #include "environments/environment.h"
 
 
+EnvironmentCreation::EnvironmentCreation()
+{
+
+}
+
 EnvironmentCreation::~EnvironmentCreation()
 {
 

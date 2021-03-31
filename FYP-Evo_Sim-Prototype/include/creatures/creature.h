@@ -43,6 +43,8 @@ struct Creature
 	int generationNumber = 1;		//!< initialise to 1, as the first lot of seed population that survive will be generation 1.
 	int childNumber = 0;			//!< initialise to 0, as above, but 0 because not a child creature, an original seed one.
 	int creatureID;
+
+	std::vector<float> geneStack; 
 };
 
 struct CreatureSettings
@@ -85,6 +87,7 @@ public:
 	void printCreatureVariables(const Creature creature);
 	float resetVariable(float minLow, float minHigh, float maxLow, float maxHigh);
 private:
+	void fillGeneElement(Creature &creature, std::vector<float> &gene, float value);
 	std::shared_ptr<GeneralFunctions> genFunc;
 	CreatureSettings cs;
 	float newMin;

@@ -158,31 +158,111 @@ int main()
 		//maybe need a third 'ParentsVec' for the parents that can be added to the current pop after children had their crossover/mutation stage.
 		vecTempPopulation.clear();
 
-		//MUTATION STAGE
-		
 
+		//MUTATION STAGE
+		std::vector<float> tempGeneStack;
+		float mutChance = 2.5f;
+		float mutInten = 2.5f;
+
+		for (int i = 0; i < vecCurrentPopulation.size(); i++)
+		{
+			//clear the temporary gene stack vector in preparation for use.
+			tempGeneStack.clear();
+			//reserve the size of the temporoary gene stack to the creatures gene stack size.
+			tempGeneStack.reserve(vecCurrentPopulation.at(i).geneStack.size());
+			//assign current creatures gene stack to a temporary gene stack.
+			tempGeneStack.assign(vecCurrentPopulation.at(i).geneStack.begin(), vecCurrentPopulation.at(i).geneStack.end());
+
+			//iterate through the tempGeneStack array.
+			for(int j = 0; j < tempGeneStack.size(); j++)
+			{
+				//run a mutation chance test on each element in vector, if it comes back true
+				if (mut.mutationTest(mutChance) == true)
+				{
+					//then run mutation intensity on the gene that will be mutating to determine the strength of that mutation.
+					mut.mutationIntensity(mutInten, tempGeneStack.at(j), envir[0].mutationModifier);
+				}
+			}
+			//assign the temp gene stack to the creatures gene stack. 
+			vecCurrentPopulation.at(i).geneStack.assign(tempGeneStack.begin(), tempGeneStack.end());
+		}
 
 		//TESTING... duplication of temp population vec to the current population vec.
 		std::cout << "END OF CYCLE " << i + 1 << ": final CURRENT population size is: " << vecCurrentPopulation.size() << std::endl;
 
-
-
 	}
 
 
-	/*
-	//TESTING... stuff for mutation functions.
-	int MUT_CHANCE = 2;
-	int TEST_NUM = 100000;
-	float yesMutation = 0;
-	float noMutation = 0;
-	for (int i = 0; i < TEST_NUM; i++)
-		mut.mutationChance(MUT_CHANCE, yesMutation, noMutation);
-	//output to console testing info.
-	std::cout << std::endl << std::endl << "MUTATION FUNCTION TESTING" << std::endl;
-	std::cout << "Number of YES mutated: " << yesMutation << std::endl;
-	std::cout << "Number of NO mutated: "  << noMutation << std::endl;
-	float mutationChance = (yesMutation / (yesMutation + noMutation)) * 100;
-	std::cout << "Percentage chance of mutation is: " << mutationChance << std::endl;
-	*/
+
 }
+
+
+
+
+/* //ESPECIALLY USEFUL FOR COMPARING THE HIGHEST DIFFERENCE TO THE MUTATION INTENSITY.
+	//testing mutation chance & intensity functions.
+	float testRuns = 1000000;
+	int yesMut = 0;
+	int noMut = 0;
+	float mutChance = 2.5f;
+	float mutInten = 1.0f;
+	float enMulti = 1.0f;
+
+
+	if(mutInten > 0.05f)
+	{
+		//NOTE BELOW LINE ONLY REALLY WORKS IF mutInten is dividable by 0.05f.
+		int timesToRun = mutInten / 0.05f;		//should be 20 if mutInten starts at 1.0f.
+
+		for (int i = 0; i < timesToRun; i++)
+		{
+			float diff = 0.0f;
+			float avDiff = 0.0f;
+			float highDiff = diff;
+			float largeMutList = 0;
+			float largeMutPercent = 0.0f;
+
+			for (int j = 0; j < testRuns; j++)
+			{
+				if (mut.mutationTest(mutChance) == true)
+				{
+					float element2Mutate = 100.0f;
+
+					mut.mutationIntensity(mutInten, element2Mutate, enMulti);
+					diff = element2Mutate - 100.0f;
+
+					//set to a positive value if negative.
+					if (diff < 0.0f)
+						diff = diff * -1.0f;
+
+					//check if a large change.
+					if (diff >= 1.0f)
+						largeMutList = largeMutList + 1.0f;
+
+					//tally up the avDiff.
+					avDiff += diff;
+
+					//check if new diff is larger than highDiff, if so, set highDiff to the diff value.
+					if (diff > highDiff)
+						highDiff = diff;
+					//std::cout << "new mutated element value is: " << element2Mutate << std::endl;
+					yesMut++;
+				}
+				else
+					noMut++;
+			}
+			std::cout << "MUTATION INTENSITY IS: " << mutInten << std::endl;
+			std::cout << "highest difference is: " << highDiff << std::endl;
+
+			avDiff = avDiff / testRuns;
+			std::cout << "average difference is: " << avDiff << std::endl;
+
+			largeMutPercent = largeMutList / testRuns;
+			std::wcout << "percentage of mutations over 1% change is: " << largeMutPercent << std::endl << std::endl;
+
+			mutInten = mutInten - 0.05f;
+		}
+
+		//std::cout << "Over " << testRuns << " tests, number of YES mutations is: " << yesMut << " and number of NO mutations is: " << noMut << std::endl;
+	}
+*/

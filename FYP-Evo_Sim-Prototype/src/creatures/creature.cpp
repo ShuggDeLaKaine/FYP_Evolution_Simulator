@@ -10,6 +10,7 @@ CreatureCreation::~CreatureCreation()
 
 void CreatureCreation::creatureCreation(Creature & creature, float energyCentre, float energyGauss, float idealTempCentre, float idealTempGuass, float idealTempRangeMin, float idealTempRangeMax, float tolTempRangeMin, float tolTempRangeMax, float oxyCentre, float oxyGauss, float oxyRangeMin, float oxyRangeMax)
 {
+
 	creature.initialEnergyDemand = genFunc->normalFloatBetween(energyCentre, energyGauss);
 	creature.initialEnergyDemand = genFunc->roundFloat(creature.initialEnergyDemand);
 	if (creature.initialEnergyDemand <= 0.0f)
@@ -19,11 +20,18 @@ void CreatureCreation::creatureCreation(Creature & creature, float energyCentre,
 		//or, do we randomly pick a constrained low number?
 		creature.initialEnergyDemand = resetVariable(1.0f, 20.0f, 60.0f, 80.0f);
 	}
+	fillGeneElement(creature, creature.geneStack, creature.initialEnergyDemand);
 
 	creature.idealTemp = genFunc->normalFloatBetween(idealTempCentre, idealTempGuass);
 	creature.idealTemp = genFunc->roundFloat(creature.idealTemp);
+	fillGeneElement(creature, creature.geneStack, creature.idealTemp);
+
 	creature.idealTempRange = genFunc->uniformFloatBetween(idealTempRangeMin, idealTempRangeMax);
+	fillGeneElement(creature, creature.geneStack, creature.idealTempRange);
+
 	creature.tolTempRange = genFunc->uniformFloatBetween(tolTempRangeMin, tolTempRangeMax);
+	fillGeneElement(creature, creature.geneStack, creature.tolTempRange);
+
 	creature.oxygenDemand = genFunc->normalFloatBetween(oxyCentre, oxyGauss);
 	creature.oxygenDemand = genFunc->roundFloat(creature.oxygenDemand);
 	if (creature.oxygenDemand <= 0.0f)
@@ -33,7 +41,10 @@ void CreatureCreation::creatureCreation(Creature & creature, float energyCentre,
 		//or, do we randomly pick a constrained low number?
 		creature.oxygenDemand = resetVariable(1.0f, 5.0f, 15.0f, 20.0f);
 	}
+	fillGeneElement(creature, creature.geneStack, creature.oxygenDemand);
+
 	creature.oxygenRange = genFunc->uniformFloatBetween(oxyRangeMin, oxyRangeMax);
+	fillGeneElement(creature, creature.geneStack, creature.oxygenRange);
 
 	creature.idealTempRangeMax = creature.idealTemp + creature.idealTempRange;
 	creature.idealTempRangeMin = creature.idealTemp - creature.idealTempRange;
@@ -145,4 +156,9 @@ float CreatureCreation::resetVariable(float minLow, float minHigh, float maxLow,
 	newMax = genFunc->uniformFloatBetween(maxLow, maxHigh);
 	float result = genFunc->uniformFloatBetween(newMin, newMax);
 	return result;
+}
+
+void CreatureCreation::fillGeneElement(Creature & creature, std::vector<float>& gene, float value)
+{
+	creature.geneStack.push_back(value);
 }

@@ -2,6 +2,7 @@
 #pragma once
 #include <iostream>
 #include "core/generalFunctions.h"
+#include "environments/environment.h"
 
 
 /*	\class Mutation
@@ -10,9 +11,19 @@
 class Mutation
 {
 public:
-	bool mutationTest(int percentageChance);
-	float mutationIntensity();			//!< function to result strength of mutation...
+	Mutation();					//!< constructor.
+	~Mutation() {};				//!< deconstructor.
+	bool mutationTest(float mutationChance);							//!< test to result true/false whether a creatures var should mutate.
+	void mutationIntensity(float mutIntensity, float &eleToMut, float envirMulti);	//!< function to result strength of mutation...
 
 private:
-	std::shared_ptr<GeneralFunctions> genFunc;
+	void setEnvironModifier(float envirMulti) { envMod = envirMulti; }		//!< 
+
+	float mutIntensity;		//!< value of the intensity of the mutation, the range in which a value can mutate.
+	float mutChance;		//!< chance of the mutation taking place.
+	float envMod;			//!< modifying value of any environmental impacts.
+
+	std::shared_ptr<GeneralFunctions> genFunc;	//!< pointer ref to general functions class.	
+	Environment envir;							//!< ref to Environment struct.
+
 };

@@ -2,49 +2,61 @@
 #include "reproduction/mutation.h"
 
 
-bool Mutation::mutationTest(int percentageChance)
+Mutation::Mutation()
 {
-	int randomNumber = genFunc->uniformIntBetween(1, 100);
+	//grab the environmental mutation modifier value;
+	float modifier = envir.mutationModifier;
+	//get the local environmental modifier to the value from the one from class environment.
+	setEnvironModifier(modifier);
+}
 
-	if (randomNumber < percentageChance)
+bool Mutation::mutationTest(float mutationChance)
+{
+	float fURandomNumber = genFunc->uniformFloatBetween(0.0f, 1.0f);	//float 0-1, uniform produces an even random spread within the range.
+	float fMutChance = mutationChance;
+
+	//mutation chance should be between 0-1, therefore a 5% chance should be 0.05f.
+	//this checks if it has been put in as 5% and reduces to the required value range.
+	if (fMutChance > 1.0f)
+	{
+		//std::cout << "WARNING - mutationChance in mutationTest() is above 1.0f, therefore above 100% chance" << std::endl;
+		fMutChance = fMutChance * 0.01f;
+	}
+	//this is a precautionary test, in chance user enters 0.5f wanting a 0.5% of mutation, this will result in a 50% chance of mutation.
+	else if (fMutChance <= 1.0f && fMutChance >= 0.25f)
+	{
+		std::cout << "WARNING - mutationChance is very high, between 25% and 100%; have you entered this correctly?" << std::endl;
+	}
+
+	if (fURandomNumber <= fMutChance)
 	{
 		//mutation happens
-
+		//std::cout << "Mutation happened!!!" << std::endl;
 		return true;
-		std::cout << "Mutation happened!!!" << std::endl;
 	}
 	else
 	{
-		std::cout << "No mutation for this creatures" /*<< creature id << variable*/ << "variable" << std::endl;
+		//std::cout << "No mutation for this creatures" /*<< creature id << variable*/ << "variable" << std::endl;
 		return false;
 	}
 }
 
-float Mutation::mutationIntensity()
+void Mutation::mutationIntensity(float mutIntensity, float &eleToMut, float envirMulti)
 {
-	float result = 0.0f;
-	int randomNumber = genFunc->uniformIntBetween(1, 100);
+	//make mutation intensity a % of the element to mutate, so 10 intensity of element 5, gives a result of 0.5
 
-	if (randomNumber <= 60)
-	{
-		//low strength mutation.
-		result = 1.0f;
-	}
-	else if (randomNumber > 60 && randomNumber <= 90)
-	{
-		//medium strength
-		result = 2.5f;
-	}
-	else if (randomNumber > 90 && randomNumber <= 100)
-	{
-		//high strength
-		result = 5.0f;
-	}
-	else
-	{
-		std::cout << "ERROR: issue with strengthOfMutation(), randomNumber generated is out of range" << std::endl;
-		result = 0.0f;
-	}
 
-	return result;
+	//get a random float using a gaussian function, the element to mutate being the centre and the sigma (range) being the mutation intensity.
+	float fMutElement = genFunc->normalFloatBetween(eleToMut, mutIntensity);
+
+	//round it off.
+	fMutElement = genFunc->roundFloat(fMutElement);
+
+	//get the difference between the original element to mutate.
+	float fDiff = eleToMut - fMutElement;
+
+	//apply environmental multipliers to the mutation element. 
+	float fMultiDiff = fDiff * envirMulti;
+	
+	eleToMut = eleToMut + fMultiDiff;
 }

@@ -9,6 +9,8 @@ struct Environment
 	float energyAvailable;
 	float temperature;
 	float oxygenationRate;
+	float mutationModifier = 1.0f;	//!< always initialised to 1 (no multiple effect), as initialisation considers environment 'clean', changes such a pollution will modify this.
+	float pollution = 0.0f;			//!< at initalisation set to 0 as considered to be 'clean', pollution changes added later.
 	int ID;
 
 	inline float getEnergyAvailable() { return energyAvailable; }
@@ -23,8 +25,8 @@ struct Environment
 class EnvironmentCreation
 {
 public:
-	EnvironmentCreation() {};					//!< default constructor.
-	~EnvironmentCreation();						//!< default deconstructor.
+	EnvironmentCreation();			//!< default constructor.
+	~EnvironmentCreation();			//!< default deconstructor.
 
 	void environmentCreation(Environment& envir, float energyMin, float energyMax, float tempMin, 
 							 float tempMax, float oxygenMin, float oxygenMax);		//!< 
