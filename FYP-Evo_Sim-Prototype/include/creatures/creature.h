@@ -8,6 +8,12 @@
 #include "fitness/fitnessHeaderList.h"
 #include "core/generalFunctions.h"
 
+struct Species
+{
+	int speciesID;
+
+
+};
 
 struct Creature
 {

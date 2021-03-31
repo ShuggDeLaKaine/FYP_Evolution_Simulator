@@ -78,6 +78,9 @@
     <ClCompile Include="src\core\display.cpp">
       <Filter>code\src</Filter>
     </ClCompile>
+    <ClCompile Include="src\creatures\species.cpp">
+      <Filter>code\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\fitness\fitnessFunctions.h">
@@ -120,6 +123,9 @@
       <Filter>code\include</Filter>
     </ClInclude>
     <ClInclude Include="include\core\display.h">
+      <Filter>code\include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\creatures\species.h">
       <Filter>code\include</Filter>
     </ClInclude>
   </ItemGroup>

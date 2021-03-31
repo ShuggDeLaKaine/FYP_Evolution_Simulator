@@ -159,6 +159,7 @@
     <ClCompile Include="src\core\generalFunctions.cpp" />
     <ClCompile Include="src\core\main.cpp" />
     <ClCompile Include="src\creatures\creature.cpp" />
+    <ClCompile Include="src\creatures\species.cpp" />
     <ClCompile Include="src\environments\environment.cpp" />
     <ClCompile Include="src\fitness\energyFitnessTest.cpp" />
     <ClCompile Include="src\fitness\fullFitnessTest.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="include\core\headerList.h" />
     <ClInclude Include="include\core\system.h" />
     <ClInclude Include="include\creatures\creature.h" />
+    <ClInclude Include="include\creatures\species.h" />
     <ClInclude Include="include\environments\environment.h" />
     <ClInclude Include="include\fitness\energyFitnessTest.h" />
     <ClInclude Include="include\fitness\fitnessFunctions.h" />
