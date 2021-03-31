@@ -13,13 +13,15 @@ struct SpeciesInfo
 {
 	std::vector<Creature> speciesMembers;
 	int speciesID;
-
 };
 
 class Species
 {
 public:
 
+	void createNewSpecies();
+	void updateSpeciesMembership();
+	void checkSpeciesDivergence();
 private:
 
 };
