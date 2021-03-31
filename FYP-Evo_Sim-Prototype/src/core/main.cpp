@@ -15,9 +15,8 @@ Display ds;
 
 //
 const int SEED_POP = 10000;
-const int LIFE_CYCLES = 3;
+const int LIFE_CYCLES = 5;
 Creature seedPopulationPool[SEED_POP];
-//std::vector<Creature> vecStartPopulation;
 std::vector<Creature> vecCurrentPopulation;
 std::vector<Creature> vecTempPopulation;
 Environment envir[10];
@@ -104,7 +103,6 @@ int main()
 
 	//TESTING... duplication of temp population vec to the current population vec.
 	std::cout << std::endl << "...END OF SEED STAGE: final CURRENT population size is: " << vecCurrentPopulation.size() << std::endl;
-	std::cout << std::endl << "...END OF SEED STAGE: final TEMP population size is: " << vecTempPopulation.size() << std::endl;
 
 	//reset alive and dead counters.
 	isAlive = 0;
@@ -151,8 +149,7 @@ int main()
 		//REPRODUCTION STAGE
 		for (int i = 0; i < vecTempPopulation.size(); i++)
 		{
-			//as survived, DUPLICATE (think bacterial reproduction)
-			//cc.duplicateCreature(vecTempPopulation, vecTempPopulation.at(i));
+			//as survived, DUPLICATE (think bacterial reproduction, atm just doing x2)
 			cc.duplicateCreature(vecCurrentPopulation, vecTempPopulation.at(i));
 		}
 
@@ -161,9 +158,15 @@ int main()
 		//maybe need a third 'ParentsVec' for the parents that can be added to the current pop after children had their crossover/mutation stage.
 		vecTempPopulation.clear();
 
+		//MUTATION STAGE
+		
+
+
 		//TESTING... duplication of temp population vec to the current population vec.
 		std::cout << "END OF CYCLE " << i + 1 << ": final CURRENT population size is: " << vecCurrentPopulation.size() << std::endl;
-		std::cout << "END OF CYCLE " << i + 1 << ": final TEMP population size is: " << vecTempPopulation.size() << std::endl;
+
+
+
 	}
 
 
