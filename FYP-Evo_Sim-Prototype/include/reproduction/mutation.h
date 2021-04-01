@@ -12,7 +12,7 @@ class Mutation
 {
 public:
 	Mutation();					//!< constructor.
-	~Mutation() {};				//!< deconstructor.
+	~Mutation();				//!< deconstructor.
 	bool mutationTest(float mutationChance);		//!< test to result true/false whether a creatures var should mutate.
 	void mutationIntensity(float mutPercent, float &eleToMut, float envirMulti);	//!< function to result strength of mutation...
 

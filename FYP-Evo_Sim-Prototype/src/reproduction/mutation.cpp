@@ -10,6 +10,12 @@ Mutation::Mutation()
 	setEnvironModifier(modifier);
 }
 
+Mutation::~Mutation()
+{
+	//***NEED TO*** kill that shared pointer to the genFuncs 
+
+}
+
 bool Mutation::mutationTest(float mutationChance)
 {
 	float fURandomNumber = genFunc->uniformFloatBetween(0.0f, 1.0f);	//float 0-1, uniform produces an even random spread within the range.

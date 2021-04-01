@@ -5,6 +5,7 @@
 
 CreatureCreation::~CreatureCreation()
 {
+	//***NEED TO*** kill that shared pointer to the genFuncs 
 
 }
 
@@ -154,13 +155,10 @@ void CreatureCreation::passCreatureElement(const Creature sourceArray[], int sou
 	destinationArray[destinationSize - 1] = sourceArray[sourceElement];
 }
 
-void CreatureCreation::passCreatureArray(const Creature sourceArray[], Creature destinationArray[], int size)
+void CreatureCreation::passCreatureArray(const Creature sourceArray[], Creature destinationArray[], uint32_t size)
 {
-	int i;
-	for (i = 0; i < size; i++)
-	{
+	for (uint32_t i = 0; i < size; i++)
 		destinationArray[i] = sourceArray[i];
-	}
 }
 
 void CreatureCreation::printCreatureVariables(const Creature creature)
