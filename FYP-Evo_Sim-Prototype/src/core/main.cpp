@@ -18,11 +18,10 @@ int main()
 
 	int populationSize = (sizeof(seedPopulationPool) / sizeof(*seedPopulationPool));
 	int environmentSize = (sizeof(envir) / sizeof(*envir));
-	int isAlive = 0;
-	int isDead = 0;
 
-	int totalMutTests = 0;
-	int totalNumberMut = 0;
+
+
+//                                 ************    SEED POPULATION STAGE    ************
 
 	//loop through creature array and create creatures with constrained random variables.
 	for (int i = 0; i < populationSize; i++)
@@ -60,6 +59,10 @@ int main()
 			std::cout << "ERROR: Creature " << seedPopulationPool[i].creatureNumber << " has NULL value to bool isAlive" << std::endl;
 	}
 
+
+
+	//                                 ************    FIRST POPULATION STAGE    ************
+
 	//each creature species now has two identicial members in the tempPopulation vector. 
 	//to encourage diversification of species, seed parents should be slightly different otherwise the crossover stage has no effect. 
 	//so, loop through vector of creatures and mutate each element of their geneStack vectors with an initial smaller mutation intensity.
@@ -74,11 +77,8 @@ int main()
 
 		//iterate through the tempGeneStack array and run a mutation on each element.
 		for (int j = 0; j < tempGeneStack.size(); j++)
-		{
-			std::cout << "element value before mutation is : " << tempGeneStack.at(j) << std::endl;;
 			mut.mutationIntensity(seedMutIntensity, tempGeneStack.at(j), envir[0].mutationModifier);
-			std::cout << "element value after mutation is : " << tempGeneStack.at(j) << std::endl;
-		}
+
 		//assign the temp gene stack to the creatures gene stack. 
 		vecTempPopulation.at(i).geneStack.assign(tempGeneStack.begin(), tempGeneStack.end());
 		//update all the creatures variables with these new mutated values.
@@ -87,6 +87,12 @@ int main()
 
 	//update the CURRENT population vector from the temporary population vector.
 	cc.duplicatePopulationVectors(vecCurrentPopulation, vecTempPopulation);
+
+	//********************    SPECIES CREATION    ********************
+
+
+
+
 
 	//display required information about survival and populations.
 	ds.displaySeedPopulationPoolResult(isAlive, isDead);
@@ -102,6 +108,9 @@ int main()
 	//reset alive and dead counters.
 	isAlive = 0;
 	isDead = 0;
+
+
+	//                                 ************    LIFE CYCLE STAGE    ************
 
 	//Iterate over life cycles...
 	for (int i = 0; i < LIFE_CYCLES; i++)
@@ -198,4 +207,7 @@ int main()
 	std::cout << "Total number of mutations are: " << totalNumberMut << std::endl;
 	float percentMut = static_cast<float>(totalNumberMut) / static_cast<float>(totalMutTests);
 	std::cout << "Percentage of mutations is: " << percentMut << std::endl;
+
+
+	genFunc->stop();
 }

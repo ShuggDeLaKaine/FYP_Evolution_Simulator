@@ -69,6 +69,7 @@ float GeneralFunctions::roundFloat(float val)
 	return (float)value / 100;
 }
 
+
 int GeneralFunctions::createNewCreatureID(int id, int gen, int child)
 {
 	//convert ints to strings.

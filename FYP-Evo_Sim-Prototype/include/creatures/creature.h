@@ -39,6 +39,9 @@ struct Creature
 	bool oxyIdeal;
 	bool oxyTol;
 
+	uint32_t creatureNumber;
+	uint32_t generationNumber = 1;		//!< initialise to 1, as the first lot of seed population that survive will be generation 1.
+	uint32_t childNumber = 0;			//!< initialise to 0, as above, but 0 because not a child creature, an original seed one.
 	uint32_t creatureID;
 
 	std::vector<float> geneStack; 
@@ -76,7 +79,7 @@ public:
 	void updateCreatureWithMutations(Creature &creature);
 
 	void duplicateCreature(std::vector<Creature> &tempPopulationVec, Creature creatToDup);
-	void duplicatePopulationVectors(std::vector<Creature> &mainPopulationVec, std::vector<Creature> &tempPopulationVec);		//!< move the temp vector into the main vector.
+	void duplicatePopulationVectors(std::vector<Creature> &toPopulation, std::vector<Creature> &fromPopulation);		//!< move the temp vector into the main vector.
 
 	void createInitialPopulation(Creature &creature, const uint32_t populationSize);
 
@@ -86,9 +89,9 @@ public:
 	void printCreatureVariables(const Creature creature);
 	float resetVariable(float minLow, float minHigh, float maxLow, float maxHigh);
 private:
-	void fillGeneElement(Creature &creature, std::vector<float> &gene, float value);
-	std::shared_ptr<GeneralFunctions> genFunc;
 	CreatureSettings cs;
+	std::shared_ptr<GeneralFunctions> genFunc;
+	void fillGeneElement(Creature &creature, std::vector<float> &gene, float value);
 	float newMin;
 	float newMax;
 };
