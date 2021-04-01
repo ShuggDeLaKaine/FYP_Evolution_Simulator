@@ -16,8 +16,9 @@ int main()
 	envir[0].ID = 1;
 #pragma endregion
 
-	int populationSize = (sizeof(seedPopulationPool) / sizeof(*seedPopulationPool));
-	int environmentSize = (sizeof(envir) / sizeof(*envir));
+	uint32_t populationSize  = (sizeof(seedPopulationPool) / sizeof(*seedPopulationPool));
+	uint32_t speciesSize     = (sizeof(speciesPool) / sizeof(*speciesPool));
+	uint32_t environmentSize = (sizeof(envir) / sizeof(*envir));
 
 
 
@@ -44,6 +45,19 @@ int main()
 		//if the creature has survived and is alive.
 		if (seedPopulationPool[i].isAlive == true)
 		{
+			//********************    SPECIES CREATION    ********************
+			//loop through species to find first species element that is unused. 
+			for(int j = 0; j < speciesSize; j++)
+			{
+				//check whether the species has an ID other an 0, it is has another value, loop around to the next element...
+				//if it is == 0 then hasn't been assigned yet, so create and add a new species to here and break out of loop.
+				if (speciesPool[j].speciesID == 0)
+				{
+					//create a new species with the details creature of creature that passed fitness tests.
+					sp.createNewSpecies(speciesPool[j], seedPopulationPool[i].geneStack, i + 1);
+					break;
+				}
+			}
 			//add this creature from seedPopulationPool[] to tempPopulation[]
 			vecTempPopulation.push_back(seedPopulationPool[i]);
 			//add another of these creatures to the tempPopulation to create an 'Adam & Eve' of this species.
@@ -58,7 +72,6 @@ int main()
 		else
 			std::cout << "ERROR: Creature " << seedPopulationPool[i].creatureNumber << " has NULL value to bool isAlive" << std::endl;
 	}
-
 
 
 	//                                 ************    FIRST POPULATION STAGE    ************
@@ -87,12 +100,6 @@ int main()
 
 	//update the CURRENT population vector from the temporary population vector.
 	cc.duplicatePopulationVectors(vecCurrentPopulation, vecTempPopulation);
-
-	//********************    SPECIES CREATION    ********************
-
-
-
-
 
 	//display required information about survival and populations.
 	ds.displaySeedPopulationPoolResult(isAlive, isDead);
@@ -128,16 +135,13 @@ int main()
 		{
 			//run the fitness tests between the creature and the environment.
 			ft.creatureFitnessTests(vecCurrentPopulation[i], envir[0]);
-
 			//if the creature has survived and is alive.
 			if (vecCurrentPopulation[i].isAlive == true)
 			{
 				//creature has survived, pop it into the temp population vector.
 				vecTempPopulation.push_back(vecCurrentPopulation[i]);
-
 				//TESTING... print surviving creature info to console.
 				ds.displayCreatureVariables(vecTempPopulation);
-
 				//update isAlive.
 				isAlive++;
 			}

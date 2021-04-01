@@ -9,18 +9,6 @@
 #include "fitness/fitnessHeaderList.h"
 #include "core/generalFunctions.h"
 
-struct AllSpecies
-{
-	std::vector<SpeciesInfo> fullSpeciesList;	//!< a full list of all species.
-	std::vector<SpeciesInfo> aliveSpeciesList;	//!< all alive species.
-	std::vector<SpeciesInfo> extinctSpeciesList;//!< all extinct species.
-
-	uint32_t speciesCount;						//!< running count of all species.
-	uint32_t aliveSpeciesCount;					//!< count of all alive species.
-	uint32_t extinctSpeciesCount;				//!< count of all now dead species.
-
-	uint32_t const MAX_SPECIES = 10000;			//!< max number of species, used in initial creation of species list vector to reserve a portion of memory.
-};
 
 struct SpeciesInfo
 {
@@ -32,7 +20,27 @@ struct SpeciesInfo
 	uint32_t currentMembers = 0;				//!< number of current members that are alive in the species.
 	uint32_t totalMembers = 0;					//!< running total of species members since species inception. 
 
-	bool speciesAssigned = false;				//!< bool to take whether this Species has been assigned to an acutal species yet.
+	bool speciesAlive = true;					//!< bool to determine whether species still has members, initalised to true;
+	
+	void speciesAliveCheck() {
+		if (currentMembers == 0)
+			speciesAlive = false;
+		else
+			speciesAlive = true;
+	}
+};
+
+struct AllSpecies
+{
+	std::vector<SpeciesInfo> fullSpeciesList;	//!< a full list of all species.
+	std::vector<SpeciesInfo> aliveSpeciesList;	//!< all alive species.
+	std::vector<SpeciesInfo> extinctSpeciesList;//!< all extinct species.
+
+	uint32_t speciesCount;						//!< running count of all species.
+	uint32_t aliveSpeciesCount;					//!< count of all alive species.
+	uint32_t extinctSpeciesCount;				//!< count of all now dead species.
+
+	//uint32_t const MAX_SPECIES = 10000;			//!< max number of species, used in initial creation of species list vector to reserve a portion of memory.
 };
 
 class Species
@@ -41,8 +49,10 @@ public:
 	Species();							//!< default constructor.
 	~Species() {};						//!< deconstructor.
 
-	void createNewSpecies(SpeciesInfo species, std::vector<float> geneStack, uint32_t creatureID);			//!< create a new species, adding the relevant creatures to this species vector
-	void updateSpeciesMembership();		//!< update species membership, adding new members and removing 'dead' ones.
+	void createNewSpecies(SpeciesInfo species, std::vector<float> geneStack, uint32_t creatureID);	//!< create a new species, adding the relevant creatures to this species vector
+	void assignSpeciesToSpeciesVector(SpeciesInfo species, std::vector<SpeciesInfo> speciesVector);	//!< assign a species to the species vector.
+	void addCreatureToSpecies(Creature creature, SpeciesInfo species);		//!< add a creature to a species.
+	void updateSpeciesMembership(SpeciesInfo species ,std::vector<Creature>& membership);		//!< update species membership, adding new members and removing 'dead' ones.
 	void checkSpeciesDivergence();		//!< check membership gene stacks against species gene stack to see if creature has diverged.
 
 	std::vector<float> getSeedGeneStack(SpeciesInfo species);		//!< get the species initial seed population gene stack.

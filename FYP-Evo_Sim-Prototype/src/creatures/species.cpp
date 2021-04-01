@@ -3,26 +3,49 @@
 
 Species::Species()
 {
-	//reserve the space required in the species vectors. 
-	as.fullSpeciesList.reserve(as.MAX_SPECIES);
+
 }
 
 void Species::createNewSpecies(SpeciesInfo species, std::vector<float> geneStack, uint32_t creatureID)
 {
 	//first set the speciesID to the creatureID.
 	species.speciesID = creatureID;
-
 	//set the size of the seedGeneStack to the size of the params geneStack.
 	species.seedGeneStack.reserve(geneStack.size());
 	//assign that over into the reserved space. 
 	species.seedGeneStack.assign(geneStack.begin(), geneStack.end());
-
-
+	//assign this species to the full speciesList.
+	assignSpeciesToSpeciesVector(species, as.fullSpeciesList);
 }
 
-void Species::updateSpeciesMembership()
+void Species::assignSpeciesToSpeciesVector(SpeciesInfo species, std::vector<SpeciesInfo> speciesVector)
 {
+	//pop the species onto the back of the target species vector.
+	speciesVector.push_back(species);
+}
 
+void Species::addCreatureToSpecies(Creature creature, SpeciesInfo species)
+{
+	//push creature onto the species vector.
+	species.speciesMembership.push_back(creature);
+	species.currentMembers++;
+	species.totalMembers++;
+}
+
+void Species::updateSpeciesMembership(SpeciesInfo species, std::vector<Creature>& membership)
+{
+	//run through full speciesMembership vector and check which are alive.
+	for (int i = 0; i < membership.size(); i++)
+	{
+		//check whether alive... 
+		if (membership.at(i).isAlive == false)
+		{
+			//kick out of species membership if not...
+			membership.erase(membership.begin() + i);
+			//update counts.
+			species.currentMembers--;
+		}
+	}
 }
 
 void Species::checkSpeciesDivergence()
