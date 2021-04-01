@@ -3,10 +3,10 @@
 
 Species::Species()
 {
-
+	//as.fullSpeciesList.clear();
 }
 
-void Species::createNewSpecies(SpeciesInfo species, std::vector<float> geneStack, uint32_t creatureID)
+void Species::createNewSpecies(SpeciesInfo & species, std::vector<float> & geneStack, uint32_t creatureID)
 {
 	//first set the speciesID to the creatureID.
 	species.speciesID = creatureID;
@@ -14,17 +14,17 @@ void Species::createNewSpecies(SpeciesInfo species, std::vector<float> geneStack
 	species.seedGeneStack.reserve(geneStack.size());
 	//assign that over into the reserved space. 
 	species.seedGeneStack.assign(geneStack.begin(), geneStack.end());
-	//assign this species to the full speciesList.
-	assignSpeciesToSpeciesVector(species, as.fullSpeciesList);
 }
 
-void Species::assignSpeciesToSpeciesVector(SpeciesInfo species, std::vector<SpeciesInfo> speciesVector)
+void Species::assignSpeciesToAllSpeciesVector(SpeciesInfo species, std::vector<SpeciesInfo> & speciesVector, AllSpecies & allSpecies)
 {
 	//pop the species onto the back of the target species vector.
 	speciesVector.push_back(species);
+	//update species count.
+	allSpecies.speciesCount = allSpecies.fullSpeciesList.size();
 }
 
-void Species::addCreatureToSpecies(Creature creature, SpeciesInfo species)
+void Species::addCreatureToSpecies(Creature creature, SpeciesInfo & species)
 {
 	//push creature onto the species vector.
 	species.speciesMembership.push_back(creature);
@@ -80,9 +80,29 @@ std::vector<float>  Species::getSpeciesGeneStack(SpeciesInfo species)
 	return result;
 }
 
-void Species::updateSpeciesGeneStack(std::vector<float>& geneStack)
+//void Species::updateSpeciesGeneStack(std::vector<Creature> speciesMembership, std::vector<float> & speciesGeneStack)
+void Species::updateSpeciesGeneStack(SpeciesInfo & species)
 {
+	//ensure speciesGeneStack has values
+	if (species.speciesGeneStack.size() == 0)
+		species.speciesGeneStack.resize(species.speciesMembership.at(0).geneStack.size());
+
 	//iterate through membership of species for each gene element of the their species gene stack.
-	//take an average of each gene and assign that to the relevant element in the species gene stack.
-	//then move on and do the same to the next element in the species gene stack.
+	for (int i = 0; i < species.speciesMembership.size(); i++)
+	{
+		//iterate through gene stack of species member.
+		for (int j = 0; j < species.speciesMembership.at(i).geneStack.size(); j++)
+		{
+			//add the gene stack values of each member to the species overall average gene stack. 
+			species.speciesGeneStack.at(j) = species.speciesGeneStack.at(j) + species.speciesMembership.at(i).geneStack.at(j);
+		}
+	}
+
+	//now average each element of the species gene stack by the size of the species membership.
+	for (int i = 0; i < species.speciesGeneStack.size(); i++)
+	{
+		float result = species.speciesGeneStack.at(i);
+		result = result / species.speciesMembership.size();
+		species.speciesGeneStack.at(i) = result;
+	}
 }

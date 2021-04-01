@@ -29,12 +29,14 @@ uint32_t isDead = 0;
 uint32_t totalMutTests = 0;
 uint32_t totalNumberMut = 0;
 
-Creature seedPopulationPool[SEED_POP];
+uint32_t tempPosition = 0;
+
+Creature    seedPopulationPool[SEED_POP];
 SpeciesInfo speciesPool[MAX_SPECIES];
+AllSpecies  allSpeciesList[1];
 Environment envir[10];
 
 std::vector<Creature> vecCurrentPopulation;
 std::vector<Creature> vecTempPopulation;
 
 std::vector<float> tempGeneStack;
-

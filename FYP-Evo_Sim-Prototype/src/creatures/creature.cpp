@@ -135,10 +135,8 @@ void CreatureCreation::duplicatePopulationVectors(std::vector<Creature> &toPopul
 {
 	//empty the main population vector as going to refilled.
 	toPopulation.clear();
-
 	//know the size it is going to be, so reserve this size, saves having to do the whole vector 'create a new array' everytime it expands, which it potentially do A LOT here.
 	toPopulation.reserve(fromPopulation.size());
-
 	//assign() used rather than copy(), as happy for it to be set exactly the same.
 	toPopulation.assign(fromPopulation.begin(), fromPopulation.end());
 }

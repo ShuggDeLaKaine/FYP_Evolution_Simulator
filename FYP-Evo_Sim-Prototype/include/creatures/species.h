@@ -49,15 +49,16 @@ public:
 	Species();							//!< default constructor.
 	~Species() {};						//!< deconstructor.
 
-	void createNewSpecies(SpeciesInfo species, std::vector<float> geneStack, uint32_t creatureID);	//!< create a new species, adding the relevant creatures to this species vector
-	void assignSpeciesToSpeciesVector(SpeciesInfo species, std::vector<SpeciesInfo> speciesVector);	//!< assign a species to the species vector.
-	void addCreatureToSpecies(Creature creature, SpeciesInfo species);		//!< add a creature to a species.
-	void updateSpeciesMembership(SpeciesInfo species ,std::vector<Creature>& membership);		//!< update species membership, adding new members and removing 'dead' ones.
+	void createNewSpecies(SpeciesInfo& species, std::vector<float>& geneStack, uint32_t creatureID);	//!< create a new species, adding the relevant creatures to this species vector
+	void assignSpeciesToAllSpeciesVector(SpeciesInfo species, std::vector<SpeciesInfo>& speciesVector, AllSpecies& allSpecies);	//!< assign a species to the species vector.
+	void addCreatureToSpecies(Creature creature, SpeciesInfo& species);						//!< add a creature to a species.
+	void updateSpeciesMembership(SpeciesInfo species ,std::vector<Creature>& membership);	//!< update species membership, adding new members and removing 'dead' ones.
 	void checkSpeciesDivergence();		//!< check membership gene stacks against species gene stack to see if creature has diverged.
 
 	std::vector<float> getSeedGeneStack(SpeciesInfo species);		//!< get the species initial seed population gene stack.
 	std::vector<float> getSpeciesGeneStack(SpeciesInfo species);	//!< get the species current populations gene stack.
-	void updateSpeciesGeneStack(std::vector<float>& geneStack);		//!< get the average of the current species population gene stack and update/set the species current gene stack.
+	//void updateSpeciesGeneStack(std::vector<Creature> speciesMembership, std::vector<float>& speciesGeneStack);		//!< get the average of the current species population gene stack and update/set the species current gene stack.
+	void updateSpeciesGeneStack(SpeciesInfo& species);		//!< get the average of the current species population gene stack and update/set the species current gene stack.
 private:
 	SpeciesInfo si;						//!< reference to SpeciesInfo struct.
 	AllSpecies as;						//!< reference to AllSpecies strcut.

@@ -23,7 +23,8 @@ public:
 
 	static float roundFloat(float val);									//!< func to round a float to 2 decimal floats.
 
-	static int createNewCreatureID(int id, int gen, int child);			//!< 
+	static uint32_t createNewCreatureID(uint32_t id);					//!< 
+	static uint32_t createNewCreatureID(uint32_t id, uint32_t gen, uint32_t child);			//!< 
 
 private:
 	static std::shared_ptr<std::mt19937> s_generator;					//!< random number generating engine.

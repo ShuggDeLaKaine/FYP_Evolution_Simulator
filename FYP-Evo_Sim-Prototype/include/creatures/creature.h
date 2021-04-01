@@ -11,6 +11,9 @@
 
 struct Creature
 {
+	uint32_t creatureID;
+	std::vector<float> geneStack;
+
 	//energy vars.
 	float initialEnergyDemand;		//!< initial energy demand of creature.
 	float finalEnergyDemand;		//!< final energy demand of creature, with mutlipliers applying to this.
@@ -42,9 +45,6 @@ struct Creature
 	uint32_t creatureNumber;
 	uint32_t generationNumber = 1;		//!< initialise to 1, as the first lot of seed population that survive will be generation 1.
 	uint32_t childNumber = 0;			//!< initialise to 0, as above, but 0 because not a child creature, an original seed one.
-	uint32_t creatureID;
-
-	std::vector<float> geneStack; 
 };
 
 struct CreatureSettings

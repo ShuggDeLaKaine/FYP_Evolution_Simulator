@@ -29,9 +29,10 @@ int main()
 	{
 		cc.creatureCreation(seedPopulationPool[i], cs.energyCentre, cs.energyGauss, cs.idealTempCentre, cs.idealTempGuass, cs.idealTempRangeMin, 
 			cs.idealTempRangeMax, cs.tolTempRangeMin, cs.tolTempRangeMax, cs.oxyCentre, cs.oxyGauss, cs.oxyRangeMin, cs.oxyRangeMax);
-		seedPopulationPool[i].creatureNumber = i + 1;
-		seedPopulationPool[i].creatureID = genFunc->createNewCreatureID(seedPopulationPool[i].creatureNumber, seedPopulationPool[i].generationNumber, 
-																			seedPopulationPool[i].childNumber);
+		seedPopulationPool[i].creatureNumber = i;
+		//seedPopulationPool[i].creatureID = genFunc->createNewCreatureID(seedPopulationPool[i].creatureNumber, seedPopulationPool[i].generationNumber, 
+		//																	seedPopulationPool[i].childNumber);
+		seedPopulationPool[i].creatureID = genFunc->createNewCreatureID(seedPopulationPool[i].creatureNumber);
 	}
 
 	std::cout << std::endl << "SEED POPULATION STAGE" << std::endl << std::endl;
@@ -39,7 +40,7 @@ int main()
 	//loop through this population and run the fitness tests against them to determine which of the seed population will survive and populate the start population.
 	for (int i = 0; i < populationSize; i++)
 	{
-		//run the fitness tests between the creature and the environment.
+		//run the FITNESS TESTS between the seed creature and the environment.
 		ft.creatureFitnessTests(seedPopulationPool[i], envir[0]);
 
 		//if the creature has survived and is alive.
@@ -50,18 +51,50 @@ int main()
 			for(int j = 0; j < speciesSize; j++)
 			{
 				//check whether the species has an ID other an 0, it is has another value, loop around to the next element...
-				//if it is == 0 then hasn't been assigned yet, so create and add a new species to here and break out of loop.
+				//if it is == 0 then hasn't been assigned yet, so create and add a new species here and break out of loop.
 				if (speciesPool[j].speciesID == 0)
 				{
 					//create a new species with the details creature of creature that passed fitness tests.
-					sp.createNewSpecies(speciesPool[j], seedPopulationPool[i].geneStack, i + 1);
+					sp.createNewSpecies(speciesPool[j], seedPopulationPool[i].geneStack, seedPopulationPool[i].creatureID);
 					break;
 				}
 			}
-			//add this creature from seedPopulationPool[] to tempPopulation[]
-			vecTempPopulation.push_back(seedPopulationPool[i]);
-			//add another of these creatures to the tempPopulation to create an 'Adam & Eve' of this species.
-			vecTempPopulation.push_back(seedPopulationPool[i]);
+
+			//add creature from seedPop to tempPop, doing so twice as need to create an 'Adam & Eve' for this species.
+			for (int j = 0; j < 2; j++)
+			{
+				//add this creature from seedPopulationPool[] to tempPopulation[]
+				vecTempPopulation.push_back(seedPopulationPool[i]);
+				//loop through species...
+				for (int k = 0; k < speciesSize; k++)
+				{
+					//check whether the creature and species IDs are the same.
+					if (i == speciesPool[k].speciesID)
+					{
+						//need to create an 'Adam & Eve' from the initial single creature to be the first parents of this species.
+						//they need to be different for one another for the crossover reproduction mechanic to have an effect.
+						//therefore, iterate through their geneStacks 
+						for (int l = 0; l < seedPopulationPool[i].geneStack.size(); l++)
+						{
+							//and mutate each value in its gene stack slightly.
+							mut.mutationIntensity(seedMutIntensity, seedPopulationPool[i].geneStack.at(l), envir[0].mutationModifier);
+							//now update all the creatures variables with these new mutated values.
+							cc.updateCreatureWithMutations(seedPopulationPool[i]);
+						}
+						//add this prepped creature to its species.
+						sp.addCreatureToSpecies(seedPopulationPool[i], speciesPool[k]);
+						tempPosition = k;
+					}
+					//otherwise check if speciesID == 0, if so break out as into the not yet used species elements.
+					else if (speciesPool[k].speciesID == 0)
+						break;
+				}
+			}
+			//add this new species to the overall species list.
+			sp.assignSpeciesToAllSpeciesVector(speciesPool[tempPosition], allSpeciesList->fullSpeciesList, allSpeciesList[1]);
+			//update species data, such as species average gene stack.
+			sp.updateSpeciesGeneStack(speciesPool[tempPosition]);
+
 			//print surviving creature info to console.
 			ds.displayCreatureVariables(vecTempPopulation);
 			//update isAlive.
@@ -76,6 +109,7 @@ int main()
 
 	//                                 ************    FIRST POPULATION STAGE    ************
 
+	/*
 	//each creature species now has two identicial members in the tempPopulation vector. 
 	//to encourage diversification of species, seed parents should be slightly different otherwise the crossover stage has no effect. 
 	//so, loop through vector of creatures and mutate each element of their geneStack vectors with an initial smaller mutation intensity.
@@ -97,6 +131,7 @@ int main()
 		//update all the creatures variables with these new mutated values.
 		cc.updateCreatureWithMutations(vecTempPopulation.at(i));
 	}
+	*/
 
 	//update the CURRENT population vector from the temporary population vector.
 	cc.duplicatePopulationVectors(vecCurrentPopulation, vecTempPopulation);
@@ -141,7 +176,7 @@ int main()
 				//creature has survived, pop it into the temp population vector.
 				vecTempPopulation.push_back(vecCurrentPopulation[i]);
 				//TESTING... print surviving creature info to console.
-				ds.displayCreatureVariables(vecTempPopulation);
+				///ds.displayCreatureVariables(vecTempPopulation);
 				//update isAlive.
 				isAlive++;
 			}

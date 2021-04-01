@@ -3,7 +3,6 @@
 #include <chrono>
 
 
-
 //initialising...
 //setting shared pointer to nullptr.
 std::shared_ptr<std::mt19937> GeneralFunctions::s_generator = nullptr;
@@ -69,20 +68,28 @@ float GeneralFunctions::roundFloat(float val)
 	return (float)value / 100;
 }
 
+uint32_t GeneralFunctions::createNewCreatureID(uint32_t id)
+{
+	//convert ints to strings.
+	std::string s1 = std::to_string(id);
+	//concatenate the strings.
+	std::string finalString = s1;
+	//convert concatenated string back into an int.
+	uint32_t result = stoi(finalString);
+	//return the resulting int.
+	return result;
+}
 
-int GeneralFunctions::createNewCreatureID(int id, int gen, int child)
+uint32_t GeneralFunctions::createNewCreatureID(uint32_t id, uint32_t gen, uint32_t child)
 {
 	//convert ints to strings.
 	std::string s1 = std::to_string(id);
 	std::string s2 = std::to_string(gen);
 	std::string s3 = std::to_string(child);
-
 	//concatenate the strings.
 	std::string finalString = s1 + s2 + s3;
-
 	//convert concatenated string back into an int.
 	int result = stoi(finalString);
-
 	//return the resulting int.
 	return result;
 }
