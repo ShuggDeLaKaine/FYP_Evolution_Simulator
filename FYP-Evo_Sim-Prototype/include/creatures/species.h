@@ -12,16 +12,23 @@
 struct SpeciesInfo
 {
 	std::vector<Creature> speciesMembers;
+	std::vector<float> seedGeneStack;
+	std::vector<float> speciesGeneStack;
 	int speciesID;
 };
 
 class Species
 {
 public:
-
+	Species() {};					//!< default constructor.
+	~Species() {};					//!< deconstructor.
 	void createNewSpecies();
 	void updateSpeciesMembership();
 	void checkSpeciesDivergence();
+
+	void getSeedGeneStack();
+	void getSpeciesGeneStack();
+	void updateSpeciesGeneStack();
 private:
 
 };

@@ -15,3 +15,15 @@ void Species::checkSpeciesDivergence()
 {
 
 }
+
+void Species::getSeedGeneStack()
+{
+}
+
+void Species::getSpeciesGeneStack()
+{
+}
+
+void Species::updateSpeciesGeneStack()
+{
+}
