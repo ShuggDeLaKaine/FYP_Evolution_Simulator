@@ -81,8 +81,6 @@ public:
 	void duplicateCreature(std::vector<Creature> &tempPopulationVec, Creature creatToDup);
 	void duplicatePopulationVectors(std::vector<Creature> &toPopulation, std::vector<Creature> &fromPopulation);		//!< move the temp vector into the main vector.
 
-	void createInitialPopulation(Creature &creature, const uint32_t populationSize);
-
 	void passCreatureElement(const Creature sourceArray[], int sourceElement, Creature destinationArray[], int destinationSize);
 	void passCreatureArray(const Creature sourceArray[], Creature destinationArray[], uint32_t size);
 

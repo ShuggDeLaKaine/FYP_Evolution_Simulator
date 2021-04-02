@@ -141,13 +141,6 @@ void CreatureCreation::duplicatePopulationVectors(std::vector<Creature> &toPopul
 	toPopulation.assign(fromPopulation.begin(), fromPopulation.end());
 }
 
-void CreatureCreation::createInitialPopulation(Creature &creature, const uint32_t populationSize)
-{
-	
-
-
-}
-
 void CreatureCreation::passCreatureElement(const Creature sourceArray[], int sourceElement, Creature destinationArray[], int destinationSize)
 {
 	destinationArray[destinationSize - 1] = sourceArray[sourceElement];

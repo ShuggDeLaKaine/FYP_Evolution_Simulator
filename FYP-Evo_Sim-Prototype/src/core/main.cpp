@@ -30,8 +30,6 @@ int main()
 		cc.creatureCreation(seedPopulationPool[i], cs.energyCentre, cs.energyGauss, cs.idealTempCentre, cs.idealTempGuass, cs.idealTempRangeMin, 
 			cs.idealTempRangeMax, cs.tolTempRangeMin, cs.tolTempRangeMax, cs.oxyCentre, cs.oxyGauss, cs.oxyRangeMin, cs.oxyRangeMax);
 		seedPopulationPool[i].creatureNumber = i;
-		//seedPopulationPool[i].creatureID = genFunc->createNewCreatureID(seedPopulationPool[i].creatureNumber, seedPopulationPool[i].generationNumber, 
-		//																	seedPopulationPool[i].childNumber);
 		seedPopulationPool[i].creatureID = genFunc->createNewCreatureID(seedPopulationPool[i].creatureNumber);
 	}
 
@@ -91,7 +89,7 @@ int main()
 				}
 			}
 			//add this new species to the overall species list.
-			sp.assignSpeciesToAllSpeciesVector(speciesPool[tempPosition], allSpeciesList->fullSpeciesList, allSpeciesList[1]);
+			sp.assignSpeciesToAllSpeciesVector(speciesPool[tempPosition], allSpeciesList->fullSpeciesList, allSpeciesList[0]);
 			//update species data, such as species average gene stack.
 			sp.updateSpeciesGeneStack(speciesPool[tempPosition]);
 
@@ -163,7 +161,6 @@ int main()
 		//TESTING... keeping an eye on the which life cycle it is.
 		std::cout << std::endl << "LIFE CYCLE: " << i + 1 << std::endl << std::endl;
 
-
 		//SURVIVAL TEST STAGE...
 		//for each life cycle, iterate through the current population vector.
 		for (int i = 0; i < vecCurrentPopulation.size(); i++)
@@ -194,12 +191,38 @@ int main()
 		{
 			//as survived, DUPLICATE (think bacterial reproduction, atm just doing x2)
 			cc.duplicateCreature(vecCurrentPopulation, vecTempPopulation.at(i));
+
+			//********   ADD CREATURE TO RELEVANT SPECIES   ********
+			//get creature ID
+			uint32_t tempCreatID = vecTempPopulation.at(i).creatureID;
+
+			//loop through species and match with species ID, 
+			for (int j = 0; j < allSpeciesList[0].fullSpeciesList.size(); j++)
+			{
+				//get the species ID
+				uint32_t tempSpecID = allSpeciesList[0].fullSpeciesList.at(j).speciesID;
+				//if species ID is 0 then stop iterating through as unassigned species.
+				if (tempSpecID == 0)
+					break;
+
+				//check if species ID and creature ID match
+				 if (tempCreatID == tempSpecID)
+				{
+					//a match, so this creature needs to be added to this species. 
+					sp.addCreatureToSpecies(vecTempPopulation.at(i), allSpeciesList[0].fullSpeciesList.at(j));
+					//in it's right place, so break out of the loop looking for its right place.
+					break;
+				}
+			}
 		}
 
 		//clear temp pop, as offspring in current pop and these creatures would have died.
-		//!!!NOTE!!! if checks have more than 1 cycle life span, then will need to move this parent into the current population vec WITHOUT then mutation/crossovering them.
+		//!!!NOTE!!! if creatures have more than 1 cycle life span, then will need to move this parent into the current population vec WITHOUT then mutation/crossovering them.
 		//maybe need a third 'ParentsVec' for the parents that can be added to the current pop after children had their crossover/mutation stage.
 		vecTempPopulation.clear();
+
+		
+
 
 
 		//MUTATION STAGE
@@ -246,6 +269,12 @@ int main()
 	std::cout << "Total number of mutations are: " << totalNumberMut << std::endl;
 	float percentMut = static_cast<float>(totalNumberMut) / static_cast<float>(totalMutTests);
 	std::cout << "Percentage of mutations is: " << percentMut << std::endl;
+
+	//UPDATE SPECIES DATA (ie average gene stacks) NOW SPECIES HAVE BEEN UPDATED.
+
+
+	//display species data.
+
 
 
 	genFunc->stop();
