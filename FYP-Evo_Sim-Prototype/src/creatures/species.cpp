@@ -102,7 +102,7 @@ void Species::updateSpeciesGeneStack(SpeciesInfo & species)
 	for (int i = 0; i < species.speciesGeneStack.size(); i++)
 	{
 		float result = species.speciesGeneStack.at(i);
-		result = result / species.speciesMembership.size();
+		result = genFunc->roundFloat(result / species.speciesMembership.size());
 		species.speciesGeneStack.at(i) = result;
 	}
 }

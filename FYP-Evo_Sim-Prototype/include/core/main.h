@@ -22,6 +22,7 @@ const int SEED_POP = 10000;
 const int MAX_SPECIES = 10000;
 const int LIFE_CYCLES = 5;
 const float seedMutIntensity = 0.5f;
+bool bSuccessfulSeed = false;
 
 uint32_t isAlive = 0;
 uint32_t isDead = 0;

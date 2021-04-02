@@ -32,22 +32,37 @@ void Display::displaySurvivedPercentage(const Environment envir, int alive, int 
 void Display::displaySpeciesPopulationInfo(SpeciesInfo species)
 {
 	//number of current alive members.
-	std::cout << "SPECIES " << species.speciesID << " has " << species.currentMembers << " current members." << std::endl;
+	std::cout << "SPECIES " << species.speciesID << " has " << species.currentMembers << " current members";
 	//do a little check to see if the counter is working as expected...
 	if (species.speciesMembership.size() != species.currentMembers)
 		std::cout << "WARNING... Species " << species.speciesID << " currentMembers NOT equal to .size() of vector speciesMembership" << std::endl;
 	//number of members overall.
-	std::cout << "SPECIES " << species.speciesID << " has had " << species.totalMembers << " total members." << std::endl;
+	std::cout << " and has had " << species.totalMembers << " total members." << std::endl;
 }
 
 void Display::displayGeneStackInfo(SpeciesInfo species, std::vector<float> geneStack)
 {
 	//display data for the seed gene stack.
-	std::cout << "SPECIES " << species.speciesID << " current gene stack is as follows: " << std::endl;
-	std::cout << "Initial Energy Demand: " << geneStack.at(0) << std::endl;
+	if(geneStack == species.seedGeneStack)
+		std::cout << std::endl << "SPECIES " << species.speciesID << " -- SEED Gene Stack is as follows: " << std::endl;
+	else if (geneStack == species.speciesGeneStack)
+		std::cout << std::endl << "SPECIES " << species.speciesID << " -- AVERAGED CURRENT Gene Stack is as follows: " << std::endl;
+
+	std::cout << "Energy Demand: " << geneStack.at(0) << std::endl;
 	std::cout << "Ideal Temperature: " << geneStack.at(1) << std::endl;
 	std::cout << "Ideal Temperature Range: " << geneStack.at(2) << std::endl;
 	std::cout << "Tolerated Temperature Range: " << geneStack.at(3) << std::endl;
 	std::cout << "Oxygen % Demand: " << geneStack.at(4) << std::endl;
-	std::cout << "Oxygen % Range: " << geneStack.at(5) << std::endl << std::endl;
+	std::cout << "Oxygen % Range: " << geneStack.at(5) << std::endl;
+}
+
+void Display::displayGeneStackChange(SpeciesInfo species, std::vector<float> geneStackSeed, std::vector<float> geneStackCurrent)
+{
+	std::cout << std::endl << "SPECIES " << species.speciesID << " -- DIFFERENCE in SEED to END Gene Stacks:" << std::endl;
+	std::cout << "Energy Demand: " << genFunc->roundFloat(geneStackCurrent.at(0) - geneStackSeed.at(0)) << std::endl;
+	std::cout << "Ideal Temperature: " << genFunc->roundFloat(geneStackCurrent.at(1) - geneStackSeed.at(1)) << std::endl;
+	std::cout << "Ideal Temperature Range: " << genFunc->roundFloat(geneStackCurrent.at(2) - geneStackSeed.at(2)) << std::endl;
+	std::cout << "Tolerated Temperature Range: " << genFunc->roundFloat(geneStackCurrent.at(3) - geneStackSeed.at(3)) << std::endl;
+	std::cout << "Oxygen % Demand: " << genFunc->roundFloat(geneStackCurrent.at(4) - geneStackSeed.at(4)) << std::endl;
+	std::cout << "Oxygen % Range: " << genFunc->roundFloat(geneStackCurrent.at(5) - geneStackSeed.at(5)) << std::endl;
 }
