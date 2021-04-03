@@ -7,37 +7,38 @@
 
 
 //reference to classes.
-FullFitnessTest ft;
-CreatureCreation cc;
-CreatureSettings cs;
-EnvironmentCreation ec;
-Species sp;
-SpeciesInfo si;
-AllSpecies as;
-Mutation mut;
-Display ds;
-std::shared_ptr<GeneralFunctions> genFunc;
+FullFitnessTest ft;								//!< ref to Full Fitness Test class.
+CreatureCreation cc;							//!< ref to Creature Creation class.
+EnvironmentCreation ec;							//!< ref to Environment Creation class.
+Species sp;										//!< ref to Species class.
+Mutation mut;									//!< ref to Mutation class.
+Display ds;										//!< ref to Display class.
 
-const int SEED_POP = 10000;
-const int MAX_SPECIES = 10000;
-const int LIFE_CYCLES = 5;
-const float seedMutIntensity = 0.5f;
-bool bSuccessfulSeed = false;
+SpeciesInfo si;									//!< ref to Species Info struct.
+AllSpecies as;									//!< ref to All Species struct.
+CreatureSettings cs;							//!< ref to Creature Settings struct.
 
-uint32_t isAlive = 0;
-uint32_t isDead = 0;
+std::shared_ptr<GeneralFunctions> genFunc;		//!< ptr to General Functions class.
 
-uint32_t totalMutTests = 0;
-uint32_t totalNumberMut = 0;
+const uint32_t SEED_POP = 10000;				//!< number of creatures for the seed stage.
+const uint32_t MAX_SPECIES = 10000;				//!< max number of species.
+const uint32_t LIFE_CYCLES = 5;					//!< number of life cycles to iterate through.
+const float seedMutIntensity = 0.5f;			//!< mutation intensity during the seed stage, used for first populations of creatures.
+bool bSuccessfulSeed = false;					//!< bool to take whether the seed stage has been successful.
 
-uint32_t tempPosition = 0;
+uint32_t isAlive = 0;							//!< TESTING - count of 'alive' creatures from the seed population.
+uint32_t isDead = 0;							//!< TESTING - count of 'dead' creatures from seed population.
+uint32_t totalMutTests = 0;						//!< TESTING - count of total mutation tests.
+uint32_t totalNumberMut = 0;					//!< TESTING - count of number of mutations.
 
-Creature    seedPopulationPool[SEED_POP];
-SpeciesInfo speciesPool[MAX_SPECIES];
-AllSpecies  allSpeciesList[1];
-Environment envir[10];
+uint32_t tempPosition = 0;						//!< holds the position within an array or vector.
 
-std::vector<Creature> vecCurrentPopulation;
-std::vector<Creature> vecTempPopulation;
+Creature    seedPopulationPool[SEED_POP];		//!< a pool for the seed population.
+SpeciesInfo speciesPool[MAX_SPECIES];			//!< a pool for species set as max species.
+AllSpecies  allSpeciesList[1];					//!< single array to contain details of all the species in the sim.
+Environment envir[10];							//!< array of environments.
 
-std::vector<float> tempGeneStack;
+std::vector<Creature> vecCurrentPopulation;		//!< current storage of populations of Creatures.
+std::vector<Creature> vecTempPopulation;		//!< temp storage for populations of Creatures.
+
+std::vector<float> tempGeneStack;				//!< takes and holds a gene stack whilst moving the data.
