@@ -72,13 +72,22 @@
     <ClCompile Include="src\reproduction\mutation.cpp">
       <Filter>code\src</Filter>
     </ClCompile>
-    <ClCompile Include="src\reproduction\crossover.cpp">
-      <Filter>code\src</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\display.cpp">
       <Filter>code\src</Filter>
     </ClCompile>
     <ClCompile Include="src\creatures\species.cpp">
+      <Filter>code\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reproduction\selection.cpp">
+      <Filter>code\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reproduction\elitismSelection.cpp">
+      <Filter>code\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reproduction\rouletteSelection.cpp">
+      <Filter>code\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\reproduction\verusSelection.cpp">
       <Filter>code\src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -119,9 +128,6 @@
     <ClInclude Include="include\reproduction\mutation.h">
       <Filter>code\include</Filter>
     </ClInclude>
-    <ClInclude Include="include\reproduction\crossover.h">
-      <Filter>code\include</Filter>
-    </ClInclude>
     <ClInclude Include="include\core\display.h">
       <Filter>code\include</Filter>
     </ClInclude>
@@ -129,6 +135,18 @@
       <Filter>code\include</Filter>
     </ClInclude>
     <ClInclude Include="include\core\main.h">
+      <Filter>code\include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\reproduction\selection.h">
+      <Filter>code\include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\reproduction\rouletteSelection.h">
+      <Filter>code\include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\reproduction\elitismSelection.h">
+      <Filter>code\include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\reproduction\verusSelection.h">
       <Filter>code\include</Filter>
     </ClInclude>
   </ItemGroup>
