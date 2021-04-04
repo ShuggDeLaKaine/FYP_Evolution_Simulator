@@ -17,11 +17,13 @@ void Selection::parentSelection(SpeciesInfo species)
 	fillReproductionTable(selectionTable, percentToReproduce);
 
 	//send toReproduce gene stacks over to the crossover class.
-	cross->getGeneStacks(toReproduceTable);
+	//cross.getGeneStacks(toReproduceTable);
+	cross.fullCrossover(toReproduceTable);
 
-	//clear the selection and reproduction tables ready for the next species.
+	//clear the selection and reproduction tables ready for the next species and set percentToReproduce back to 0;
 	selectionTable.clear();
 	toReproduceTable.clear();
+	percentToReproduce = 0;
 }
 
 void Selection::fillSelectionTable(SpeciesInfo species)

@@ -21,6 +21,7 @@ struct greater
 class Selection
 {
 public:
+	
 	Selection() {};			//!< constructor.
 	~Selection() {};		//!< deconstructor.
 
@@ -33,9 +34,11 @@ public:
 	inline void setSelectionPercentage(uint32_t desiredPercentage) { selectionPercentage = desiredPercentage; };
 
 private:
+	Crossover cross;			//!< ref to Crossover class.
+
 	std::vector<std::pair<float, std::vector<float>>> selectionTable;	//!< vector of pairs, contains a float (for the threshold score) and another vector of floats (for the gene stack of the creature). 
 	std::vector<std::pair<float, std::vector<float>>> toReproduceTable;		//!< vector of floats vectors, containing the gene stack information for those creatures which will reproduce.
+	
 	float selectionPercentage = 25.0f;
 	uint32_t percentToReproduce;
-	Crossover co;			//!< ref to Crossover class.
 };

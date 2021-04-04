@@ -7,6 +7,7 @@
 #include "fitness/oxygenFitnessTest.h"
 #include "core/generalFunctions.h"
 
+
 typedef struct Creature CREAT;
 
 /*	\class FullFitnessTest
