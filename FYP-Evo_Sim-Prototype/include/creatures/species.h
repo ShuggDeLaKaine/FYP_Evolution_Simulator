@@ -12,13 +12,14 @@
 
 struct SpeciesInfo
 {
-	std::vector<Creature> speciesMembership;	//!< vector of all creatures that are members of this species.
-	std::vector<float> seedGeneStack;			//!< the gene stack of the seed members of this species.
-	std::vector<float> speciesGeneStack;		//!< the current averaged gene stack of all currently alive members of the species.
-
 	uint32_t speciesID = 0;						//!< ID of species, taken from the seed population member ID, initialised to 0 as an easy to tell to see if it has been assigned, ie. 0 means it hasn't been assigned.
+
+	std::vector<Creature> speciesMembership;	//!< vector of all creatures that are members of this species.
 	uint32_t currentMembers = 0;				//!< number of current members that are alive in the species.
 	uint32_t totalMembers = 0;					//!< running total of species members since species inception. 
+
+	std::vector<float> seedGeneStack;			//!< the gene stack of the seed members of this species.
+	std::vector<float> speciesGeneStack;		//!< the current averaged gene stack of all currently alive members of the species.
 
 	bool speciesAlive = true;					//!< bool to determine whether species still has members, initalised to true;
 	

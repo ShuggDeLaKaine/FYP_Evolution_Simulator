@@ -63,8 +63,8 @@ int main()
 					}
 				}
 
-				//add creature from seedPop to tempPop, doing so twice as need to create an 'Adam & Eve' for this species.
-				for (int j = 0; j < 2; j++)
+				//add creature from seedPop to tempPop, change to STARTING_POP from the original 'Adam & Eve' method of 2 starting creatures per species.
+				for (int j = 0; j < STARTING_POP; j++)
 				{
 					//add this creature from seedPopulationPool[] to tempPopulation[]
 					vecTempPopulation.push_back(seedPopulationPool[i]);
@@ -293,9 +293,15 @@ int main()
 
 			ds.displayGeneStackChange(allSpeciesList[0].fullSpeciesList.at(j), allSpeciesList[0].fullSpeciesList.at(j).seedGeneStack,
 				allSpeciesList[0].fullSpeciesList.at(j).speciesGeneStack);
+
+
+			std::cout << std::endl << std::endl << std::endl;
+			sel.parentSelection(allSpeciesList[0].fullSpeciesList.at(j));
+			std::cout << std::endl << std::endl << std::endl;
 		}
 
 	}
+
 
 	//testing mutation success and number of mutations. 
 	std::cout << std::endl << "Total number of mutation tests is: " << totalMutTests << std::endl;
