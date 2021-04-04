@@ -23,7 +23,7 @@ void Crossover::pairParents(std::vector<std::pair<float, std::vector<float>>>& p
 	
 }
 
-void Crossover::crossoverParents(std::vector<float> geneStack1, std::vector<float> geneStack2)
+void Crossover::crossoverGeneStacks(std::vector<float> geneStack1, std::vector<float> geneStack2)
 {
 
 }

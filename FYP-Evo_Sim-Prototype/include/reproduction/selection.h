@@ -38,5 +38,4 @@ private:
 	float selectionPercentage = 25.0f;
 	uint32_t percentToReproduce;
 	Crossover co;			//!< ref to Crossover class.
-	//std::shared_ptr<Crossover> cross;
 };
