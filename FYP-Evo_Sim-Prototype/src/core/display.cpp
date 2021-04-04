@@ -47,7 +47,6 @@ void Display::displayGeneStackInfo(SpeciesInfo species, std::vector<float> geneS
 		std::cout << std::endl << "SPECIES " << species.speciesID << " -- SEED Gene Stack is as follows: " << std::endl;
 	else if (geneStack == species.speciesGeneStack)
 		std::cout << std::endl << "SPECIES " << species.speciesID << " -- AVERAGED CURRENT Gene Stack is as follows: " << std::endl;
-
 	std::cout << "Energy Demand: " << geneStack.at(0) << std::endl;
 	std::cout << "Ideal Temperature: " << geneStack.at(1) << std::endl;
 	std::cout << "Ideal Temperature Range: " << geneStack.at(2) << std::endl;

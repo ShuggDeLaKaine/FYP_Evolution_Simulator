@@ -25,5 +25,9 @@ void FullFitnessTest::creatureFitnessTests(CREAT &creature, Environment& environ
 				creature.isAlive = energyFF.fitnessTest(creature.finalEnergyDemand, environment.energyAvailable);
 			}
 		}
+
+		//give the creature its threshold score.
+		if (creature.isAlive)
+			creature.thresholdScore = genFunc->roundFloat(environment.energyAvailable - creature.finalEnergyDemand);
 	}
 }

@@ -160,6 +160,7 @@ void CreatureCreation::printCreatureVariables(const Creature creature)
 		std::cout << "multipliers have been applied == TRUE" << std::endl;
 	else
 		std::cout << "multipliers have been applied == FALSE" << std::endl;
+	std::cout << "thresholdScore" << creature.thresholdScore << std::endl;
 	std::cout << "idealTemp: " << creature.idealTemp << std::endl;
 	std::cout << "idealTempRange: " << creature.idealTempRange << std::endl;
 	std::cout << "tolTempRange: " << creature.tolTempRange << std::endl;
