@@ -16,17 +16,27 @@ void Selection::parentSelection(SpeciesInfo species)
 	//populate reproduction table with selected from selection table.
 	fillReproductionTable(selectionTable, percentToReproduce);
 
-	//clear the selection table ready for the next species.
+	//send toReproduce gene stacks over to the crossover class.
+	cross->getGeneStacks(toReproduceTable);
+
+	//clear the selection and reproduction tables ready for the next species.
 	selectionTable.clear();
+	toReproduceTable.clear();
 }
 
 void Selection::fillSelectionTable(SpeciesInfo species)
 {
 	//fail safe, if filling with a new species data, the selectionTable should be clear, check that...
-	if(selectionTable.size() == 0)
+	if (selectionTable.size() == 0)
+	{
+		//get the size of species membership.
+		uint32_t size = species.speciesMembership.size();
+		//reserve this space in the selection table, more efficient than increasing size one element at a time in the below loop.
+		selectionTable.reserve(size);
 		//fill the selection table with the paired variables of the creatures threshold score and their gene stacks.
-		for (int i = 0; i < species.speciesMembership.size(); i++)
+		for (int i = 0; i < size; i++)
 			selectionTable.push_back(std::make_pair(species.speciesMembership.at(i).thresholdScore, species.speciesMembership.at(i).geneStack));
+	}
 	else
 		std::cout << "WARNING - SELECTION - fillSelectionTable() - trying to add two different species to same selectionTable" << std::endl;
 }

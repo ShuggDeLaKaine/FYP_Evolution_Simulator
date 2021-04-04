@@ -43,6 +43,7 @@ struct Creature
 	bool tempTol;					//!< determines whether creature in tolerated temperature range.
 	bool oxyIdeal;					//!< determines whether creature in ideal oxygen range.
 	bool oxyTol;					//!< determines whether creature in tolerated oxygen range.
+	bool paired = false;			//!< determines in reproduction stage whether creature has been paired up, initialised to false;
 
 	uint32_t creatureNumber;		//!< creation number within species.
 	uint32_t generationNumber = 1;	//!< initialise to 1, as the first lot of seed population that survive will be generation 1.

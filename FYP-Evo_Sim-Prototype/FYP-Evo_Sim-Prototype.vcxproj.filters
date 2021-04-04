@@ -90,6 +90,9 @@
     <ClCompile Include="src\reproduction\verusSelection.cpp">
       <Filter>code\src</Filter>
     </ClCompile>
+    <ClCompile Include="src\reproduction\crossover.cpp">
+      <Filter>code\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\fitness\fitnessFunctions.h">
@@ -147,6 +150,9 @@
       <Filter>code\include</Filter>
     </ClInclude>
     <ClInclude Include="include\reproduction\verusSelection.h">
+      <Filter>code\include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\reproduction\crossover.h">
       <Filter>code\include</Filter>
     </ClInclude>
   </ItemGroup>

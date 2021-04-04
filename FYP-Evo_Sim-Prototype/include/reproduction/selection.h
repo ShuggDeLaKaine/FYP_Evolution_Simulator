@@ -3,6 +3,7 @@
 #include "core/generalFunctions.h"
 #include "creatures/species.h"
 #include "creatures/creature.h"
+#include "reproduction/crossover.h"
 
 
 /* \struct greater
@@ -36,4 +37,6 @@ private:
 	std::vector<std::pair<float, std::vector<float>>> toReproduceTable;		//!< vector of floats vectors, containing the gene stack information for those creatures which will reproduce.
 	float selectionPercentage = 25.0f;
 	uint32_t percentToReproduce;
+	Crossover co;			//!< ref to Crossover class.
+	//std::shared_ptr<Crossover> cross;
 };
