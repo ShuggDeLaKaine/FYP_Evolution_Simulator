@@ -11,7 +11,7 @@
 
 struct Creature
 {
-	uint32_t creatureID;			//!< creature ID (basically name)
+	uint32_t creatureID;			//!< creature ID.
 	std::vector<float> geneStack;	//!< vector containing the core gene values.
 	
 	float thresholdScore;			//!< score used to determine reproduction chances.
@@ -48,6 +48,12 @@ struct Creature
 	uint32_t creatureNumber;		//!< creation number within species.
 	uint32_t generationNumber = 1;	//!< initialise to 1, as the first lot of seed population that survive will be generation 1.
 	uint32_t childNumber = 0;		//!< initialise to 0, as above, but 0 because not a child creature, an original seed one.
+
+	//TO BRING IN.
+	//creatureSize;					//!< the 'size' of creature, used in weight and competetion mechanics.
+	float creatureWeight;			//!< the 'weight' of an individual creature on the environment it is in.
+	float litterSize;				//!< a float, if 5.45f, will definitely have 5 offspring and a 45% chance of 6.
+	float lifeSpan;					//!< if survives fitness tests, how many life spans the creature can survive. if 5.45, will definitely live 5 cycles, 45% chance to live 6.
 };
 
 struct CreatureSettings

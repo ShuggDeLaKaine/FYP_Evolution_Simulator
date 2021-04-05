@@ -12,7 +12,7 @@ CreatureCreation cc;							//!< ref to Creature Creation class.
 EnvironmentCreation ec;							//!< ref to Environment Creation class.
 Species sp;										//!< ref to Species class.
 Mutation mut;									//!< ref to Mutation class.
-Selection sel;
+Selection sel;									//!< ref to Selection class.
 Display ds;										//!< ref to Display class.
 
 SpeciesInfo si;									//!< ref to Species Info struct.

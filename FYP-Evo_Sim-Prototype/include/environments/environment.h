@@ -6,17 +6,18 @@
 
 struct Environment
 {
-	float energyAvailable;
-	float temperature;
-	float oxygenationRate;
+	float energyAvailable;			//!< energy available in environment.
+	float fWeightCapacity;			//!< how much collective creature weight the environment can take before resource availability starts to drop. 
+	float temperature;				//!< temperature of the environment.
+	float oxygenationRate;			//!< oxygenation % of the environment.
 	float mutationModifier = 1.0f;	//!< always initialised to 1 (no multiple effect), as initialisation considers environment 'clean', changes such a pollution will modify this.
 	float pollution = 0.0f;			//!< at initalisation set to 0 as considered to be 'clean', pollution changes added later.
-	int ID;
+	uint32_t ID;					//!< environmental ID number.
 
-	inline float getEnergyAvailable() { return energyAvailable; }
-	inline float getTemperature() { return temperature; }
-	inline float getOxygenRate() { return oxygenationRate; }
-	inline int   getEnvironmentID() { return ID; }
+	inline float getEnergyAvailable() { return energyAvailable; }	//!< get energyAvailable.
+	inline float getTemperature() { return temperature; }			//!< get temperature.
+	inline float getOxygenRate() { return oxygenationRate; }		//!< get oxygenation rate.
+	inline int   getEnvironmentID() { return ID; }					//!< get the environmental id.
 };
 
 /*	\class EnvironmentCreation
