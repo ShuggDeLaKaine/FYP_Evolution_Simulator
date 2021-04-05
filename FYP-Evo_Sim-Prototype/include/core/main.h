@@ -42,6 +42,9 @@ AllSpecies  allSpeciesList[1];					//!< single array to contain details of all t
 Environment envir[10];							//!< array of environments.
 
 std::vector<Creature> vecCurrentPopulation;		//!< current storage of populations of Creatures.
+std::vector<Creature> vecOffspringPopulation;	//!< storage for populations of offspring Creatures.
 std::vector<Creature> vecTempPopulation;		//!< temp storage for populations of Creatures.
+std::vector<Creature> tempCreatsToAdd;			//!< temp storage for creatures to be added to the next generation.
+std::vector<std::pair<float, std::vector<float>>> tempReproduce;	//!< temp storage for gene stacks to be reproduced.
 
 std::vector<float> tempGeneStack;				//!< takes and holds a gene stack whilst moving the data.

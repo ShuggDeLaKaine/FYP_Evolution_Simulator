@@ -13,8 +13,9 @@ Crossover::~Crossover()
 
 std::vector<Creature> Crossover::fullCrossover(std::vector<std::pair<float, std::vector<float>>> parents)
 {
-	//clear the temporary gene stack ready for use.
-	tempGeneStack.clear();
+	//clear the temporary gene stack and new creatures vector ready for use.
+	tempNewGeneStack.clear();
+	tempNewCreatures.clear();
 
 	//get the relevant gene stacks from parents.
 	getGeneStacks(parents);
@@ -25,27 +26,29 @@ std::vector<Creature> Crossover::fullCrossover(std::vector<std::pair<float, std:
 	//loop through paired parents.
 	for(int i = 0; i < pairedParents.size(); i++)
 	{
-		//cross over paired gene stacks into new gene stacks from offspring creatures.
-		crossoverGeneStacks(pairedParents.at(i), pairedParents.at(i).first.size());
+		//determine and get the number of offspring this pair of parents will have.
+		uint32_t tempOffspringNum = getOffspringNumber(pairedParents.at(i));
 
-		getOffspringNumber(pairedParents.at(i));
-
-		//loop through and repeat creature creation stage for the number of litter size of the pair of parents.
-		for (int j = 0; j < 2; j++)
+		//loop through and repeat creature creation stage for the number of offspring.
+		for (int j = 0; j < tempOffspringNum; j++)
 		{
-			//have the new gene stack in tempGeneStack, use this to create offspring creatures and add to species.
-			tempCreatures.push_back(cc.createCreatureFromGeneStack(tempGeneStack));
+			//a new gene stack from the paired parents.
+			crossoverGeneStacks(pairedParents.at(i), pairedParents.at(i).first.size());
+
+			//use new gene stack to create a new offspring creature and add to the temporary new creatures vector.
+			tempNewCreatures.push_back(cc.createCreatureFromGeneStack(tempNewGeneStack));
 		}
 	}
 
 	//return the creature.
-	return tempCreatures;
+	return tempNewCreatures;
 }
 
 void Crossover::getGeneStacks(std::vector<std::pair<float, std::vector<float>>> parents)
 {
 	//clear out geneStacksToPairVec in prep for a new species set of geneStacks.
 	geneStacksToPairVec.clear();
+
 	//loop through and get gene stacks from to reproduce table from selection.h/cpp that'll be in the params.
 	for (int i = 0; i < parents.size(); i++)
 		geneStacksToPairVec.push_back(std::make_pair(parents.at(i).second, false));
@@ -53,6 +56,8 @@ void Crossover::getGeneStacks(std::vector<std::pair<float, std::vector<float>>> 
 
 void Crossover::pairParents(std::vector<std::pair<std::vector<float>, bool>>& parents)
 {
+	//clear pairedParents ready for use.
+	pairedParents.clear();
 	//NOTE - how to pair parents? 
 	//iterate down through the list and match that way? 
 	//or randomly select them from the list? May take too long randomly picking numbers until it gets the correct last one.
@@ -63,9 +68,11 @@ void Crossover::pairParents(std::vector<std::pair<std::vector<float>, bool>>& pa
 		{
 			//pair creature at i and i+1
 			pairedParents.push_back(std::make_pair(parents.at(i).first, parents.at(i + 1).first));
+
 			//set the bool to true for both of these parents, as saying that they are assigned.
 			parents.at(i).second = true;
 			parents.at(i + 1).second = true;
+
 			//i++ as skipping a creature as it is assigned.
 			i++;
 		}
@@ -77,18 +84,19 @@ void Crossover::pairParents(std::vector<std::pair<std::vector<float>, bool>>& pa
 void Crossover::crossoverGeneStacks(std::pair<std::vector<float>, std::vector<float>> pairParents, uint32_t geneStackSize)
 {
 	//clear the temp geneStack, then reserve size.
-	tempGeneStack.clear();
-	tempGeneStack.reserve(geneStackSize);
+	tempNewGeneStack.clear();
+	tempNewGeneStack.reserve(geneStackSize);
+
 	//get a random uniform number from within the size of the geneStack vector.
-	std::rand();
-	//int randNum = genFunc->uniformIntBetween(0, geneStackSize);
-	int randNum = std::rand() % geneStackSize; 
+	int randNum = genFunc->uniformIntBetween(0, geneStackSize);
+
 	//loop through parent1 geneStack, start at the beginning to end at the random number, assigning each gene element to the new offspring geneStack.
 	for (int i = 0; i < randNum; i++)
-		tempGeneStack.push_back(pairParents.first.at(i));
+		tempNewGeneStack.push_back(pairParents.first.at(i));
+
 	//loop through parent2 geneStack, start at the random number to end at the end, assigning each gene element to the new offsping geneStack.
 	for (int i = randNum; i < geneStackSize; i++)
-		tempGeneStack.push_back(pairParents.second.at(i));
+		tempNewGeneStack.push_back(pairParents.second.at(i));
 }
 
 uint32_t Crossover::getOffspringNumber(std::pair<std::vector<float>, std::vector<float>> parents)

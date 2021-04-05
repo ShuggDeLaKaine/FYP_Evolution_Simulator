@@ -60,6 +60,12 @@ void Species::checkSpeciesDivergence()
 
 }
 
+void Species::clearSpeciesMembership(SpeciesInfo species)
+{
+	species.speciesMembership.clear();
+
+}
+
 std::vector<float>  Species::getSeedGeneStack(SpeciesInfo species)
 {
 	std::vector<float> result;

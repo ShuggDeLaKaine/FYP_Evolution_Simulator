@@ -46,14 +46,14 @@ struct Creature
 	bool paired = false;			//!< determines in reproduction stage whether creature has been paired up, initialised to false;
 
 	uint32_t creatureNumber;		//!< creation number within species.
-	uint32_t generationNumber = 1;	//!< initialise to 1, as the first lot of seed population that survive will be generation 1.
-	uint32_t childNumber = 0;		//!< initialise to 0, as above, but 0 because not a child creature, an original seed one.
+	//uint32_t generationNumber = 1;	//!< initialise to 1, as the first lot of seed population that survive will be generation 1.
+	//uint32_t childNumber = 0;		//!< initialise to 0, as above, but 0 because not a child creature, an original seed one.
 
 	//TO BRING IN.
 	//creatureSize;					//!< the 'size' of creature, used in weight and competetion mechanics.
 	float creatureWeight;			//!< the 'weight' of an individual creature on the environment it is in.
 	float offspringNumber;			//!< a float, if 5.45f, will definitely have 5 offspring and a 45% chance of 6.
-	float lifeSpan;					//!< if survives fitness tests, how many life spans the creature can survive. if 5.45, will definitely live 5 cycles, 45% chance to live 6.
+	uint32_t lifeSpan;					//!< if survives fitness tests, how many life spans the creature can survive. if 5.45, will definitely live 5 cycles, 45% chance to live 6.
 };
 
 struct CreatureSettings
@@ -72,6 +72,8 @@ struct CreatureSettings
 	float oxyRangeMax = 25.0f;			//!< 
 	float offspringMin = 1.0f;			//!< 
 	float offspringMax = 5.0f;			//!< 
+	uint32_t lifeMin = 1;				//!< 
+	uint32_t lifeMax = 5;				//!< 
 };
 
 /*	\class CreatureCreation
@@ -85,7 +87,7 @@ public:
 
 	void creatureCreation(Creature &creature, float energyCentre, float energyGauss, float idealTempCentre, float idealTempGuass,
 		float idealTempRangeMin, float idealTempRangeMax, float tolTempRangeMin, float tolTempRangeMax, float oxyCentre, float oxyGauss,
-		float oxyRangeMin, float oxyRangeMax, float offspringMin, float offspringMax);				//!< create a creature, used in the seeding stage to randomly create creatures.
+		float oxyRangeMin, float oxyRangeMax, float offspringMin, float offspringMax, uint32_t lifeMin, uint32_t lifeMax);				//!< create a creature, used in the seeding stage to randomly create creatures.
 
 	Creature createCreatureFromGeneStack(std::vector<float> newGeneStack);		//!< creates a creature from a geneStack.
 	void updateCreature(Creature &creature);	//!< update creatures variables with the new gene stack.

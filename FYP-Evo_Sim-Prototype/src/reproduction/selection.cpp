@@ -32,8 +32,10 @@ void Selection::fillSelectionTable(SpeciesInfo species)
 	{
 		//get the size of species membership.
 		uint32_t size = species.speciesMembership.size();
+
 		//reserve this space in the selection table, more efficient than increasing size one element at a time in the below loop.
 		selectionTable.reserve(size);
+
 		//fill the selection table with the paired variables of the creatures threshold score and their gene stacks.
 		for (int i = 0; i < size; i++)
 			selectionTable.push_back(std::make_pair(species.speciesMembership.at(i).thresholdScore, species.speciesMembership.at(i).geneStack));
@@ -49,6 +51,7 @@ void Selection::fillReproductionTable(std::vector<std::pair<float, std::vector<f
 	{
 		//reserve the size of the toReproduceTable to percentToReproduce as we know it's this size and more efficient than just adding an element each time.
 		toReproduceTable.reserve(numToReprod);
+
 		//take the gene stacks from the selectionTable up to the percentageToReproduce value element.
 		for (int i = 0; i < numToReprod; i++)
 			toReproduceTable.push_back(selectTable.at(i));
@@ -61,9 +64,11 @@ uint32_t Selection::getSelectionPercent(std::vector<std::pair<float, std::vector
 {
 	//get the % of the selected table.
 	uint32_t result = static_cast<int>((selectTable.size() * 0.01f) * selectionPercentage);
+
 	//need an even number of creatures to pair up, check percentage is even, if not, add 1 to make so.
 	if (result % 2 != 0)
 		result += 1;
+	
 	//return the result.
 	return result;
 }

@@ -11,7 +11,7 @@ CreatureCreation::~CreatureCreation()
 
 void CreatureCreation::creatureCreation(Creature & creature, float energyCentre, float energyGauss, float idealTempCentre, float idealTempGuass, 
 	float idealTempRangeMin, float idealTempRangeMax, float tolTempRangeMin, float tolTempRangeMax, float oxyCentre, float oxyGauss, 
-	float oxyRangeMin, float oxyRangeMax, float offspringMin, float offspringMax)
+	float oxyRangeMin, float oxyRangeMax, float offspringMin, float offspringMax, uint32_t lifeMin, uint32_t lifeMax)
 {
 	creature.initialEnergyDemand = genFunc->normalFloatBetween(energyCentre, energyGauss);
 	creature.initialEnergyDemand = genFunc->roundFloat(creature.initialEnergyDemand);
@@ -66,6 +66,9 @@ void CreatureCreation::creatureCreation(Creature & creature, float energyCentre,
 	creature.offspringNumber = genFunc->uniformFloatBetween(offspringMin, offspringMax);
 	fillGeneElement(creature, creature.geneStack, creature.offspringNumber);
 
+	creature.lifeSpan = genFunc->uniformIntBetween(lifeMin, lifeMax);
+	fillGeneElement(creature, creature.geneStack, creature.lifeSpan);
+
 	creature.isAlive = true;
 	creature.tempIdeal = true;
 	creature.tempTol = true;
@@ -87,7 +90,8 @@ Creature CreatureCreation::createCreatureFromGeneStack(std::vector<float> newGen
 
 	//create the rest of the creatures variables from this genestack.
 	updateCreature(newCreature);
-	
+
+	//REMEMBER - in main run ft.creatureFitnessTests on these creatures to complete build, specifically threshold score and final energy demand, VERY IMPORTANT.	
 	//return the newly created creature.
 	return newCreature;
 }
@@ -95,7 +99,7 @@ Creature CreatureCreation::createCreatureFromGeneStack(std::vector<float> newGen
 void CreatureCreation::updateCreature(Creature & creature)
 {
 	//Creature mutations have taken place, update the geneStack with these new values.
-	//geneStack elements = e0-initialEnergyDemand / e1-idealTemp / e2-idealTempRange / e3-tolTempRange / e4-oxyenDemand / e5-oxygenRange
+	//geneStack elements = e0-initialEnergyDemand / e1-idealTemp / e2-idealTempRange / e3-tolTempRange / e4-oxyenDemand / e5-oxygenRange / e6-numberOffspring / e7-lifeSpan / e8-species/creature id.
 	creature.initialEnergyDemand = creature.geneStack.at(0);
 	creature.idealTemp = creature.geneStack.at(1);
 	creature.idealTempRange = creature.geneStack.at(2);
@@ -109,6 +113,10 @@ void CreatureCreation::updateCreature(Creature & creature)
 		creature.oxygenDemand = resetVariable(1.0f, 5.0f, 15.0f, 20.0f);
 	}
 	creature.oxygenRange = creature.geneStack.at(5);
+
+	creature.offspringNumber = creature.geneStack.at (6);
+	creature.lifeSpan = creature.geneStack.at(7);
+	creature.creatureID = creature.geneStack.at(8);
 
 	creature.idealTempRangeMax = creature.idealTemp + creature.idealTempRange;
 	creature.idealTempRangeMin = creature.idealTemp - creature.idealTempRange;
@@ -181,6 +189,8 @@ void CreatureCreation::printCreatureVariables(const Creature creature)
 	std::cout << "tolTempRangeMax: " << creature.tolTempRangeMax << std::endl;
 	std::cout << "tolTempRangeMin: " << creature.tolTempRangeMin << std::endl;
 	std::cout << "oxygenTolMin: " << creature.oxygenTolMin << std::endl;
+	std::cout << "minimum offspring to have: " << static_cast<int>(creature.offspringNumber) << std::endl;
+	std::cout << "lifeSpan: " << creature.lifeSpan << std::endl;
 }
 
 float CreatureCreation::resetVariable(float minLow, float minHigh, float maxLow, float maxHigh)

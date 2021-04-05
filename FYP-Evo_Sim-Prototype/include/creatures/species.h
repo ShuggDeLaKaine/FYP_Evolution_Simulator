@@ -55,6 +55,7 @@ public:
 	void addCreatureToSpecies(Creature creature, SpeciesInfo& species);						//!< add a creature to a species.
 	void updateSpeciesMembership(SpeciesInfo species ,std::vector<Creature>& membership);	//!< update species membership, adding new members and removing 'dead' ones.
 	void checkSpeciesDivergence();//****TO-DO****	//!< check membership gene stacks against species gene stack to see if creature has diverged.
+	void clearSpeciesMembership(SpeciesInfo species);
 
 	std::vector<float> getSeedGeneStack(SpeciesInfo species);		//!< get the species initial seed population gene stack.
 	std::vector<float> getSpeciesGeneStack(SpeciesInfo species);	//!< get the species current populations gene stack.

@@ -1,6 +1,13 @@
 
 
 
+
+
+
+//BACTERIA METHOD, 1 parent divides into 2 offspring.
+//cc.duplicateCreature(vecCurrentPopulation, vecTempPopulation.at(i));
+
+
 //bacteria reproduction method, 1 creature divides into 2.
 /*
 	//each creature species now has two identicial members in the tempPopulation vector.
