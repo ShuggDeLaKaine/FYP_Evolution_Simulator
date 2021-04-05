@@ -68,7 +68,26 @@ void CreatureCreation::creatureCreation(Creature & creature, float energyCentre,
 	creature.oxyTol = true;
 }
 
-void CreatureCreation::updateCreatureWithMutations(Creature & creature)
+Creature CreatureCreation::createCreatureFromGeneStack(std::vector<float> newGeneStack)
+{
+	//create a new creature object.
+	Creature newCreature;
+
+	//reserve its geneStack size to the newGeneStackSize, more efficient than resizing element by element.
+	newCreature.geneStack.reserve(newGeneStack.size());
+
+	//loop through and set creatures gene stack to the new gene stack.
+	for (int i = 0; i < newGeneStack.size(); i++)
+		newCreature.geneStack.push_back(newGeneStack.at(i));
+
+	//create the rest of the creatures variables from this genestack.
+	updateCreature(newCreature);
+	
+	//return the newly created creature.
+	return newCreature;
+}
+
+void CreatureCreation::updateCreature(Creature & creature)
 {
 	//Creature mutations have taken place, update the geneStack with these new values.
 	//geneStack elements = e0-initialEnergyDemand / e1-idealTemp / e2-idealTempRange / e3-tolTempRange / e4-oxyenDemand / e5-oxygenRange
@@ -104,31 +123,11 @@ void CreatureCreation::updateCreatureWithMutations(Creature & creature)
 
 void CreatureCreation::duplicateCreature(std::vector<Creature> &tempPopulationVec, Creature creatToDup)
 {
+	//BELOW FOR BACTERIA REPRODUCTION, ie 1 parent, divides into 2 parents.
 	//add first child creature.
 	tempPopulationVec.push_back(creatToDup);
-	/*
-	//create a new ID based for this creature, which is will the end element of the vector so using .back().
-	tempPopulationVec.back().generationNumber = tempPopulationVec.back().generationNumber + 1;
-	tempPopulationVec.back().childNumber = 1;
-	tempPopulationVec.back().creatureNumber = genFunc->createNewCreatureID(
-		tempPopulationVec.back().creatureNumber, tempPopulationVec.back().generationNumber, tempPopulationVec.back().childNumber);
-	//TESTING stuff...
-	//size = tempPopulationVec.size();
-	//std::cout << "TempPopVec size after FIRST CHILD added: " << size << std::endl;
-	*/
-
 	//do it all again for the second child creature.
 	tempPopulationVec.push_back(creatToDup);
-	/*
-	//create a new ID based for this creature, which is will the end element of the vector so using .back().
-	tempPopulationVec.back().generationNumber = tempPopulationVec.back().generationNumber + 1;
-	tempPopulationVec.back().childNumber = 2;
-	tempPopulationVec.back().creatureNumber = genFunc->createNewCreatureID(
-		tempPopulationVec.back().creatureNumber, tempPopulationVec.back().generationNumber, tempPopulationVec.back().childNumber);;
-	//TESTING stuff...
-	//size = tempPopulationVec.size();
-	//std::cout << "TempPopVec size after SECOND CHILD added: " << size << std::endl;
-	*/
 }
 
 void CreatureCreation::duplicatePopulationVectors(std::vector<Creature> &toPopulation, std::vector<Creature> &fromPopulation)

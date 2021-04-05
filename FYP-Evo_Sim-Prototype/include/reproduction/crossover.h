@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include "core/generalFunctions.h"
+#include "creatures/creature.h"
 
 
 /*	\class Crossover
@@ -22,6 +23,10 @@ public:
 private:
 	std::vector<std::pair<std::vector<float>, bool>> geneStacksToPairVec;				//!< vector to take the gene stacks that will be crossed over.
 	std::vector<std::pair<std::vector<float>, std::vector<float>>> pairedParents;		//!< vector of pairs, each a vector of floats, gene stack 1 and gene stack 2 from each parent.
+	
 	std::vector<float> tempGeneStack;			//!< temp gene stack to contain the core gene values whilst an offspring is under construction.
+	Creature tempCreature;						//!< object of temporary Creature, used in creature creation and species assignment.
+	
 	std::shared_ptr<GeneralFunctions> genFunc;	//!< pointer ref to general functions class.
+	CreatureCreation cc;						//!< ref to Creature Creation class.
 };

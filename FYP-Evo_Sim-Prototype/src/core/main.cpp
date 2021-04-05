@@ -81,7 +81,7 @@ int main()
 								//and mutate each value in its gene stack slightly.
 								mut.mutationIntensity(seedMutIntensity, seedPopulationPool[i].geneStack.at(l), envir[0].mutationModifier);
 								//now update all the creatures variables with these new mutated values.
-								cc.updateCreatureWithMutations(seedPopulationPool[i]);
+								cc.updateCreature(seedPopulationPool[i]);
 							}
 							//add this prepped creature to its species.
 							sp.addCreatureToSpecies(seedPopulationPool[i], speciesPool[k]);
@@ -182,8 +182,24 @@ int main()
 		//REPRODUCTION STAGE
 		for (int i = 0; i < vecTempPopulation.size(); i++)
 		{
+			//SELECT CREATURES IN EACH SPECIES TO REPRODUCE.
+			//loop through species and do below for each. 
+			for (int j = 0; j < allSpeciesList[0].fullSpeciesList.size(); j++)
+			{
+				std::cout << std::endl;
+				sel.parentSelection(allSpeciesList[0].fullSpeciesList.at(j));
+				std::cout << std::endl;
+			}
+
+
 			//as survived, DUPLICATE (think bacterial reproduction, atm just doing x2)
 			cc.duplicateCreature(vecCurrentPopulation, vecTempPopulation.at(i));
+
+
+
+
+
+
 
 			//********   ADD CREATURE TO RELEVANT SPECIES   ********
 			//get creature ID
@@ -245,7 +261,7 @@ int main()
 			//assign the temp gene stack to the creatures gene stack. 
 			vecCurrentPopulation.at(i).geneStack.assign(tempGeneStack.begin(), tempGeneStack.end());
 			//update all the creatures variables with these new mutated values.
-			cc.updateCreatureWithMutations(vecCurrentPopulation.at(i));
+			cc.updateCreature(vecCurrentPopulation.at(i));
 		}
 
 		//TESTING... duplication of temp population vec to the current population vec.
@@ -276,11 +292,6 @@ int main()
 
 			ds.displayGeneStackChange(allSpeciesList[0].fullSpeciesList.at(j), allSpeciesList[0].fullSpeciesList.at(j).seedGeneStack,
 				allSpeciesList[0].fullSpeciesList.at(j).speciesGeneStack);
-
-
-			std::cout << std::endl << std::endl << std::endl;
-			sel.parentSelection(allSpeciesList[0].fullSpeciesList.at(j));
-			std::cout << std::endl << std::endl << std::endl;
 		}
 
 	}
@@ -298,6 +309,7 @@ int main()
 	for (int i = 0; i < allSpeciesList[0].fullSpeciesList.size(); i++)
 		ds.displayGeneStackChange(allSpeciesList[0].fullSpeciesList.at(i), allSpeciesList[0].fullSpeciesList.at(i).seedGeneStack,
 			allSpeciesList[0].fullSpeciesList.at(i).speciesGeneStack);
+
 
 	genFunc->stop();
 }

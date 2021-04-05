@@ -85,7 +85,8 @@ public:
 		float idealTempRangeMin, float idealTempRangeMax, float tolTempRangeMin, float tolTempRangeMax, float oxyCentre, float oxyGauss,
 		float oxyRangeMin, float oxyRangeMax);				//!< create a creature, used in the seeding stage to randomly create creatures.
 
-	void updateCreatureWithMutations(Creature &creature);	//!< update all the creatures variables with the new mutated values from the gene stack.
+	Creature createCreatureFromGeneStack(std::vector<float> newGeneStack);		//!< creates a creature from a geneStack.
+	void updateCreature(Creature &creature);	//!< update creatures variables with the new gene stack.
 
 	void duplicateCreature(std::vector<Creature> &tempPopulationVec, Creature creatToDup);	//!< duplicate a creature.
 	void duplicatePopulationVectors(std::vector<Creature> &toPopulation, std::vector<Creature> &fromPopulation);	//!< move the temp vector into the main vector.
