@@ -2,8 +2,13 @@
 #include "reproduction/selection.h"
 
 
-void Selection::parentSelection(SpeciesInfo species)
+std::vector<std::pair<float, std::vector<float>>> Selection::parentSelection(SpeciesInfo species)
 {
+	//clear everything ready for use.
+	selectionTable.clear();
+	toReproduceTable.clear();
+	percentToReproduce = 0;
+
 	//fill the selection table with paired scores and geneStacks of the creatures from the passed in species.
 	fillSelectionTable(species);
 
@@ -16,13 +21,8 @@ void Selection::parentSelection(SpeciesInfo species)
 	//populate reproduction table with selected from selection table.
 	fillReproductionTable(selectionTable, percentToReproduce);
 
-	//send toReproduce gene stacks over to the crossover class.
-	cross.fullCrossover(toReproduceTable);
-
-	//clear the selection and reproduction tables ready for the next species and set percentToReproduce back to 0;
-	selectionTable.clear();
-	toReproduceTable.clear();
-	percentToReproduce = 0;
+	//return the table to be reproduced.
+	return toReproduceTable;
 }
 
 void Selection::fillSelectionTable(SpeciesInfo species)

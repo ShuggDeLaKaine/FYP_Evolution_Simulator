@@ -25,7 +25,7 @@ public:
 	Selection() {};			//!< constructor.
 	~Selection() {};		//!< deconstructor.
 
-	void parentSelection(SpeciesInfo species);
+	std::vector<std::pair<float, std::vector<float>>> parentSelection(SpeciesInfo species);
 
 	void fillSelectionTable(SpeciesInfo species);
 	void fillReproductionTable(std::vector<std::pair<float, std::vector<float>>> selectTable, uint32_t numToReprod);

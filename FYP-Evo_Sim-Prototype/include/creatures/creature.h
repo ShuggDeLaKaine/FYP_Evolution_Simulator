@@ -52,7 +52,7 @@ struct Creature
 	//TO BRING IN.
 	//creatureSize;					//!< the 'size' of creature, used in weight and competetion mechanics.
 	float creatureWeight;			//!< the 'weight' of an individual creature on the environment it is in.
-	float litterSize;				//!< a float, if 5.45f, will definitely have 5 offspring and a 45% chance of 6.
+	float offspringNumber;			//!< a float, if 5.45f, will definitely have 5 offspring and a 45% chance of 6.
 	float lifeSpan;					//!< if survives fitness tests, how many life spans the creature can survive. if 5.45, will definitely live 5 cycles, 45% chance to live 6.
 };
 
@@ -70,6 +70,8 @@ struct CreatureSettings
 	float oxyGauss = 25.0f;				//!< 
 	float oxyRangeMin = 1.0f;			//!< 
 	float oxyRangeMax = 25.0f;			//!< 
+	float offspringMin = 1.0f;			//!< 
+	float offspringMax = 5.0f;			//!< 
 };
 
 /*	\class CreatureCreation
@@ -83,10 +85,11 @@ public:
 
 	void creatureCreation(Creature &creature, float energyCentre, float energyGauss, float idealTempCentre, float idealTempGuass,
 		float idealTempRangeMin, float idealTempRangeMax, float tolTempRangeMin, float tolTempRangeMax, float oxyCentre, float oxyGauss,
-		float oxyRangeMin, float oxyRangeMax);				//!< create a creature, used in the seeding stage to randomly create creatures.
+		float oxyRangeMin, float oxyRangeMax, float offspringMin, float offspringMax);				//!< create a creature, used in the seeding stage to randomly create creatures.
 
 	Creature createCreatureFromGeneStack(std::vector<float> newGeneStack);		//!< creates a creature from a geneStack.
 	void updateCreature(Creature &creature);	//!< update creatures variables with the new gene stack.
+	void addToGeneStack(std::vector<float>& geneStack, float newElement);	//!< adds an element to a gene stack.
 
 	void duplicateCreature(std::vector<Creature> &tempPopulationVec, Creature creatToDup);	//!< duplicate a creature.
 	void duplicatePopulationVectors(std::vector<Creature> &toPopulation, std::vector<Creature> &fromPopulation);	//!< move the temp vector into the main vector.

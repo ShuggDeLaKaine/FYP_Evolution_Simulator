@@ -9,7 +9,9 @@ CreatureCreation::~CreatureCreation()
 
 }
 
-void CreatureCreation::creatureCreation(Creature & creature, float energyCentre, float energyGauss, float idealTempCentre, float idealTempGuass, float idealTempRangeMin, float idealTempRangeMax, float tolTempRangeMin, float tolTempRangeMax, float oxyCentre, float oxyGauss, float oxyRangeMin, float oxyRangeMax)
+void CreatureCreation::creatureCreation(Creature & creature, float energyCentre, float energyGauss, float idealTempCentre, float idealTempGuass, 
+	float idealTempRangeMin, float idealTempRangeMax, float tolTempRangeMin, float tolTempRangeMax, float oxyCentre, float oxyGauss, 
+	float oxyRangeMin, float oxyRangeMax, float offspringMin, float offspringMax)
 {
 	creature.initialEnergyDemand = genFunc->normalFloatBetween(energyCentre, energyGauss);
 	creature.initialEnergyDemand = genFunc->roundFloat(creature.initialEnergyDemand);
@@ -60,6 +62,9 @@ void CreatureCreation::creatureCreation(Creature & creature, float energyCentre,
 	creature.oxygenTolMin = creature.oxygenDemand - creature.oxygenRange;
 	if (creature.oxygenTolMin <= 0.0f)
 		creature.oxygenTolMin = resetVariable(0.05f, 1.0f, 3.0f, 6.0f);
+
+	creature.offspringNumber = genFunc->uniformFloatBetween(offspringMin, offspringMax);
+	fillGeneElement(creature, creature.geneStack, creature.offspringNumber);
 
 	creature.isAlive = true;
 	creature.tempIdeal = true;
@@ -119,6 +124,12 @@ void CreatureCreation::updateCreature(Creature & creature)
 	creature.oxygenTolMin = creature.oxygenDemand - creature.oxygenRange;
 	if (creature.oxygenTolMin <= 0.0f)
 		creature.oxygenTolMin = resetVariable(0.05f, 1.0f, 3.0f, 6.0f);
+}
+
+void CreatureCreation::addToGeneStack(std::vector<float>& geneStack, float newElement)
+{
+	//adds an element to the end of the gene stack.
+	geneStack.insert(geneStack.end(), newElement);
 }
 
 void CreatureCreation::duplicateCreature(std::vector<Creature> &tempPopulationVec, Creature creatToDup)

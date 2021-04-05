@@ -32,9 +32,10 @@ int main()
 		for (int i = 0; i < populationSize; i++)
 		{
 			cc.creatureCreation(seedPopulationPool[i], cs.energyCentre, cs.energyGauss, cs.idealTempCentre, cs.idealTempGuass, cs.idealTempRangeMin,
-				cs.idealTempRangeMax, cs.tolTempRangeMin, cs.tolTempRangeMax, cs.oxyCentre, cs.oxyGauss, cs.oxyRangeMin, cs.oxyRangeMax);
+				cs.idealTempRangeMax, cs.tolTempRangeMin, cs.tolTempRangeMax, cs.oxyCentre, cs.oxyGauss, cs.oxyRangeMin, cs.oxyRangeMax, cs.offspringMin, cs.offspringMax);
 			seedPopulationPool[i].creatureNumber = i;
 			seedPopulationPool[i].creatureID = genFunc->createNewCreatureID(seedPopulationPool[i].creatureNumber);
+			cc.addToGeneStack(seedPopulationPool[i].geneStack, seedPopulationPool[i].creatureID);
 		}
 
 		std::cout << std::endl << "SEED POPULATION STAGE" << std::endl << std::endl;
@@ -73,10 +74,11 @@ int main()
 						//check whether the creature and species IDs are the same.
 						if (i == speciesPool[k].speciesID)
 						{
-							//need to create an 'Adam & Eve' from the initial single creature to be the first parents of this species.
+							//need to create an initial first population from the initial single creature for this species.
 							//they need to be different for one another for the crossover reproduction mechanic to have an effect.
 							//therefore, iterate through their geneStacks 
-							for (int l = 0; l < seedPopulationPool[i].geneStack.size(); l++)
+							//-1 on the size below so it does NOT mutate the final element, which is a float containing the creature/species ID.
+							for (int l = 0; l < (seedPopulationPool[i].geneStack.size() - 1); l++)
 							{
 								//and mutate each value in its gene stack slightly.
 								mut.mutationIntensity(seedMutIntensity, seedPopulationPool[i].geneStack.at(l), envir[0].mutationModifier);
@@ -186,10 +188,24 @@ int main()
 			//loop through species and do below for each. 
 			for (int j = 0; j < allSpeciesList[0].fullSpeciesList.size(); j++)
 			{
-				std::cout << std::endl;
-				sel.parentSelection(allSpeciesList[0].fullSpeciesList.at(j));
-				std::cout << std::endl;
+				//std::cout << std::endl;
+				//sel.parentSelection(allSpeciesList[0].fullSpeciesList.at(j));
+				//std::cout << std::endl;
+
+				std::vector<std::pair<float, std::vector<float>>> tempReproduce;
+				tempReproduce = sel.parentSelection(allSpeciesList[0].fullSpeciesList.at(j));
+
+				std::vector<Creature> tempCreatsToAdd;
+				tempCreatsToAdd = cross.fullCrossover(tempReproduce);
+
+				//iterate through the temp creatures to add vector and pop onto the back of the temp population vector.
+				for(int k = 0; k < tempCreatsToAdd.size(); k++)
+					vecTempPopulation.push_back(tempCreatsToAdd.at(i));
 			}
+
+
+
+
 
 
 			//as survived, DUPLICATE (think bacterial reproduction, atm just doing x2)
@@ -247,7 +263,8 @@ int main()
 			tempGeneStack.assign(vecCurrentPopulation.at(i).geneStack.begin(), vecCurrentPopulation.at(i).geneStack.end());
 
 			//iterate through the tempGeneStack array.
-			for(int j = 0; j < tempGeneStack.size(); j++)
+			//-1 on size as don't want to mutate the final element which is the species id, need that kept the same.
+			for(int j = 0; j < (tempGeneStack.size() - 1); j++)
 			{
 				totalMutTests++;
 				//run a mutation chance test on each element in vector, if it comes back true
