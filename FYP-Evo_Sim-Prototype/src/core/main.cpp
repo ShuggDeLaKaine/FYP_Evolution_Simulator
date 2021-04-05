@@ -99,9 +99,6 @@ int main()
 				sp.assignSpeciesToAllSpeciesVector(speciesPool[tempPosition], allSpeciesList->fullSpeciesList, allSpeciesList[0]);
 				//update species data, such as species average gene stack.
 				sp.updateSpeciesGeneStack(speciesPool[tempPosition]);
-
-				//print surviving creature info to console.
-				///ds.displayCreatureVariables(vecTempPopulation);
 				//update isAlive.
 				isAlive++;
 			}
@@ -134,9 +131,6 @@ int main()
 	//clear the temp population vector, to refill again.
 	vecTempPopulation.clear();
 
-	//TESTING... duplication of temp population vec to the current population vec.
-	std::cout << std::endl << "...END OF SEED STAGE: final CURRENT population size is: " << vecCurrentPopulation.size() << std::endl;
-
 	//reset alive and dead counters.
 	isAlive = 0;
 	isDead = 0;
@@ -151,7 +145,7 @@ int main()
 		vecTempPopulation.clear();
 
 		//TESTING --- keeping an eye on the which life cycle it is.
-		std::cout << std::endl << "LIFE CYCLE: " << i + 1 << std::endl << std::endl;
+		std::cout << std::endl << "LIFE CYCLE: " << i + 1 << std::endl;
 
 #pragma region FITNESS_TESTS
 		//SURVIVAL TEST STAGE...
@@ -254,7 +248,7 @@ int main()
 			cc.updateCreature(vecOffspringPopulation.at(i));
 		}
 
-
+		/*
 		//TESTING... duplication of temp population vec to the current population vec.
 		std::cout << "END OF CYCLE " << i + 1 << ": final CURRENT population size is: " << vecCurrentPopulation.size() << std::endl;
 		std::cout << "NUMBER OF MUTATION THIS CYCLE " << numMut << std::endl;
@@ -262,6 +256,7 @@ int main()
 		numMut = 0;
 		std::cout << "Number of POSITIVE mutations is: " << mut.iPosMuts << " with a combined value of: " << mut.fPosMutsTally << std::endl;
 		std::cout << "Number of NEGATIVE mutations is: " << mut.iNegMuts << " with a combined value of: " << mut.fNegMutsTally << std::endl;
+		*/
 
 		//FITNESS TEST NEWLY MUTATED OFFSPRING CREATURES.
 		for (int i = 0; i < vecOffspringPopulation.size(); i++)
@@ -345,30 +340,38 @@ int main()
 
 			//update species data, such as species average gene stack.
 			sp.updateSpeciesGeneStack(allSpeciesList[0].fullSpeciesList.at(i));
+			sp.updateSpeciesMembership(allSpeciesList[0].fullSpeciesList.at(i));
 
-			//display species data.
-			ds.displaySpeciesPopulationInfo(allSpeciesList[0].fullSpeciesList.at(i));
-
+			/*
 			//display changes in gene stack.
 			ds.displayGeneStackChange(allSpeciesList[0].fullSpeciesList.at(i), allSpeciesList[0].fullSpeciesList.at(i).seedGeneStack,
 				allSpeciesList[0].fullSpeciesList.at(i).speciesGeneStack);
+			*/
+
+			//display species data.
+			ds.displaySpeciesPopulationInfo(allSpeciesList[0].fullSpeciesList.at(i));
 		}
 	}
 
-
+	/*
 	//TESTING --- display mutation success and number of mutations. 
 	std::cout << std::endl << std::endl << "END OF LIFE CYCLES - RESULTS FOLLOWING" << std::endl << std::endl;
 	std::cout << std::endl << "Total number of mutation tests is: " << totalMutTests << std::endl;
 	std::cout << "Total number of mutations are: " << totalNumberMut << std::endl;
 	float percentMut = static_cast<float>(totalNumberMut) / static_cast<float>(totalMutTests);
 	std::cout << "Percentage of mutations is: " << percentMut << std::endl << std::endl;
-
+	*/
 
 	//TESTING --- display each species seed and end gene stacks.
 	for (int i = 0; i < allSpeciesList[0].fullSpeciesList.size(); i++)
+	{
 		ds.displayGeneStackChange(allSpeciesList[0].fullSpeciesList.at(i), allSpeciesList[0].fullSpeciesList.at(i).seedGeneStack,
 			allSpeciesList[0].fullSpeciesList.at(i).speciesGeneStack);
+		//display species data.
+		ds.displaySpeciesPopulationInfo(allSpeciesList[0].fullSpeciesList.at(i));
+	}
 
+	std::cout << std::endl << std::endl << "        SIMULATION ENDED" << std::endl;
 
 	genFunc->stop();
 }

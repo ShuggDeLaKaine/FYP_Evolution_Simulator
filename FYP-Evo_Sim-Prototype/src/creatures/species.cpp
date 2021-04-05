@@ -32,20 +32,10 @@ void Species::addCreatureToSpecies(Creature creature, SpeciesInfo & species)
 	species.totalMembers++;
 }
 
-void Species::updateSpeciesMembership(SpeciesInfo species, std::vector<Creature>& membership)
+void Species::updateSpeciesMembership(SpeciesInfo& species)
 {
-	//run through full speciesMembership vector and check which are alive.
-	for (int i = 0; i < membership.size(); i++)
-	{
-		//check whether alive... 
-		if (membership.at(i).isAlive == false)
-		{
-			//kick out of species membership if not...
-			membership.erase(membership.begin() + i);
-			//update counts.
-			species.currentMembers--;
-		}
-	}
+	species.currentMembers = species.speciesMembership.size();
+	species.totalMembers += species.currentMembers;
 }
 
 void Species::checkSpeciesDivergence()
@@ -57,12 +47,6 @@ void Species::checkSpeciesDivergence()
 	//NOTE ***TODO*** 
 	//work out what distance between a diverging member and the population average would be considered as diverging.
 	//this will need testing.
-
-}
-
-void Species::clearSpeciesMembership(SpeciesInfo species)
-{
-	species.speciesMembership.clear();
 
 }
 
