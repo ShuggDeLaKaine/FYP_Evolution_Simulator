@@ -2,12 +2,8 @@
 #include "core/main.h"
 
 
-
 int main()
 {
-	genFunc.reset(new GeneralFunctions);
-	genFunc->start();
-
 #pragma region ENVIRONMENTS
 	//'BAAAAAAD' Testing Environment.
 	envir[0].energyAvailable = 100.0f;
@@ -15,6 +11,9 @@ int main()
 	envir[0].oxygenationRate = 20.0f;
 	envir[0].ID = 1;
 #pragma endregion
+
+	genFunc.reset(new GeneralFunctions);
+	genFunc->start();
 
 	uint32_t populationSize = (sizeof(seedPopulationPool) / sizeof(*seedPopulationPool));
 	uint32_t speciesSize = (sizeof(speciesPool) / sizeof(*speciesPool));
@@ -25,7 +24,7 @@ int main()
 	else
 		bSuccessfulSeed = false;
 
-
+#pragma region SEED_POPULATION_STAGE
 	do {
 	//                                 ************    SEED POPULATION STAGE    ************
 
@@ -114,32 +113,10 @@ int main()
 		else
 			bSuccessfulSeed = false;
 	} while (!bSuccessfulSeed);
-	//                                 ************    FIRST POPULATION STAGE    ************
+#pragma endregion
 
-	/*
-		//each creature species now has two identicial members in the tempPopulation vector. 
-		//to encourage diversification of species, seed parents should be slightly different otherwise the crossover stage has no effect. 
-		//so, loop through vector of creatures and mutate each element of their geneStack vectors with an initial smaller mutation intensity.
-		for (int i = 0; i < vecTempPopulation.size(); i++)
-		{
-			//clear the temporary gene stack vector in preparation for use.
-			tempGeneStack.clear();
-			//reserve the size of the temporoary gene stack to the creatures gene stack size.
-			tempGeneStack.reserve(vecTempPopulation.at(i).geneStack.size());
-			//assign current creatures gene stack to a temporary gene stack.
-			tempGeneStack.assign(vecTempPopulation.at(i).geneStack.begin(), vecTempPopulation.at(i).geneStack.end());
-
-			//iterate through the tempGeneStack array and run a mutation on each element.
-			for (int j = 0; j < tempGeneStack.size(); j++)
-				mut.mutationIntensity(seedMutIntensity, tempGeneStack.at(j), envir[0].mutationModifier);
-
-			//assign the temp gene stack to the creatures gene stack. 
-			vecTempPopulation.at(i).geneStack.assign(tempGeneStack.begin(), tempGeneStack.end());
-			//update all the creatures variables with these new mutated values.
-			cc.updateCreatureWithMutations(vecTempPopulation.at(i));
-		}
-		*/
-
+#pragma region FIRST_POPULATION_STAGE
+//			                           ************    FIRST POPULATION STAGE    ************
 	//update the CURRENT population vector from the temporary population vector.
 	cc.duplicatePopulationVectors(vecCurrentPopulation, vecTempPopulation);
 
@@ -160,18 +137,21 @@ int main()
 	//reset alive and dead counters.
 	isAlive = 0;
 	isDead = 0;
+#pragma endregion
 
-	//                                 ************    LIFE CYCLE STAGE    ************
 
-	//Iterate over life cycles...
+//                                 ************    MAIN PART - LIFE CYCLE STAGE    ************
+	//iterate over life cycles...
 	for (int i = 0; i < LIFE_CYCLES; i++)
 	{
 		//clear the temp population vector, to refill again.
 		vecTempPopulation.clear();
 
-		//TESTING... keeping an eye on the which life cycle it is.
+		//TESTING --- keeping an eye on the which life cycle it is.
 		std::cout << std::endl << "LIFE CYCLE: " << i + 1 << std::endl << std::endl;
 
+
+#pragma region FITNESS_TESTS
 		//SURVIVAL TEST STAGE...
 		//for each life cycle, iterate through the current population vector.
 		for (int i = 0; i < vecCurrentPopulation.size(); i++)
@@ -196,7 +176,9 @@ int main()
 		//clear current pop, as all survivors now in the temp pop vec. 
 		//will need to refill current pop vec with the offspring from the temp pop vector.
 		vecCurrentPopulation.clear();
+#pragma endregion
 
+#pragma region REPRODUCTION_STAGE
 		//REPRODUCTION STAGE
 		for (int i = 0; i < vecTempPopulation.size(); i++)
 		{
@@ -231,8 +213,9 @@ int main()
 		//!!!NOTE!!! if creatures have more than 1 cycle life span, then will need to move this parent into the current population vec WITHOUT then mutation/crossovering them.
 		//maybe need a third 'ParentsVec' for the parents that can be added to the current pop after children had their crossover/mutation stage.
 		vecTempPopulation.clear();
+#pragma endregion
 
-	
+#pragma region MUTATION_STAGE
 		//MUTATION STAGE
 		float mutChance = 2.5f;
 		float mutInten = 2.5f;
@@ -301,25 +284,21 @@ int main()
 		}
 
 	}
+#pragma endregion
 
 
-	//testing mutation success and number of mutations. 
+	//TESTING --- display mutation success and number of mutations. 
 	std::cout << std::endl << "Total number of mutation tests is: " << totalMutTests << std::endl;
 	std::cout << "Total number of mutations are: " << totalNumberMut << std::endl;
 	float percentMut = static_cast<float>(totalNumberMut) / static_cast<float>(totalMutTests);
 	std::cout << "Percentage of mutations is: " << percentMut << std::endl << std::endl;
 
-	//display each species seed and end gene stacks.
+
+	//TESTING --- display each species seed and end gene stacks.
 	for (int i = 0; i < allSpeciesList[0].fullSpeciesList.size(); i++)
-	{
-		//ds.displayGeneStackInfo(allSpeciesList[0].fullSpeciesList.at(i), allSpeciesList[0].fullSpeciesList.at(i).seedGeneStack);
-		//ds.displayGeneStackInfo(allSpeciesList[0].fullSpeciesList.at(i), allSpeciesList[0].fullSpeciesList.at(i).speciesGeneStack);
 		ds.displayGeneStackChange(allSpeciesList[0].fullSpeciesList.at(i), allSpeciesList[0].fullSpeciesList.at(i).seedGeneStack,
 			allSpeciesList[0].fullSpeciesList.at(i).speciesGeneStack);
-		//std::cout << std::endl;
-	}
 
 	genFunc->stop();
 }
-
 

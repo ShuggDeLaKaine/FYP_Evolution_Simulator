@@ -1,6 +1,31 @@
 
 
 
+//bacteria reproduction method, 1 creature divides into 2.
+/*
+	//each creature species now has two identicial members in the tempPopulation vector.
+	//to encourage diversification of species, seed parents should be slightly different otherwise the crossover stage has no effect.
+	//so, loop through vector of creatures and mutate each element of their geneStack vectors with an initial smaller mutation intensity.
+	for (int i = 0; i < vecTempPopulation.size(); i++)
+	{
+		//clear the temporary gene stack vector in preparation for use.
+		tempGeneStack.clear();
+		//reserve the size of the temporoary gene stack to the creatures gene stack size.
+		tempGeneStack.reserve(vecTempPopulation.at(i).geneStack.size());
+		//assign current creatures gene stack to a temporary gene stack.
+		tempGeneStack.assign(vecTempPopulation.at(i).geneStack.begin(), vecTempPopulation.at(i).geneStack.end());
+
+		//iterate through the tempGeneStack array and run a mutation on each element.
+		for (int j = 0; j < tempGeneStack.size(); j++)
+			mut.mutationIntensity(seedMutIntensity, tempGeneStack.at(j), envir[0].mutationModifier);
+
+		//assign the temp gene stack to the creatures gene stack.
+		vecTempPopulation.at(i).geneStack.assign(tempGeneStack.begin(), tempGeneStack.end());
+		//update all the creatures variables with these new mutated values.
+		cc.updateCreatureWithMutations(vecTempPopulation.at(i));
+	}
+	*/
+
 //testing for automated environmental creation.
 /*
 for (int i = 1; i < environmentSize; i++)
