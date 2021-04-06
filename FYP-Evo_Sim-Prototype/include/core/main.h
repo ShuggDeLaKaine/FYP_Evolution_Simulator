@@ -25,7 +25,7 @@ std::shared_ptr<GeneralFunctions> genFunc;		//!< ptr to General Functions class.
 const uint32_t SEED_POP = 10000;				//!< number of creatures for the seed stage.
 const uint32_t MAX_SPECIES = 10000;				//!< max number of species.
 const uint32_t LIFE_CYCLES = 5;					//!< number of life cycles to iterate through.
-const uint32_t STARTING_POP = 12;				//!< once creatures chosen after seed stage, number of creatures in each species to start with.
+const uint32_t STARTING_POP = 24;				//!< once creatures chosen after seed stage, number of creatures in each species to start with.
 const float seedMutIntensity = 0.5f;			//!< mutation intensity during the seed stage, used for first populations of creatures.
 bool bSuccessfulSeed = false;					//!< bool to take whether the seed stage has been successful.
 

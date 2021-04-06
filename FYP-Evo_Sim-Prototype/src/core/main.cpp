@@ -98,7 +98,7 @@ int main()
 				//add this new species to the overall species list.
 				sp.assignSpeciesToAllSpeciesVector(speciesPool[tempPosition], allSpeciesList->fullSpeciesVec, allSpeciesList[0]);
 				//update species data, such as species average gene stack.
-				sp.updateSpeciesGeneStack(speciesPool[tempPosition]);
+				sp.updateSpeciesGeneStack(allSpeciesList->fullSpeciesVec.at(tempPosition));
 				//update isAlive.
 				isAlive++;
 			}
@@ -369,10 +369,10 @@ int main()
 		ds.displayGeneStackChange(allSpeciesList[0].aliveSpeciesVec.at(i), allSpeciesList[0].aliveSpeciesVec.at(i).seedGeneStack,
 			allSpeciesList[0].aliveSpeciesVec.at(i).speciesGeneStack);
 		//display species data.
-		ds.displaySpeciesPopulationInfo(allSpeciesList[0].aliveSpeciesVec.at(i));
+		ds.displaySpeciesPopulationInfo(allSpeciesList[0].aliveSpeciesVec.at(i));	///ISSUE HERE, NUMBERS AREN'T CORRECT.
 	}
 
-	std::cout << std::endl << std::endl << "           ********    SIMULATION ENDED    ********" << std::endl;
+	std::cout << std::endl << std::endl << "                    ********    SIMULATION ENDED    ********" << std::endl;
 
 	genFunc->stop();
 }
