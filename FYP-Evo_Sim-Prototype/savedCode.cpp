@@ -3,6 +3,102 @@
 
 
 
+/*
+//********   COMBINE POPULATIONS   ********
+//clear current population in prep.
+vecCurrentPopulation.clear();
+
+//combine the temp population vector with the current population vector of surviving creatures.
+for (int i = 0; i < vecTempPopulation.size(); i++)
+	vecCurrentPopulation.push_back(vecTempPopulation.at(i));
+
+//combine the offspring population with the current population vector of surviving creatures.
+for (int i = 0; i < vecOffspringPopulation.size(); i++)
+	vecCurrentPopulation.push_back(vecOffspringPopulation.at(i));
+
+//clear temp and offspring population for use in the future.
+vecTempPopulation.clear();
+vecOffspringPopulation.clear();
+*/
+
+
+/*
+//clear individual species membership elements of alive species in preperation for new membership.
+for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
+{
+	allSpecies.aliveSpeciesVec.at(i).speciesMembership.clear();
+}
+*/
+/*
+//ADD CREATURE TO RELEVANT SPECIES.
+//iterate through current population and assign to relevant species.
+for (int i = 0; i < vecCurrentPopulation.size(); i++)
+{
+	//get creature ID
+	uint32_t tempCreatID = vecCurrentPopulation.at(i).creatureID;
+
+	//loop through species and match with species ID,
+	for (int j = 0; j < allSpecies.aliveSpeciesVec.size(); j++)
+	{
+		//get the species ID
+		uint32_t tempSpeciesID = allSpecies.aliveSpeciesVec.at(j).speciesID;
+
+		//if species ID is 0 then stop iterating through as unassigned species.
+		if (tempSpeciesID == 0)
+			break;
+
+		//check if species ID and creature ID match
+		if (tempCreatID == tempSpeciesID)
+		{
+			//a match, so this creature needs to be added to this species.
+			sp.addCreatureToSpecies(vecCurrentPopulation.at(i), allSpecies.aliveSpeciesVec.at(j));
+			//in it's right place, so break out of the loop looking for its right place.
+			break;
+		}
+	}
+}
+*/
+
+//MUTATION TESTING CONSOLE OUTPUT
+/*
+//TESTING --- display mutation success and number of mutations.
+std::cout << std::endl << std::endl << "END OF LIFE CYCLES - RESULTS FOLLOWING" << std::endl << std::endl;
+std::cout << std::endl << "Total number of mutation tests is: " << totalMutTests << std::endl;
+std::cout << "Total number of mutations are: " << totalNumberMut << std::endl;
+float percentMut = static_cast<float>(totalNumberMut) / static_cast<float>(totalMutTests);
+std::cout << "Percentage of mutations is: " << percentMut << std::endl << std::endl;
+*/
+/*
+//TESTING... duplication of temp population vec to the current population vec.
+std::cout << "END OF CYCLE " << i + 1 << ": final CURRENT population size is: " << vecCurrentPopulation.size() << std::endl;
+std::cout << "NUMBER OF MUTATION THIS CYCLE " << numMut << std::endl;
+totalNumberMut += numMut;
+numMut = 0;
+std::cout << "Number of POSITIVE mutations is: " << mut.iPosMuts << " with a combined value of: " << mut.fPosMutsTally << std::endl;
+std::cout << "Number of NEGATIVE mutations is: " << mut.iNegMuts << " with a combined value of: " << mut.fNegMutsTally << std::endl;
+*/
+
+//FITNESS FUNCTION TESTS FOR THE currentPopVec and tempPopVec way of doing it.
+/*
+//for each life cycle, iterate through the current population vector.
+for (int i = 0; i < vecCurrentPopulation.size(); i++)
+{
+	//run the fitness tests between the creature and the environment.
+	ft.creatureFitnessTests(vecCurrentPopulation[i], envir[0]);
+	//if the creature has survived and is alive.
+	if (vecCurrentPopulation[i].isAlive == true)
+	{
+		//creature has survived, pop it into the temp population vector.
+		vecTempPopulation.push_back(vecCurrentPopulation[i]);
+		//update isAlive.
+		isAlive++;
+	}
+	else if (seedPopulationPool[i].isAlive == false)
+		isDead++;
+	else
+		std::cout << "ERROR: Creature " << vecTempPopulation[i].creatureNumber << " has NULL value to bool isAlive" << std::endl;
+}
+*/
 
 //BACTERIA METHOD, 1 parent divides into 2 offspring.
 //cc.duplicateCreature(vecCurrentPopulation, vecTempPopulation.at(i));

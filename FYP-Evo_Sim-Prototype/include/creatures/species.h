@@ -17,7 +17,9 @@ struct SpeciesInfo
 	std::vector<Creature> speciesMembership;	//!< vector of all creatures that are members of this species.
 	uint32_t currentMembers = 0;				//!< number of current members that are alive in the species.
 	uint32_t cycleOffspringCount = 0;			//!< 
-	uint32_t cycleDeadCount = 0;				//!< 
+	uint32_t cycleTotalDeadCount = 0;			//!< 
+	uint32_t cycleFailedFitnessDeadCount = 0;	//!< 
+	uint32_t cycleOldAgeDeadCount = 0;			//!< 
 
 	std::vector<float> seedGeneStack;			//!< the gene stack of the seed members of this species.
 	std::vector<float> speciesGeneStack;		//!< the current averaged gene stack of all currently alive members of the species.
@@ -30,6 +32,10 @@ struct SpeciesInfo
 		else
 			speciesAlive = true;
 	}		//!< check whether the species has current members, so still going.
+
+	void addValueToUIVar(uint32_t& variableToAlter, uint32_t byValue) {
+		variableToAlter += variableToAlter + byValue;
+	}		//!< 
 };
 
 struct AllSpecies

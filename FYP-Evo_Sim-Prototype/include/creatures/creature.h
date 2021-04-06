@@ -53,7 +53,7 @@ struct Creature
 	//creatureSize;					//!< the 'size' of creature, used in weight and competetion mechanics.
 	float creatureWeight;			//!< the 'weight' of an individual creature on the environment it is in.
 	float offspringNumber;			//!< a float, if 5.45f, will definitely have 5 offspring and a 45% chance of 6.
-	uint32_t lifeSpan;					//!< if survives fitness tests, how many life spans the creature can survive. if 5.45, will definitely live 5 cycles, 45% chance to live 6.
+	int32_t lifeSpan;				//!< if survives fitness tests, how many life spans the creature can survive. if 5.45, will definitely live 5 cycles, 45% chance to live 6.
 };
 
 struct CreatureSettings
@@ -70,10 +70,10 @@ struct CreatureSettings
 	float oxyGauss = 25.0f;				//!< 
 	float oxyRangeMin = 1.0f;			//!< 
 	float oxyRangeMax = 25.0f;			//!< 
-	float offspringMin = 1.0f;			//!< 
-	float offspringMax = 5.0f;			//!< 
+	float offspringMin = 2.0f;			//!< 
+	float offspringMax = 12.0f;			//!< 
 	uint32_t lifeMin = 1;				//!< 
-	uint32_t lifeMax = 5;				//!< 
+	uint32_t lifeMax = 6;				//!< 
 };
 
 /*	\class CreatureCreation
