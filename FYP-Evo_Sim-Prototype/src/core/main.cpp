@@ -19,7 +19,7 @@ int main()
 	uint32_t speciesSize = (sizeof(speciesPool) / sizeof(*speciesPool));
 	uint32_t environmentSize = (sizeof(envir) / sizeof(*envir));
 
-	if (allSpeciesList[0].fullSpeciesList.size() != 0)
+	if (allSpeciesList[0].fullSpeciesVec.size() != 0)
 		bSuccessfulSeed = true;
 	else
 		bSuccessfulSeed = false;
@@ -39,7 +39,7 @@ int main()
 			cc.addToGeneStack(seedPopulationPool[i].geneStack, seedPopulationPool[i].creatureID);
 		}
 
-		std::cout << std::endl << "SEED POPULATION STAGE" << std::endl << std::endl;
+		std::cout << std::endl << "SEED POPULATION STAGE" << std::endl;
 
 		//loop through this population and run the fitness tests against them to determine which of the seed population will survive and populate the start population.
 		for (int i = 0; i < populationSize; i++)
@@ -96,7 +96,7 @@ int main()
 					}
 				}
 				//add this new species to the overall species list.
-				sp.assignSpeciesToAllSpeciesVector(speciesPool[tempPosition], allSpeciesList->fullSpeciesList, allSpeciesList[0]);
+				sp.assignSpeciesToAllSpeciesVector(speciesPool[tempPosition], allSpeciesList->fullSpeciesVec, allSpeciesList[0]);
 				//update species data, such as species average gene stack.
 				sp.updateSpeciesGeneStack(speciesPool[tempPosition]);
 				//update isAlive.
@@ -107,8 +107,11 @@ int main()
 			else
 				std::cout << "ERROR: Creature " << seedPopulationPool[i].creatureNumber << " has NULL value to bool isAlive" << std::endl;
 		}
+		//update the various species vectors.
+		sp.updateAllSpecies(allSpeciesList[0]);
 
-		if (allSpeciesList[0].fullSpeciesList.size() != 0)
+		//check whether SEED STAGE was successful (ie there's surviving species), if no, do it again.
+		if (allSpeciesList[0].fullSpeciesVec.size() != 0)
 			bSuccessfulSeed = true;
 		else
 			bSuccessfulSeed = false;
@@ -121,15 +124,11 @@ int main()
 	cc.duplicatePopulationVectors(vecCurrentPopulation, vecTempPopulation);
 
 	//display required information about survival and populations.
-	ds.displaySurvivedPercentage(envir[0], isAlive, populationSize);
-	//loop through species and match with species ID, 
-	for (int i = 0; i < allSpeciesList[0].fullSpeciesList.size(); i++)
-	{
-		ds.displaySpeciesPopulationInfo(allSpeciesList[0].fullSpeciesList.at(i));
-	}
+	///ds.displaySurvivedPercentage(envir[0], isAlive, populationSize);
 
-	//clear the temp population vector, to refill again.
-	vecTempPopulation.clear();
+	//loop through species and match with species ID, 
+	for (int i = 0; i < allSpeciesList[0].fullSpeciesVec.size(); i++)
+		ds.displaySpeciesPopulationInfo(allSpeciesList[0].fullSpeciesVec.at(i));
 
 	//reset alive and dead counters.
 	isAlive = 0;
@@ -144,7 +143,7 @@ int main()
 		//clear the temp population vector, to refill again.
 		vecTempPopulation.clear();
 
-		//TESTING --- keeping an eye on the which life cycle it is.
+		//keeping an tally of which life cycle it is.
 		std::cout << std::endl << "LIFE CYCLE: " << i + 1 << std::endl;
 
 #pragma region FITNESS_TESTS
@@ -174,11 +173,11 @@ int main()
 
 		//********   SELECTION, CROSSOVER AND OFFSPRING CREATION STAGE   ********
 		//loop through the different species. 
-		for (int i = 0; i < allSpeciesList[0].fullSpeciesList.size(); i++)
+		for (int i = 0; i < allSpeciesList[0].aliveSpeciesVec.size(); i++)
 		{
 			//clear tempReproduce vec, fill with selected paired parents gene stacks.
 			tempReproduce.clear();
-			tempReproduce = sel.parentSelection(allSpeciesList[0].fullSpeciesList.at(i));
+			tempReproduce = sel.parentSelection(allSpeciesList[0].aliveSpeciesVec.at(i));
 
 			//clear tempCreatsToAdd vec, fill with offspring of parents genestacks, 95% created, still need thresholdScore and finalEnergyDemand. 
 			tempCreatsToAdd.clear();
@@ -208,11 +207,6 @@ int main()
 				i--;
 			}
 		}
-
-		//clear temp pop, as offspring in current pop and these creatures would have died.
-		//!!!NOTE!!! if creatures have more than 1 cycle life span, then will need to move this parent into the current population vec WITHOUT then mutation/crossovering them.
-		//maybe need a third 'ParentsVec' for the parents that can be added to the current pop after children had their crossover/mutation stage.
-		//vecTempPopulation.clear();
 
 #pragma region MUTATION_STAGE
 		//MUTATION STAGE - ran on the offspring population as they are the only ones who need to be mutation checks ran on them.
@@ -294,11 +288,12 @@ int main()
 
 
 		//********   UPDATE SPECIES   ********
-		//clear the species membership list in prep for new membership.
-		for (int i = 0; i < allSpeciesList[0].fullSpeciesList.size(); i++)
+		//clear individual species membership elements of alive species in preperation for new membership.
+		for (int i = 0; i < allSpeciesList[0].fullSpeciesVec.size(); i++)
 		{
-			allSpeciesList[0].fullSpeciesList.at(i).speciesMembership.clear();
+			allSpeciesList[0].aliveSpeciesVec.at(i).speciesMembership.clear();
 		}
+
 
 		//iterate through current population and assign to relevant species.
 		for (int i = 0; i < vecCurrentPopulation.size(); i++)
@@ -307,10 +302,10 @@ int main()
 			uint32_t tempCreatID = vecCurrentPopulation.at(i).creatureID;
 
 			//loop through species and match with species ID, 
-			for (int j = 0; j < allSpeciesList[0].fullSpeciesList.size(); j++)
+			for (int j = 0; j < allSpeciesList[0].aliveSpeciesVec.size(); j++)
 			{
 				//get the species ID
-				uint32_t tempSpeciesID = allSpeciesList[0].fullSpeciesList.at(j).speciesID;
+				uint32_t tempSpeciesID = allSpeciesList[0].aliveSpeciesVec.at(j).speciesID;
 
 				//if species ID is 0 then stop iterating through as unassigned species.
 				if (tempSpeciesID == 0)
@@ -320,7 +315,7 @@ int main()
 				if (tempCreatID == tempSpeciesID)
 				{
 					//a match, so this creature needs to be added to this species. 
-					sp.addCreatureToSpecies(vecCurrentPopulation.at(i), allSpeciesList[0].fullSpeciesList.at(j));
+					sp.addCreatureToSpecies(vecCurrentPopulation.at(i), allSpeciesList[0].aliveSpeciesVec.at(j));
 					//in it's right place, so break out of the loop looking for its right place.
 					break;
 				}
@@ -328,19 +323,20 @@ int main()
 		}
 
 		//UPDATE AND DISPLAY SPECIES DATA
-		//loop through species and match with species ID, 
-		for (int i = 0; i < allSpeciesList[0].fullSpeciesList.size(); i++)
+		//loop through species and match with the species ID, 
+		for (int i = 0; i < allSpeciesList[0].aliveSpeciesVec.size(); i++)
 		{
 			//get the species ID
-			uint32_t tempSpecID = allSpeciesList[0].fullSpeciesList.at(i).speciesID;
+			uint32_t tempSpecID = allSpeciesList[0].aliveSpeciesVec.at(i).speciesID;
 
 			//if species ID is 0 then stop iterating through as at the unassigned species.
 			if (tempSpecID == 0)
 				break;
 
 			//update species data, such as species average gene stack.
-			sp.updateSpeciesGeneStack(allSpeciesList[0].fullSpeciesList.at(i));
-			sp.updateSpeciesMembership(allSpeciesList[0].fullSpeciesList.at(i));
+			sp.updateSpeciesGeneStack(allSpeciesList[0].aliveSpeciesVec.at(i));
+			sp.updateSpeciesMembership(allSpeciesList[0].aliveSpeciesVec.at(i));
+
 
 			/*
 			//display changes in gene stack.
@@ -349,8 +345,13 @@ int main()
 			*/
 
 			//display species data.
-			ds.displaySpeciesPopulationInfo(allSpeciesList[0].fullSpeciesList.at(i));
+			ds.displaySpeciesPopulationInfo(allSpeciesList[0].aliveSpeciesVec.at(i));
 		}
+
+		//update all the full, alive and extinct species lists.
+		sp.updateAllSpecies(allSpeciesList[0]);
+
+		//********    END OF CYCLE - ABOUT TO REPEAT    ********
 	}
 
 	/*
@@ -363,15 +364,15 @@ int main()
 	*/
 
 	//TESTING --- display each species seed and end gene stacks.
-	for (int i = 0; i < allSpeciesList[0].fullSpeciesList.size(); i++)
+	for (int i = 0; i < allSpeciesList[0].aliveSpeciesVec.size(); i++)
 	{
-		ds.displayGeneStackChange(allSpeciesList[0].fullSpeciesList.at(i), allSpeciesList[0].fullSpeciesList.at(i).seedGeneStack,
-			allSpeciesList[0].fullSpeciesList.at(i).speciesGeneStack);
+		ds.displayGeneStackChange(allSpeciesList[0].aliveSpeciesVec.at(i), allSpeciesList[0].aliveSpeciesVec.at(i).seedGeneStack,
+			allSpeciesList[0].aliveSpeciesVec.at(i).speciesGeneStack);
 		//display species data.
-		ds.displaySpeciesPopulationInfo(allSpeciesList[0].fullSpeciesList.at(i));
+		ds.displaySpeciesPopulationInfo(allSpeciesList[0].aliveSpeciesVec.at(i));
 	}
 
-	std::cout << std::endl << std::endl << "        SIMULATION ENDED" << std::endl;
+	std::cout << std::endl << std::endl << "           ********    SIMULATION ENDED    ********" << std::endl;
 
 	genFunc->stop();
 }

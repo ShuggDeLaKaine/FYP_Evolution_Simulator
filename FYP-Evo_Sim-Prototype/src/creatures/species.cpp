@@ -21,7 +21,7 @@ void Species::assignSpeciesToAllSpeciesVector(SpeciesInfo species, std::vector<S
 	//pop the species onto the back of the target species vector.
 	speciesVector.push_back(species);
 	//update species count.
-	allSpecies.speciesCount = allSpecies.fullSpeciesList.size();
+	allSpecies.speciesCount = allSpecies.fullSpeciesVec.size();
 }
 
 void Species::addCreatureToSpecies(Creature creature, SpeciesInfo & species)
@@ -95,4 +95,44 @@ void Species::updateSpeciesGeneStack(SpeciesInfo & species)
 		result = genFunc->roundFloat(result / species.speciesMembership.size());
 		species.speciesGeneStack.at(i) = result;
 	}
+}
+
+void Species::updateAllSpecies(AllSpecies& allSpecies)
+{
+	//clear aliveSpecies as this will be repopulated.
+	allSpecies.aliveSpeciesVec.clear();
+
+	//first iterate through fullSpecies list, run its speciesAliveCheck
+	for (int i = 0; i < allSpecies.fullSpeciesVec.size(); i++)
+	{
+		//run species alive check on element i in fullSpecies.
+		allSpecies.fullSpeciesVec.at(i).speciesAliveCheck();
+		bool result = allSpecies.fullSpeciesVec.at(i).speciesAlive;
+
+		//species deeeeaaad...
+		if (!result)
+		{
+			//place species into extinctSpecies
+			allSpecies.extinctSpeciesVec.push_back(allSpecies.fullSpeciesVec.at(i));
+			//fullSpecies.size() now one smaller so back i one smaller to keep place in iterating through.
+			i--;
+		}
+		//species still alive and kicking.
+		else if (result)
+		{
+			//place species into aliveSpecies.
+			allSpecies.aliveSpeciesVec.push_back(allSpecies.fullSpeciesVec.at(i));
+		}
+		else
+			std::cout << "WARNING - Species - updateAllSpecies() - species is neither alive nor extinct???" << std::endl;
+	}
+	//finish up by updating all the species counts.
+	updateAllSpeciesCounts(allSpecies);
+}
+
+void Species::updateAllSpeciesCounts(AllSpecies& allSpecies)
+{
+	allSpecies.speciesCount = allSpecies.fullSpeciesVec.size();
+	allSpecies.aliveSpeciesCount = allSpecies.aliveSpeciesVec.size();
+	allSpecies.extinctSpeciesCount = allSpecies.extinctSpeciesVec.size();
 }
