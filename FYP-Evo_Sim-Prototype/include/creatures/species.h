@@ -16,11 +16,12 @@ struct SpeciesInfo
 
 	std::vector<Creature> speciesMembership;	//!< vector of all creatures that are members of this species.
 	uint32_t currentMembers = 0;				//!< number of current members that are alive in the species.
-	uint32_t totalMembers = 0;					//!< running total of species members since species inception. 
+	uint32_t cycleOffspringCount = 0;			//!< 
+	uint32_t cycleDeadCount = 0;				//!< 
 
 	std::vector<float> seedGeneStack;			//!< the gene stack of the seed members of this species.
 	std::vector<float> speciesGeneStack;		//!< the current averaged gene stack of all currently alive members of the species.
-
+	
 	bool speciesAlive = true;					//!< bool to determine whether species still has members, initalised to true;
 	
 	void speciesAliveCheck() {
@@ -52,15 +53,17 @@ public:
 	
 	void assignSpeciesToAllSpeciesVector(SpeciesInfo species, std::vector<SpeciesInfo>& speciesVector, AllSpecies& allSpecies);	//!< assign a species to the species vector.
 	void addCreatureToSpecies(Creature creature, SpeciesInfo& species);		//!< add a creature to a species.
-	
-	void updateSpeciesMembership(SpeciesInfo& species);		//!< update species membership, adding new members and removing 'dead' ones.
 	void checkSpeciesDivergence();//****TO-DO****	//!< check membership gene stacks against species gene stack to see if creature has diverged.
+
+	void updateSpeciesMembershipCounts(SpeciesInfo& species);		//!< update species membership, adding new members and removing 'dead' ones.
 
 	std::vector<float> getSeedGeneStack(SpeciesInfo species);		//!< get the species initial seed population gene stack.
 	std::vector<float> getSpeciesGeneStack(SpeciesInfo species);	//!< get the species current populations gene stack.
 	
 	void updateSpeciesGeneStack(SpeciesInfo& species);		//!< get the average of the current species population gene stack and update/set the species current gene stack.
 	void updateAllSpecies(AllSpecies& allSpecies);			//!< update the species vectors with full, alive and extinct.
+
+	int32_t setVariable(int32_t valToSetToo) { int32_t result = valToSetToo; return result; }	//!< 
 private:
 	void updateAllSpeciesCounts(AllSpecies& allSpecies);	//!< updates the counts of the species vectors with the size of the vectors.
 

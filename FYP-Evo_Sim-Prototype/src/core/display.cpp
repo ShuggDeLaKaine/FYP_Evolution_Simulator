@@ -31,13 +31,12 @@ void Display::displaySurvivedPercentage(const Environment envir, int alive, int 
 
 void Display::displaySpeciesPopulationInfo(SpeciesInfo species)
 {
-	//number of current alive members.
-	std::cout << "SPECIES " << species.speciesID << " has " << species.currentMembers << " current members";
 	//do a little check to see if the counter is working as expected...
 	if (species.speciesMembership.size() != species.currentMembers)
 		std::cout << "WARNING... Species " << species.speciesID << " currentMembers NOT equal to .size() of vector speciesMembership" << std::endl;
-	//number of members overall.
-	std::cout << " and has had " << species.totalMembers << " total members." << std::endl;
+	else
+		//number of current alive members and members overall.
+		std::cout << "SPECIES " << species.speciesID << " has " << species.currentMembers << " current members. " << std::endl;
 }
 
 void Display::displayGeneStackInfo(SpeciesInfo species, std::vector<float> geneStack)

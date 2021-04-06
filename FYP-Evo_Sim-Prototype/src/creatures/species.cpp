@@ -10,32 +10,28 @@ void Species::createNewSpecies(SpeciesInfo & species, std::vector<float> & geneS
 {
 	//first set the speciesID to the creatureID.
 	species.speciesID = creatureID;
+
 	//set the size of the seedGeneStack to the size of the params geneStack.
 	species.seedGeneStack.reserve(geneStack.size());
+
 	//assign that over into the reserved space. 
 	species.seedGeneStack.assign(geneStack.begin(), geneStack.end());
 }
 
 void Species::assignSpeciesToAllSpeciesVector(SpeciesInfo species, std::vector<SpeciesInfo> & speciesVector, AllSpecies & allSpecies)
 {
-	//pop the species onto the back of the target species vector.
 	speciesVector.push_back(species);
-	//update species count.
-	allSpecies.speciesCount = allSpecies.fullSpeciesVec.size();
 }
 
 void Species::addCreatureToSpecies(Creature creature, SpeciesInfo & species)
 {
-	//push creature onto the species vector.
 	species.speciesMembership.push_back(creature);
-	species.currentMembers++;
-	species.totalMembers++;
+	species.currentMembers = species.speciesMembership.size();
 }
 
-void Species::updateSpeciesMembership(SpeciesInfo& species)
+void Species::updateSpeciesMembershipCounts(SpeciesInfo& species)
 {
 	species.currentMembers = species.speciesMembership.size();
-	species.totalMembers += species.currentMembers;
 }
 
 void Species::checkSpeciesDivergence()
@@ -53,20 +49,16 @@ void Species::checkSpeciesDivergence()
 std::vector<float>  Species::getSeedGeneStack(SpeciesInfo species)
 {
 	std::vector<float> result;
-
 	result.reserve(species.seedGeneStack.size());
 	result.assign(species.seedGeneStack.begin(), species.seedGeneStack.end());
-
 	return result;
 }
 
 std::vector<float>  Species::getSpeciesGeneStack(SpeciesInfo species)
 {
 	std::vector<float> result;
-
 	result.reserve(species.speciesGeneStack.size());
 	result.assign(species.speciesGeneStack.begin(), species.speciesGeneStack.end());
-
 	return result;
 }
 
@@ -111,18 +103,12 @@ void Species::updateAllSpecies(AllSpecies& allSpecies)
 
 		//species deeeeaaad...
 		if (!result)
-		{
 			//place species into extinctSpecies
 			allSpecies.extinctSpeciesVec.push_back(allSpecies.fullSpeciesVec.at(i));
-			//fullSpecies.size() now one smaller so back i one smaller to keep place in iterating through.
-			i--;
-		}
 		//species still alive and kicking.
 		else if (result)
-		{
 			//place species into aliveSpecies.
 			allSpecies.aliveSpeciesVec.push_back(allSpecies.fullSpeciesVec.at(i));
-		}
 		else
 			std::cout << "WARNING - Species - updateAllSpecies() - species is neither alive nor extinct???" << std::endl;
 	}

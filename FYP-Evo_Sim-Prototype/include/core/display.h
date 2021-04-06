@@ -16,7 +16,7 @@ public:
 	void displayFirstPopulation(const std::vector<Creature> creat);					//!< display first population after seed tests.
 	void displaySurvivedPercentage(const Environment envir, int alive, int popSize);//!< display the percentage chance of survival.
 
-	void displaySpeciesPopulationInfo(SpeciesInfo species);							//!< display species population information.
+	void displaySpeciesPopulationInfo(SpeciesInfo species);							///!< display species population information.
 	void displayGeneStackInfo(SpeciesInfo species, std::vector<float> geneStack);	//!< display gene stack information.
 	void displayGeneStackChange(SpeciesInfo species, std::vector<float> geneStackSeed, std::vector<float> geneStackCurrent);	//!< display difference value in gene stacks.
 
