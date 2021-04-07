@@ -29,16 +29,11 @@ const uint32_t STARTING_POP = 100;				//!< once creatures chosen after seed stag
 const float seedMutIntensity = 0.5f;			//!< mutation intensity during the seed stage, used for first populations of creatures.
 bool bSuccessfulSeed = false;					//!< bool to take whether the seed stage has been successful.
 
-uint32_t isAlive = 0;							//!< TESTING - count of 'alive' creatures from the seed population.
-uint32_t isDead = 0;							//!< TESTING - count of 'dead' creatures from seed population.
-uint32_t totalMutTests = 0;						//!< TESTING - count of total mutation tests.
-uint32_t totalNumberMut = 0;					//!< TESTING - count of number of mutations.
-
 uint32_t tempPosition = 0;						//!< holds the position within an array or vector.
 
 Creature    seedPopulationPool[SEED_POP];		//!< a pool for the seed population.
 SpeciesInfo speciesPool[MAX_SPECIES];			//!< a pool for species set as max species.
-AllSpecies  allSpecies;						//!< single array to contain details of all the species in the sim.
+AllSpecies  allSpecies;							//!< contains the details of all the species.
 Environment envir[10];							//!< array of environments.
 
 std::vector<Creature> vecCurrentPopulation;		//!< current storage of populations of Creatures.
@@ -48,3 +43,5 @@ std::vector<Creature> vecTempPopulation;		//!< temp storage for populations of C
 std::vector<Creature> tempCreatsToAdd;			//!< temp storage for creatures to be added to the next generation.
 std::vector<std::pair<float, std::vector<float>>> tempReproduce;	//!< temp storage for gene stacks to be reproduced.
 std::vector<float> tempGeneStack;				//!< takes and holds a gene stack whilst moving the data.
+
+

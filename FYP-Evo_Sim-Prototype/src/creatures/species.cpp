@@ -92,25 +92,23 @@ void Species::updateSpeciesGeneStack(SpeciesInfo & species)
 void Species::updateAllSpecies(AllSpecies& allSpecies)
 {
 	//clear aliveSpecies as this will be repopulated.
-	allSpecies.aliveSpeciesVec.clear();
+	//allSpecies.aliveSpeciesVec.clear();
 
 	//first iterate through fullSpecies list, run its speciesAliveCheck
-	for (int i = 0; i < allSpecies.fullSpeciesVec.size(); i++)
+	for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
 	{
 		//run species alive check on element i in fullSpecies.
-		allSpecies.fullSpeciesVec.at(i).speciesAliveCheck();
-		bool result = allSpecies.fullSpeciesVec.at(i).speciesAlive;
+		allSpecies.aliveSpeciesVec.at(i).speciesAliveCheck();
+		bool result = allSpecies.aliveSpeciesVec.at(i).speciesAlive;
 
 		//species deeeeaaad...
 		if (!result)
+		{
 			//place species into extinctSpecies
-			allSpecies.extinctSpeciesVec.push_back(allSpecies.fullSpeciesVec.at(i));
-		//species still alive and kicking.
-		else if (result)
-			//place species into aliveSpecies.
-			allSpecies.aliveSpeciesVec.push_back(allSpecies.fullSpeciesVec.at(i));
-		else
-			std::cout << "WARNING - Species - updateAllSpecies() - species is neither alive nor extinct???" << std::endl;
+			allSpecies.extinctSpeciesVec.push_back(allSpecies.aliveSpeciesVec.at(i));
+			allSpecies.aliveSpeciesVec.erase(allSpecies.aliveSpeciesVec.begin() + i);
+			i--;
+		}
 	}
 	//finish up by updating all the species counts.
 	updateAllSpeciesCounts(allSpecies);
@@ -118,7 +116,7 @@ void Species::updateAllSpecies(AllSpecies& allSpecies)
 
 void Species::updateAllSpeciesCounts(AllSpecies& allSpecies)
 {
-	allSpecies.speciesCount = allSpecies.fullSpeciesVec.size();
 	allSpecies.aliveSpeciesCount = allSpecies.aliveSpeciesVec.size();
 	allSpecies.extinctSpeciesCount = allSpecies.extinctSpeciesVec.size();
+	allSpecies.totalSpeciesCount = allSpecies.aliveSpeciesCount + allSpecies.extinctSpeciesCount;
 }

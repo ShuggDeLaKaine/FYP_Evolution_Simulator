@@ -31,20 +31,25 @@ void Display::displaySurvivedPercentage(const Environment envir, int alive, int 
 
 void Display::displaySpeciesBirthDeathRates(SpeciesInfo species)
 {
+	/*
 	std::cout << "SPECIES " << species.speciesID << " offspring count this cycle is: " << species.cycleOffspringCount << std::endl;
 	std::cout << "SPECIES " << species.speciesID << " total death count this cycle is: " << species.cycleTotalDeadCount << "; " << 
 		species.cycleFailedFitnessDeadCount << " by failed Fitness Tests and " << species.cycleOldAgeDeadCount << " from old age." << std::endl;
+	*/
+	int result = species.cycleOffspringCount - species.cycleTotalDeadCount;
+	std::cout << "Change: " << result << ". Offspring: " << species.cycleOffspringCount << ". Total Deaths: " << species.cycleTotalDeadCount 
+		<< ". Fitness Failed: "<< species.cycleFailedFitnessDeadCount << ". Old Age: " << species.cycleOldAgeDeadCount << std::endl;
 }
 
 void Display::displaySpeciesPopulationInfo(SpeciesInfo species)
 {
 	//do a little check to see if the counter is working as expected...
 	if (species.speciesMembership.size() != species.currentMembers)
-		std::cout << "WARNING... Species " << species.speciesID << " currentMembers NOT equal to .size() of vector speciesMembership" << std::endl;
+		std::cout << "WARNING... Species " << species.speciesID << " currentMembers NOT equal to .size() of vector speciesMembership";
 	else
 		//number of current alive members and members overall.
 		//std::cout << "SPECIES " << species.speciesID << " has " << species.currentMembers << " current members. " << std::endl;
-		std::cout << "SPECIES " << species.speciesID << " has " << species.speciesMembership.size() << " current members. " << std::endl;
+		std::cout << "SPECIES " << species.speciesID << " has " << species.speciesMembership.size() << " current members. ";
 }
 
 void Display::displayGeneStackInfo(SpeciesInfo species, std::vector<float> geneStack)

@@ -15,14 +15,19 @@ int main()
 	genFunc.reset(new GeneralFunctions);
 	genFunc->start();
 
+	//SpeciesInfo* speciesPtr = &allSpecies.aliveSpeciesVec;
+	AllSpecies* allSpeciesPtr = &allSpecies;
+
 	uint32_t populationSize = (sizeof(seedPopulationPool) / sizeof(*seedPopulationPool));
 	uint32_t speciesSize = (sizeof(speciesPool) / sizeof(*speciesPool));
 	uint32_t environmentSize = (sizeof(envir) / sizeof(*envir));
 
-	if (allSpecies.fullSpeciesVec.size() != 0)
+	if (allSpecies.aliveSpeciesVec.size() != 0)
 		bSuccessfulSeed = true;
 	else
 		bSuccessfulSeed = false;
+
+
 
 #pragma region SEED_POPULATION_STAGE
 	do {
@@ -94,28 +99,22 @@ int main()
 					}
 				}
 				//add this new species to the overall species list.
-				sp.assignSpeciesToAllSpeciesVector(speciesPool[tempPosition], allSpecies.fullSpeciesVec, allSpecies);
+				sp.assignSpeciesToAllSpeciesVector(speciesPool[tempPosition], allSpecies.aliveSpeciesVec, allSpecies);
 				//update species data, such as species average gene stack.
-				sp.updateSpeciesGeneStack(allSpecies.fullSpeciesVec.at(tempPosition));
-				//update isAlive.
-				isAlive++;
+				sp.updateSpeciesGeneStack(allSpecies.aliveSpeciesVec.at(tempPosition));
 			}
-			else if (seedPopulationPool[i].isAlive == false)
-				isDead++;
-			else
-				std::cout << "ERROR: Creature " << seedPopulationPool[i].creatureNumber << " has NULL value to bool isAlive" << std::endl;
 		}
 		//update the various species vectors.
 		sp.updateAllSpecies(allSpecies);
 
 		//loop through and update the membership counts of each species.
-		for (int i = 0; i < allSpecies.fullSpeciesVec.size(); i++)
-			sp.updateSpeciesMembershipCounts(allSpecies.fullSpeciesVec.at(i));
+		//for (int i = 0; i < allSpecies.fullSpeciesVec.size(); i++)
+		//	sp.updateSpeciesMembershipCounts(allSpecies.fullSpeciesVec.at(i));
 		for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
 			sp.updateSpeciesMembershipCounts(allSpecies.aliveSpeciesVec.at(i));
 
 		//check whether SEED STAGE was successful (ie there's surviving species), if no, do it again.
-		if (allSpecies.fullSpeciesVec.size() != 0)
+		if (allSpecies.aliveSpeciesVec.size() != 0)
 			bSuccessfulSeed = true;
 		else
 			bSuccessfulSeed = false;
@@ -133,12 +132,8 @@ int main()
 	std::cout << std::endl << "FIRST POPULATION" << std::endl;
 
 	//loop through species and match with species ID, 
-	for (int i = 0; i < allSpecies.fullSpeciesVec.size(); i++)
-		ds.displaySpeciesPopulationInfo(allSpecies.fullSpeciesVec.at(i));
-
-	//reset alive and dead counters.
-	isAlive = 0;
-	isDead = 0;
+	for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
+		ds.displaySpeciesPopulationInfo(allSpecies.aliveSpeciesVec.at(i));
 #pragma endregion
 
 
@@ -146,6 +141,13 @@ int main()
 	//iterate over life cycles...
 	for (int i = 0; i < LIFE_CYCLES; i++)
 	{
+		/*
+		for(int j = 0; j < allSpecies.aliveSpeciesVec.size(); j++)
+		{
+			std::cout << "START OF CYCLE " << i << std::endl;
+			std::cout << "Species " << allSpecies.aliveSpeciesVec.at(j).speciesID <<" - Test value is: " << allSpecies.aliveSpeciesVec.at(j).test << std::endl;
+		}
+		*/
 		//clear the temp population vector, to refill again.
 		vecTempPopulation.clear();
 
@@ -169,7 +171,8 @@ int main()
 					//then remove from species membership...
 					allSpecies.aliveSpeciesVec.at(i).speciesMembership.erase(allSpecies.aliveSpeciesVec.at(i).speciesMembership.begin() + j);
 					j--;
-					allSpecies.aliveSpeciesVec.at(i).cycleTotalDeadCount++;
+					//allSpecies.aliveSpeciesVec.at(i).cycleTotalDeadCount++;
+					allSpeciesPtr->aliveSpeciesVec.at(i).cycleTotalDeadCount++;
 					allSpecies.aliveSpeciesVec.at(i).cycleFailedFitnessDeadCount++;
 				}
 				//good time to reduce life spans by 1 as before the offspring and won't risk preemptively reducing offsprings life spans.
@@ -247,6 +250,7 @@ int main()
 				//vector would have skrunk, begin i back down with it.
 				i--;
 				//update testing vars.
+				///BELOW DON'T WORK, SHOULDN'T BE HERE, THE (i) ISN'T EVEN FOR THE aliveSpeciesVec, GOES WAY OUT OF RANGE.
 				//allSpecies.aliveSpeciesVec.at(i).cycleTotalDeadCount++;
 				//allSpecies.aliveSpeciesVec.at(i).cycleFailedFitnessDeadCount++;
 			}
@@ -302,9 +306,9 @@ int main()
 			sp.updateSpeciesMembershipCounts(allSpecies.aliveSpeciesVec.at(i));
 
 			//display species data.
-			//ds.displayGeneStackInfo(allSpecies.aliveSpeciesVec.at(i), allSpecies.aliveSpeciesVec.at(i).speciesGeneStack);
-			ds.displaySpeciesBirthDeathRates(allSpecies.aliveSpeciesVec.at(i));
 			ds.displaySpeciesPopulationInfo(allSpecies.aliveSpeciesVec.at(i));
+			ds.displaySpeciesBirthDeathRates(allSpecies.aliveSpeciesVec.at(i));
+			//ds.displayGeneStackInfo(allSpecies.aliveSpeciesVec.at(i), allSpecies.aliveSpeciesVec.at(i).speciesGeneStack);
 		}
 
 		//***END OF CYCLE*** 
@@ -327,6 +331,10 @@ int main()
 		}
 		//update all the full, alive and extinct species lists.
 		sp.updateAllSpecies(allSpecies);
+		
+		//update species membership counts
+		for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
+			sp.updateSpeciesMembershipCounts(allSpecies.aliveSpeciesVec.at(i));
 
 		//********    END OF CYCLE - ABOUT TO REPEAT    ********
 	}
@@ -339,6 +347,7 @@ int main()
 			allSpecies.aliveSpeciesVec.at(i).speciesGeneStack);
 		//display species data.
 		ds.displaySpeciesPopulationInfo(allSpecies.aliveSpeciesVec.at(i));	///ISSUE HERE, NUMBERS AREN'T CORRECT.
+		std::cout << std::endl;
 	}
 
 	std::cout << std::endl << std::endl << "                    ********    SIMULATION ENDED    ********" << std::endl;

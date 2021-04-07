@@ -15,11 +15,13 @@ struct SpeciesInfo
 	uint32_t speciesID = 0;						//!< ID of species, taken from the seed population member ID, initialised to 0 as an easy to tell to see if it has been assigned, ie. 0 means it hasn't been assigned.
 
 	std::vector<Creature> speciesMembership;	//!< vector of all creatures that are members of this species.
-	uint32_t currentMembers = 0;				//!< number of current members that are alive in the species.
-	uint32_t cycleOffspringCount = 0;			//!< 
-	uint32_t cycleTotalDeadCount = 0;			//!< 
-	uint32_t cycleFailedFitnessDeadCount = 0;	//!< 
-	uint32_t cycleOldAgeDeadCount = 0;			//!< 
+	uint32_t currentMembers;					//!< number of current members that are alive in the species.
+	uint32_t cycleOffspringCount;				//!< 
+	uint32_t cycleTotalDeadCount;				//!< 
+	uint32_t cycleFailedFitnessDeadCount;		//!< 
+	uint32_t cycleOldAgeDeadCount;				//!< 
+		
+	uint32_t test = 0;					
 
 	std::vector<float> seedGeneStack;			//!< the gene stack of the seed members of this species.
 	std::vector<float> speciesGeneStack;		//!< the current averaged gene stack of all currently alive members of the species.
@@ -40,11 +42,11 @@ struct SpeciesInfo
 
 struct AllSpecies
 {
-	std::vector<SpeciesInfo> fullSpeciesVec;	//!< a full list of all species.
+	//std::vector<SpeciesInfo> fullSpeciesVec;	//!< a full list of all species.
 	std::vector<SpeciesInfo> aliveSpeciesVec;	//!< all alive species.
 	std::vector<SpeciesInfo> extinctSpeciesVec;	//!< all extinct species.
 
-	uint32_t speciesCount;						//!< running count of all species.
+	uint32_t totalSpeciesCount;					//!< running count of all species.
 	uint32_t aliveSpeciesCount;					//!< count of all alive species.
 	uint32_t extinctSpeciesCount;				//!< count of all now dead species.
 };
