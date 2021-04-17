@@ -106,6 +106,7 @@ public:
 private:
 	void fillGeneElement(Creature &creature, std::vector<float> &gene, float value);	//!< fill a gene stack from variables. 
 	float multiplier(float varToMulti, float multiBy);
+	void plusMinusOne(int &iToChange, float &fToChange);
 
 	CreatureSettings cs;						//!< ref to the creature settings.
 	std::shared_ptr<GeneralFunctions> genFunc;	//!< ptr to the general functions.

@@ -35,10 +35,8 @@ void CreatureCreation::creatureCreation(Creature & creature, float energyCentre,
 		creature.litterSize = multiplier(creature.litterSize, 1.5f);
 		break;
 	case MEDIUM:
-		//set creature weight, life span and litter size.
-		creature.creatureWeight = multiplier(creature.creatureWeight, 1.0f);
-		creature.lifeSpan = multiplier(creature.lifeSpan, 1.0f);;
-		creature.litterSize = multiplier(creature.litterSize, 1.0f);
+		//set creature life span and litter size; leave weight the initialised standard.
+		plusMinusOne(creature.lifeSpan, creature.litterSize);
 		break;
 	case LARGE:
 		//set creature weight, life span and litter size.
@@ -253,3 +251,18 @@ float CreatureCreation::multiplier(float varToMulti, float multiBy)
 	float result = varToMulti * multiBy;
 	return result;
 }
+
+void CreatureCreation::plusMinusOne(int & iToChange, float & fToChange)
+{
+	int randNum = genFunc->uniformIntBetween(0, 5);
+
+	if (randNum == 0) {
+		iToChange = iToChange + 1;
+		fToChange = fToChange - 1.0f;
+	} else if(randNum == 1) {
+		iToChange = iToChange - 1;
+		fToChange = fToChange + 1.0f;
+	} else
+		//no change, keep things the same.
+}
+
