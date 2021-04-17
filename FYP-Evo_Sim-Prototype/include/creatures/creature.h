@@ -9,6 +9,8 @@
 #include "core/generalFunctions.h"
 
 
+enum CreatureSize { VERY_SMALL, SMALL, MEDIUM, LARGE, VERY_LARGE };
+
 struct Creature
 {
 	uint32_t creatureID;			//!< creature ID.
@@ -46,14 +48,13 @@ struct Creature
 	bool paired = false;			//!< determines in reproduction stage whether creature has been paired up, initialised to false;
 
 	uint32_t creatureNumber;		//!< creation number within species.
-	//uint32_t generationNumber = 1;	//!< initialise to 1, as the first lot of seed population that survive will be generation 1.
-	//uint32_t childNumber = 0;		//!< initialise to 0, as above, but 0 because not a child creature, an original seed one.
 
 	//TO BRING IN.
-	//creatureSize;					//!< the 'size' of creature, used in weight and competetion mechanics.
-	float creatureWeight;			//!< the 'weight' of an individual creature on the environment it is in.
-	float offspringNumber;			//!< a float, if 5.45f, will definitely have 5 offspring and a 45% chance of 6.
-	int32_t lifeSpan;				//!< if survives fitness tests, how many life spans the creature can survive. if 5.45, will definitely live 5 cycles, 45% chance to live 6.
+	//creatureSize;					//!< the 'size' of creature, used in weight, competetion, lifespan and litterSize mechanics.
+	CreatureSize creatureSize;		//!< the size of the creature, determines life span, weight, litterSize; initialised to VERY_SMALL.
+	float creatureWeight = 0.1f;	//!< the 'weight' of an individual creature on the environment it is in, initialised to a genetic 0.1f.
+	float litterSize = 3.0f;		//!< a float, if 5.45f, will definitely have 5 offspring and a 45% chance of 6.
+	int32_t lifeSpan = 3;			//!< if survives fitness tests, how many life spans the creature can survive. if 5.45, will definitely live 5 cycles, 45% chance to live 6.
 };
 
 struct CreatureSettings
@@ -104,6 +105,7 @@ public:
 
 private:
 	void fillGeneElement(Creature &creature, std::vector<float> &gene, float value);	//!< fill a gene stack from variables. 
+	float multiplier(float varToMulti, float multiBy);
 
 	CreatureSettings cs;						//!< ref to the creature settings.
 	std::shared_ptr<GeneralFunctions> genFunc;	//!< ptr to the general functions.

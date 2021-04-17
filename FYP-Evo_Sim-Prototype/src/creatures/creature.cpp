@@ -13,6 +13,48 @@ void CreatureCreation::creatureCreation(Creature & creature, float energyCentre,
 	float idealTempRangeMin, float idealTempRangeMax, float tolTempRangeMin, float tolTempRangeMax, float oxyCentre, float oxyGauss, 
 	float oxyRangeMin, float oxyRangeMax, float offspringMin, float offspringMax, uint32_t lifeMin, uint32_t lifeMax)
 {
+	//pick creature size.
+	signed int randNum = genFunc->uniformIntBetween(0, 9);
+	if (randNum > 4)
+		randNum = 4;
+
+	creature.creatureSize = CreatureSize(randNum);
+
+	switch (creature.creatureSize)
+	{
+	case VERY_SMALL:
+		//set creature weight, life span and litter size.
+		creature.creatureWeight = multiplier(creature.creatureWeight, 0.2f);
+		creature.lifeSpan = 1;	//As very small, hard set to 1, as that is all a very small creature should live for.
+		creature.litterSize = multiplier(creature.litterSize, 3.0f);
+		break;
+	case SMALL:
+		//set creature weight, life span and litter size.
+		creature.creatureWeight = multiplier(creature.creatureWeight, 0.6f);
+		creature.lifeSpan = multiplier(creature.lifeSpan, 0.5f);
+		creature.litterSize = multiplier(creature.litterSize, 1.5f);
+		break;
+	case MEDIUM:
+		//set creature weight, life span and litter size.
+		creature.creatureWeight = multiplier(creature.creatureWeight, 1.0f);
+		creature.lifeSpan = multiplier(creature.lifeSpan, 1.0f);;
+		creature.litterSize = multiplier(creature.litterSize, 1.0f);
+		break;
+	case LARGE:
+		//set creature weight, life span and litter size.
+		creature.creatureWeight = multiplier(creature.creatureWeight, 1.4f);
+		creature.lifeSpan = multiplier(creature.lifeSpan, 1.5f);;
+		creature.litterSize = multiplier(creature.litterSize, 0.5f);
+		break;
+	case VERY_LARGE:
+		//set creature weight, life span and litter size.
+		creature.creatureWeight = multiplier(creature.creatureWeight, 1.8f);
+		creature.lifeSpan = multiplier(creature.lifeSpan, 3.0f);	
+		creature.litterSize = 1.0f;	//As very large, hard set to 1, as that is all avery large creatures litter size should be.
+		break;
+	}
+
+
 	creature.initialEnergyDemand = genFunc->normalFloatBetween(energyCentre, energyGauss);
 	creature.initialEnergyDemand = genFunc->roundFloat(creature.initialEnergyDemand);
 	if (creature.initialEnergyDemand <= 0.0f)
@@ -63,8 +105,8 @@ void CreatureCreation::creatureCreation(Creature & creature, float energyCentre,
 	if (creature.oxygenTolMin <= 0.0f)
 		creature.oxygenTolMin = resetVariable(0.05f, 1.0f, 3.0f, 6.0f);
 
-	creature.offspringNumber = genFunc->uniformFloatBetween(offspringMin, offspringMax);
-	fillGeneElement(creature, creature.geneStack, creature.offspringNumber);
+	creature.litterSize = genFunc->uniformFloatBetween(offspringMin, offspringMax);
+	fillGeneElement(creature, creature.geneStack, creature.litterSize);
 
 	creature.lifeSpan = genFunc->uniformIntBetween(lifeMin, lifeMax);
 	fillGeneElement(creature, creature.geneStack, creature.lifeSpan);
@@ -114,7 +156,7 @@ void CreatureCreation::updateCreature(Creature & creature)
 	}
 	creature.oxygenRange = creature.geneStack.at(5);
 
-	creature.offspringNumber = creature.geneStack.at (6);
+	creature.litterSize = creature.geneStack.at (6);
 	creature.lifeSpan = creature.geneStack.at(7);
 	creature.creatureID = creature.geneStack.at(8);
 
@@ -189,7 +231,7 @@ void CreatureCreation::printCreatureVariables(const Creature creature)
 	std::cout << "tolTempRangeMax: " << creature.tolTempRangeMax << std::endl;
 	std::cout << "tolTempRangeMin: " << creature.tolTempRangeMin << std::endl;
 	std::cout << "oxygenTolMin: " << creature.oxygenTolMin << std::endl;
-	std::cout << "minimum offspring to have: " << static_cast<int>(creature.offspringNumber) << std::endl;
+	std::cout << "minimum offspring to have: " << static_cast<int>(creature.litterSize) << std::endl;
 	std::cout << "lifeSpan: " << creature.lifeSpan << std::endl;
 }
 
@@ -204,4 +246,10 @@ float CreatureCreation::resetVariable(float minLow, float minHigh, float maxLow,
 void CreatureCreation::fillGeneElement(Creature & creature, std::vector<float>& gene, float value)
 {
 	creature.geneStack.push_back(value);
+}
+
+float CreatureCreation::multiplier(float varToMulti, float multiBy)
+{
+	float result = varToMulti * multiBy;
+	return result;
 }

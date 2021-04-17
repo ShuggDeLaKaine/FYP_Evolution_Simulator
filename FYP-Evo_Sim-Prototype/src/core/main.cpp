@@ -134,6 +134,8 @@ int main()
 	//loop through species and match with species ID, 
 	for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
 		ds.displaySpeciesPopulationInfo(allSpecies.aliveSpeciesVec.at(i));
+
+	std::cout << std::endl;
 #pragma endregion
 
 
