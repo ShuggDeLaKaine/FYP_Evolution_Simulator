@@ -81,8 +81,8 @@ int main()
 						if (i == speciesPool[k].speciesID)
 						{
 							//MUTATE SPECIES STARTING POPULATIONS TO GIVE SOME VARIETY 
-							//-1 on the size below so it does NOT mutate the final element, which is a float containing the creature/species ID.
-							for (int l = 0; l < (seedPopulationPool[i].geneStack.size() - 2); l++)
+							//-3 on the size below so it does NOT mutate the final 3 elements, which are creature size, lifespan and id.
+							for (int l = 0; l < (seedPopulationPool[i].geneStack.size() - 3); l++)
 							{
 								//and mutate each value in its gene stack slightly.
 								mut.mutationIntensity(seedMutIntensity, seedPopulationPool[i].geneStack.at(l), envir[0].mutationModifier);
@@ -222,8 +222,8 @@ int main()
 			tempGeneStack.reserve(vecOffspringPopulation.at(i).geneStack.size());
 			tempGeneStack.assign(vecOffspringPopulation.at(i).geneStack.begin(), vecOffspringPopulation.at(i).geneStack.end());
 
-			//iterate through the tempGeneStack array. -1 on size as don't want to mutate the final element which is the species id, need that kept the same.
-			for(int j = 0; j < (tempGeneStack.size() - 2); j++)
+			//iterate through the tempGeneStack array. -3 on the size below so it does NOT mutate the final 3 elements, which are creature size, lifespan and id.
+			for(int j = 0; j < (tempGeneStack.size() - 3); j++)
 			{
 				//run a mutation chance test on each element in vector, if it comes back true
 				if (mut.mutationTest(mutChance) == true)

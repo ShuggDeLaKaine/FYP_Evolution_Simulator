@@ -17,8 +17,9 @@ void CreatureCreation::creatureCreation(Creature & creature, float energyCentre,
 	signed int randNum = genFunc->uniformIntBetween(0, 9);
 	if (randNum > 4)
 		randNum = 4;
-
 	creature.creatureSize = CreatureSize(randNum);
+
+	float fStartEnergy = 1.0f;
 
 	switch (creature.creatureSize)
 	{
@@ -27,33 +28,39 @@ void CreatureCreation::creatureCreation(Creature & creature, float energyCentre,
 		creature.creatureWeight = multiplier(creature.creatureWeight, 0.2f);
 		creature.lifeSpan = 1;	//As very small, hard set to 1, as that is all a very small creature should live for.
 		creature.litterSize = multiplier(creature.litterSize, 3.0f);
+		fStartEnergy = multiplier(fStartEnergy, 100.0f);	//CHANGE TO A RANDOM RANGE.
 		break;
 	case SMALL:
 		//set creature weight, life span and litter size.
 		creature.creatureWeight = multiplier(creature.creatureWeight, 0.6f);
 		creature.lifeSpan = multiplier(creature.lifeSpan, 0.5f);
 		creature.litterSize = multiplier(creature.litterSize, 1.5f);
+		fStartEnergy = multiplier(fStartEnergy, 200.0f);	//CHANGE TO A RANDOM RANGE.
 		break;
 	case MEDIUM:
 		//set creature life span and litter size; leave weight the initialised standard.
 		plusMinusOne(creature.lifeSpan, creature.litterSize);
+		fStartEnergy = multiplier(fStartEnergy, 300.0f);	//CHANGE TO A RANDOM RANGE.
 		break;
 	case LARGE:
 		//set creature weight, life span and litter size.
 		creature.creatureWeight = multiplier(creature.creatureWeight, 1.4f);
 		creature.lifeSpan = multiplier(creature.lifeSpan, 1.5f);;
 		creature.litterSize = multiplier(creature.litterSize, 0.5f);
+		fStartEnergy = multiplier(fStartEnergy, 400.0f);	//CHANGE TO A RANDOM RANGE.
 		break;
 	case VERY_LARGE:
 		//set creature weight, life span and litter size.
 		creature.creatureWeight = multiplier(creature.creatureWeight, 1.8f);
 		creature.lifeSpan = multiplier(creature.lifeSpan, 3.0f);	
 		creature.litterSize = 1.0f;	//As very large, hard set to 1, as that is all avery large creatures litter size should be.
+		fStartEnergy = multiplier(fStartEnergy, 500.0f);	//CHANGE TO A RANDOM RANGE.
 		break;
 	}
 
-
 	creature.initialEnergyDemand = genFunc->normalFloatBetween(energyCentre, energyGauss);
+	//creature.initialEnergyDemand = genFunc->normalFloatBetween(fStartEnergy, energyGauss);
+	
 	creature.initialEnergyDemand = genFunc->roundFloat(creature.initialEnergyDemand);
 	if (creature.initialEnergyDemand <= 0.0f)
 	{	//CHOICE!!!
@@ -62,17 +69,17 @@ void CreatureCreation::creatureCreation(Creature & creature, float energyCentre,
 		//or, do we randomly pick a constrained low number?
 		creature.initialEnergyDemand = resetVariable(1.0f, 20.0f, 60.0f, 80.0f);
 	}
-	fillGeneElement(creature, creature.geneStack, creature.initialEnergyDemand);
+	fillGeneElement(creature, creature.geneStack, creature.initialEnergyDemand);	//geneStack element (0)
 
 	creature.idealTemp = genFunc->normalFloatBetween(idealTempCentre, idealTempGuass);
 	creature.idealTemp = genFunc->roundFloat(creature.idealTemp);
-	fillGeneElement(creature, creature.geneStack, creature.idealTemp);
+	fillGeneElement(creature, creature.geneStack, creature.idealTemp);	//geneStack element (1)
 
 	creature.idealTempRange = genFunc->uniformFloatBetween(idealTempRangeMin, idealTempRangeMax);
-	fillGeneElement(creature, creature.geneStack, creature.idealTempRange);
+	fillGeneElement(creature, creature.geneStack, creature.idealTempRange);	//geneStack element (2)
 
 	creature.tolTempRange = genFunc->uniformFloatBetween(tolTempRangeMin, tolTempRangeMax);
-	fillGeneElement(creature, creature.geneStack, creature.tolTempRange);
+	fillGeneElement(creature, creature.geneStack, creature.tolTempRange);	//geneStack element (3)
 
 	creature.oxygenDemand = genFunc->normalFloatBetween(oxyCentre, oxyGauss);
 	creature.oxygenDemand = genFunc->roundFloat(creature.oxygenDemand);
@@ -83,10 +90,10 @@ void CreatureCreation::creatureCreation(Creature & creature, float energyCentre,
 		//or, do we randomly pick a constrained low number?
 		creature.oxygenDemand = resetVariable(1.0f, 5.0f, 15.0f, 20.0f);
 	}
-	fillGeneElement(creature, creature.geneStack, creature.oxygenDemand);
+	fillGeneElement(creature, creature.geneStack, creature.oxygenDemand);	//geneStack element (4)
 
 	creature.oxygenRange = genFunc->uniformFloatBetween(oxyRangeMin, oxyRangeMax);
-	fillGeneElement(creature, creature.geneStack, creature.oxygenRange);
+	fillGeneElement(creature, creature.geneStack, creature.oxygenRange);	//geneStack element (5)
 
 	creature.idealTempRangeMax = creature.idealTemp + creature.idealTempRange;
 	creature.idealTempRangeMin = creature.idealTemp - creature.idealTempRange;
@@ -103,11 +110,13 @@ void CreatureCreation::creatureCreation(Creature & creature, float energyCentre,
 	if (creature.oxygenTolMin <= 0.0f)
 		creature.oxygenTolMin = resetVariable(0.05f, 1.0f, 3.0f, 6.0f);
 
-	creature.litterSize = genFunc->uniformFloatBetween(offspringMin, offspringMax);
-	fillGeneElement(creature, creature.geneStack, creature.litterSize);
+	//add litterSize and creatureWeight to geneStack.
+	fillGeneElement(creature, creature.geneStack, creature.litterSize);		//geneStack element (6)
+	fillGeneElement(creature, creature.geneStack, creature.creatureWeight);	//geneStack element (7)
 
-	creature.lifeSpan = genFunc->uniformIntBetween(lifeMin, lifeMax);
-	fillGeneElement(creature, creature.geneStack, creature.lifeSpan);
+	//then add creatureSize and lifeSpan to geneStack.
+	fillGeneElement(creature, creature.geneStack, creature.creatureSize);	//geneStack element (8)
+	fillGeneElement(creature, creature.geneStack, creature.lifeSpan);		//geneStack element (9)
 
 	creature.isAlive = true;
 	creature.tempIdeal = true;
@@ -154,9 +163,33 @@ void CreatureCreation::updateCreature(Creature & creature)
 	}
 	creature.oxygenRange = creature.geneStack.at(5);
 
-	creature.litterSize = creature.geneStack.at (6);
-	creature.lifeSpan = creature.geneStack.at(7);
-	creature.creatureID = creature.geneStack.at(8);
+	//add litterSize, creatureWeight, creatureSize and lifeSpan to geneStack.
+	creature.litterSize = creature.geneStack.at(6);
+	creature.creatureWeight = creature.geneStack.at(7);
+	//creature.creatureSize = CreatureSize(creature.geneStack.at(8));
+	int tempInt = creature.geneStack.at(8);
+	switch(tempInt)
+	{
+		case VERY_SMALL:
+			creature.creatureSize = CreatureSize(VERY_SMALL);
+			break;
+		case SMALL:
+			creature.creatureSize = CreatureSize(SMALL);
+			break;
+		case MEDIUM:
+			creature.creatureSize = CreatureSize(MEDIUM);
+			break;
+		case LARGE:
+			creature.creatureSize = CreatureSize(LARGE);
+			break;
+		case VERY_LARGE:
+			creature.creatureSize = CreatureSize(VERY_LARGE);
+			break;
+	}
+	creature.lifeSpan = creature.geneStack.at(9);
+
+	//and finally the creature ID.
+	creature.creatureID = creature.geneStack.at(10);
 
 	creature.idealTempRangeMax = creature.idealTemp + creature.idealTempRange;
 	creature.idealTempRangeMin = creature.idealTemp - creature.idealTempRange;
@@ -229,8 +262,10 @@ void CreatureCreation::printCreatureVariables(const Creature creature)
 	std::cout << "tolTempRangeMax: " << creature.tolTempRangeMax << std::endl;
 	std::cout << "tolTempRangeMin: " << creature.tolTempRangeMin << std::endl;
 	std::cout << "oxygenTolMin: " << creature.oxygenTolMin << std::endl;
-	std::cout << "minimum offspring to have: " << static_cast<int>(creature.litterSize) << std::endl;
+	std::cout << "min litterSize: " << static_cast<int>(creature.litterSize) << std::endl;
 	std::cout << "lifeSpan: " << creature.lifeSpan << std::endl;
+	std::cout << "creatureSize: " << creature.creatureSize << std::endl;
+	std::cout << "creatureWeight: " << creature.creatureWeight << std::endl;
 }
 
 float CreatureCreation::resetVariable(float minLow, float minHigh, float maxLow, float maxHigh)
@@ -262,7 +297,8 @@ void CreatureCreation::plusMinusOne(int & iToChange, float & fToChange)
 	} else if(randNum == 1) {
 		iToChange = iToChange - 1;
 		fToChange = fToChange + 1.0f;
-	} else
+	} else {
 		//no change, keep things the same.
+	}
 }
 
