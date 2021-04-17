@@ -9,6 +9,7 @@ int main()
 	envir[0].energyAvailable = 100.0f;
 	envir[0].temperature = 6.0f;
 	envir[0].oxygenationRate = 20.0f;
+	envir[0].fEnvironmentCapacity = envir[0].energyAvailable * envir[0].fCapacityMultiplier;
 	envir[0].ID = 1;
 #pragma endregion
 
@@ -155,6 +156,37 @@ int main()
 
 		//keeping an tally of which life cycle it is.
 		std::cout << std::endl << "AFTER CYCLE: " << i + 1 << std::endl ;
+
+#pragma region WEIGHT_CALCULATIONS
+		//POPULATION WEIGHT CALCULATIONS.
+
+		//update the combined weight of all creatures.
+		for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
+		{
+			//iterate through creatures within the species
+			for (int j = 0; j < allSpecies.aliveSpeciesVec.at(i).speciesMembership.size(); j++)
+			{
+				envir[0].fPopulationWeight += allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j).creatureWeight;
+			}
+		}
+
+		//compare to weight capacity of the environment and set the environmental status.
+		if (envir[0].fPopulationWeight > envir[0].fEnvironmentCapacity)
+		{
+			//set environment status to famine...
+			signed int temp = FAMINE;
+			envir[0].currentStatus = EnvironmentalStatus(temp);
+		}
+		else
+		{
+			//set environment status to abundance...
+			signed int temp = ABUNDANCE;
+			envir[0].currentStatus = EnvironmentalStatus(temp);
+		}
+
+
+#pragma endregion
+
 
 #pragma region FITNESS_TESTS
 		//SURVIVAL TEST STAGE...
@@ -313,7 +345,10 @@ int main()
 			//ds.displayGeneStackInfo(allSpecies.aliveSpeciesVec.at(i), allSpecies.aliveSpeciesVec.at(i).speciesGeneStack);
 		}
 
+
+
 		//***END OF CYCLE*** 
+		//****QUESTION**** DO THIS HERE OR AT THE BEGINNING OF THE TURN... MESSING WITH END POPULATIONS HERE... MAYBE BETTER AT THE BEGINNING OF LOOP... CAN DO ALONGSIDE POPULATION WEIGHT CALCULATIONS.
 		//take a 1 off life spans, so go through species one by one.
 		for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
 		{

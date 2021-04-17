@@ -4,15 +4,21 @@
 #include <vector>
 #include "core/generalFunctions.h"
 
+enum EnvironmentalStatus { ABUNDANCE, SUSTAINABLE, PRESSURED, FAMINE };
+
 struct Environment
 {
 	float energyAvailable;			//!< energy available in environment.
-	float fWeightCapacity;			//!< how much collective creature weight the environment can take before resource availability starts to drop. 
 	float temperature;				//!< temperature of the environment.
 	float oxygenationRate;			//!< oxygenation % of the environment.
 	float mutationModifier = 1.0f;	//!< always initialised to 1 (no multiple effect), as initialisation considers environment 'clean', changes such a pollution will modify this.
 	float pollution = 0.0f;			//!< at initalisation set to 0 as considered to be 'clean', pollution changes added later.
 	uint32_t ID;					//!< environmental ID number.
+
+	EnvironmentalStatus currentStatus;	//!< the current status the environment is in.
+	float fEnvironmentCapacity = 0.0f;	//!< capacity for combined population mass.
+	float fPopulationWeight = 0.0f;		//!< combined weight of all the creatures.
+	float fCapacityMultiplier = 100.0f;	//!< multiplier for getting environmentalCapacity, multiple this my energyAvailable.
 
 	inline float getEnergyAvailable() { return energyAvailable; }	//!< get energyAvailable.
 	inline float getTemperature() { return temperature; }			//!< get temperature.
@@ -46,10 +52,14 @@ private:
 	inline int   setEnvironmentID() { 
 		
 		return id; }							//!< 
+	inline float setEnvironmentalCapacity(float energyAvail, float multiplier) {
+		cap = energyAvail * multiplier;
+		return cap; }							//!<
 
 	std::shared_ptr<GeneralFunctions> genFunc;	//!< ref to General Functions class.
-	float energy;								//!< holder for named var, used in set...()
-	float temp;									//!< holder for named var, used in set...()
-	float oxy;									//!< holder for named var, used in set...()
-	float id;									//!< holder for named var, used in set...()
+	float energy;								//!< holder for named var.
+	float temp;									//!< holder for named var.
+	float oxy;									//!< holder for named var.
+	float cap;									//!< holder for named var.
+	float id;									//!< holder for named var.
 };

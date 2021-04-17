@@ -26,6 +26,9 @@ void EnvironmentCreation::environmentCreation(Environment& envir, float energyMi
 	envir.oxygenationRate = setEnergyAvailable(oxygenMin, oxygenMax);
 	std::cout << "set environments oxygen level to: " << envir.oxygenationRate << std::endl;
 
+	//set weight capacity.
+	envir.fEnvironmentCapacity = setEnvironmentalCapacity(envir.energyAvailable, envir.fCapacityMultiplier);
+
 	//need to set an environment ID too... maybe?
 	count++;
 	envir.ID = count;
