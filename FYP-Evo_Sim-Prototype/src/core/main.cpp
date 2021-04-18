@@ -177,6 +177,16 @@ int main()
 			signed int temp = FAMINE;
 			envir[0].currentStatus = EnvironmentalStatus(temp);
 		}
+		//else if (envir[0].fPopulationWeight > envir[0].fEnvironmentCapacity + fWeightOffset)
+		//{
+		//	signed int temp = SUSTAINABLE;
+		//	envir[0].currentStatus = EnvironmentalStatus(temp);
+		//}
+		//else if (envir[0].fPopulationWeight > envir[0].fEnvironmentCapacity - fWeightOffset)
+		//{
+		//	signed int temp = PRESSURED;
+		//	envir[0].currentStatus = EnvironmentalStatus(temp);
+		//}
 		else
 		{
 			//set environment status to abundance...
