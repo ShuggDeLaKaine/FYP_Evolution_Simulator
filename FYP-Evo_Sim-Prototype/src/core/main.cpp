@@ -157,7 +157,7 @@ int main()
 		//keeping an tally of which life cycle it is.
 		std::cout << std::endl << "AFTER CYCLE: " << i + 1 << std::endl ;
 
-#pragma region WEIGHT_CALCULATIONS
+#pragma region WEIGHT_CALCULATIONS_&_ENVIRONMENTAL_STATUS_SETTING
 		//POPULATION WEIGHT CALCULATIONS.
 
 		//update the combined weight of all creatures.
@@ -170,33 +170,48 @@ int main()
 			}
 		}
 
-		//compare to weight capacity of the environment and set the environmental status.
-		if (envir[0].fPopulationWeight > envir[0].fEnvironmentCapacity)
+		//ENVIRONMENT STATUS SETTING.
+		//compare population weight to environmental capacity and set environmental status accordingly.
+		if (envir[0].fPopulationWeight <= (envir[0].fEnvironmentCapacity * fAbundanceMultiplier)) 
 		{
-			//set environment status to famine...
-			signed int temp = FAMINE;
-			envir[0].currentStatus = EnvironmentalStatus(temp);
-		}
-		//else if (envir[0].fPopulationWeight > envir[0].fEnvironmentCapacity + fWeightOffset)
-		//{
-		//	signed int temp = SUSTAINABLE;
-		//	envir[0].currentStatus = EnvironmentalStatus(temp);
-		//}
-		//else if (envir[0].fPopulationWeight > envir[0].fEnvironmentCapacity - fWeightOffset)
-		//{
-		//	signed int temp = PRESSURED;
-		//	envir[0].currentStatus = EnvironmentalStatus(temp);
-		//}
-		else
-		{
-			//set environment status to abundance...
+			//set environment status to ABUNDANCE...
 			signed int temp = ABUNDANCE;
 			envir[0].currentStatus = EnvironmentalStatus(temp);
+		} 
+		else if (envir[0].fPopulationWeight > (envir[0].fEnvironmentCapacity * fAbundanceMultiplier) &&
+			envir[0].fPopulationWeight <= envir[0].fEnvironmentCapacity) 
+		{
+			//set environment status to SUSTAINABLE...
+			signed int temp = SUSTAINABLE;
+			envir[0].currentStatus = EnvironmentalStatus(temp);
+		} 
+		else if (envir[0].fPopulationWeight > envir[0].fEnvironmentCapacity &&
+			envir[0].fPopulationWeight <= (envir[0].fEnvironmentCapacity * fPressuredMultiplier)) 
+		{
+			//set environment status to PRESSURED...
+			signed int temp = PRESSURED;
+			envir[0].currentStatus = EnvironmentalStatus(temp);
+		} 
+		else if (envir[0].fPopulationWeight > (envir[0].fEnvironmentCapacity * fPressuredMultiplier)) 
+		{
+			//set environment status to FAMINE...
+			signed int temp = FAMINE;
+			envir[0].currentStatus = EnvironmentalStatus(temp);
+		} 
+		else 
+		{
+			//else default to sustainable. 
+			signed int temp = SUSTAINABLE;
+			envir[0].currentStatus = EnvironmentalStatus(temp);
 		}
-
 
 #pragma endregion
 
+#pragma COMPETITION_STAGE
+
+
+
+#pragma endregion
 
 #pragma region FITNESS_TESTS
 		//SURVIVAL TEST STAGE...
@@ -334,6 +349,7 @@ int main()
 
 #pragma endregion
 
+#pragma region SPECIES_UPDATES
 		//UPDATE AND DISPLAY SPECIES DATA
 		//loop through species and match with the species ID, 
 		for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
@@ -354,7 +370,7 @@ int main()
 			ds.displaySpeciesBirthDeathRates(allSpecies.aliveSpeciesVec.at(i));
 			//ds.displayGeneStackInfo(allSpecies.aliveSpeciesVec.at(i), allSpecies.aliveSpeciesVec.at(i).speciesGeneStack);
 		}
-
+#pragma endregion
 
 
 		//***END OF CYCLE*** 
