@@ -17,6 +17,7 @@ class FullFitnessTest
 {
 public:
 	void creatureFitnessTests(CREAT &creature, Environment &environment);	//!< function to run a full run of all fitness tests between a creature and an environment.
+	void creatureFitnessTests(CREAT &creature, Environment &environment, float energyReduction);	//!< function to run a full run of all fitness tests between a creature and an environment, takes an energy reduction value, used in competition fitness tests.
 private:
 	EnergyFitnessTest energyFF;			//!< ref to energy fitness tests.
 	TemperatureFitnessTest tempFF;		//!< ref to temperature fitness tests.

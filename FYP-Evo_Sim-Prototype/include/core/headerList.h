@@ -13,3 +13,5 @@
 
 #include "reproduction/mutation.h"
 #include "reproduction/selection.h"
+
+#include "mechanics/competition.h"
