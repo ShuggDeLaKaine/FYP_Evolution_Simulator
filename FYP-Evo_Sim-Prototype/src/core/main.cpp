@@ -176,264 +176,43 @@ int main()
 				envir[0].fPopulationWeight += allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j).creatureWeight;
 			}
 		}
-
 		//ENVIRONMENT STATUS SETTING.
-		//compare population weight to environmental capacity and set environmental status accordingly.
-		if (envir[0].fPopulationWeight <= (envir[0].fEnvironmentCapacity * fAbundanceMultiplier))	//0.0f to 0.75f
-		{
-			//set environment status to ABUNDANCE...
-			signed int temp = ABUNDANCE;
-			envir[0].currentStatus = EnvironmentalStatus(temp);
-		} 
-		else if (envir[0].fPopulationWeight > (envir[0].fEnvironmentCapacity * fAbundanceMultiplier) &&	//0.75f
-			envir[0].fPopulationWeight <= envir[0].fEnvironmentCapacity) //0.75f to 1.0f
-		{
-			//set environment status to SUSTAINABLE...
-			signed int temp = SUSTAINABLE;
-			envir[0].currentStatus = EnvironmentalStatus(temp);
-		} 
-		else if (envir[0].fPopulationWeight > envir[0].fEnvironmentCapacity &&
-			envir[0].fPopulationWeight <= (envir[0].fEnvironmentCapacity * fPressuredMultiplier)) //1.0f to 1.25f
-		{
-			//set environment status to PRESSURED...
-			signed int temp = PRESSURED;
-			envir[0].currentStatus = EnvironmentalStatus(temp);
-		} 
-		else if (envir[0].fPopulationWeight > (envir[0].fEnvironmentCapacity * fPressuredMultiplier) &&
-			envir[0].fPopulationWeight <= (envir[0].fEnvironmentCapacity * fCriticalMultiplier))	//1.25f to 1.5f
-		{
-			//set environment status to CRITICAL...
-			signed int temp = CRITICAL;
-			envir[0].currentStatus = EnvironmentalStatus(temp);
-		}
-		else if (envir[0].fPopulationWeight > (envir[0].fEnvironmentCapacity * fPressuredMultiplier)) //1.5f>>>
-		{
-			//set environment status to FAMINE...
-			signed int temp = FAMINE;
-			envir[0].currentStatus = EnvironmentalStatus(temp);
-		} 
-		else 
-		{
-			//else default to sustainable. 
-			signed int temp = SUSTAINABLE;
-			envir[0].currentStatus = EnvironmentalStatus(temp);
-		}
+		comp.setEnvironmentalStatus(envir[0]);
+
 #pragma endregion
 
-
-#pragma COMPETITION_STAGE
+#pragma region COMPETITION_STAGE
 		//get the environmental status that currently in.
+		comp.getEnvironmentStatus(envir[0]);
 
-		switch (envir[0].currentStatus)
+		//iterate through the species.
+		for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
 		{
-		//IF....
-		case ABUNDANCE:
-			//abundance == more resources available, but what is the effect? A reverse of the below with added energy? More offspring?
+			//get the population to compete, factoring creature size.
+			float popToCompete = comp.getPopulationToCompete(allSpecies.aliveSpeciesVec.at(i).speciesMembership.size(), allSpecies.aliveSpeciesVec.at(i).seedGeneStack.at(8));
 
-			
-			break;
-
-		case SUSTAINABLE:
-			//sustainable == no extra effects, good or bad.
-
-
-			break;
-
-		case PRESSURED:
-			//pressured == 30% of population experiences a reduction of available energy, as competing for food.
-			//effects split between creature sizes, smallest taking biggest brunt, largest the least.
-			//V.Small = 45% of total | Small = 25% | Medium = 15% | Large = 10% | V.Large = 5%
-			//these of 30% is...
-			//V.Small = 13.5% of total | Small = 7.5% | Medium = 4.5% | Large = 3.0% | V.Large = 1.5%
-
-			//get the initial population % to compete in a PRESSURED environmental state.
-			float fTempCompetePercent = 1.0f * envir[0].fPressuredState;
-			
-			//iterate through the species.
-			for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
+			//loop through the popToCompete size of the population, run fitness tests with the reduced environmental energy available.
+			for (int j = (allSpecies.aliveSpeciesVec.at(i).speciesMembership.size() - popToCompete);
+				j < allSpecies.aliveSpeciesVec.at(i).speciesMembership.size(); j++)
 			{
-				//grab the species and check what size it is.
-				signed int iCreatureSIZE = allSpecies.aliveSpeciesVec.at(i).seedGeneStack.at(8);
+				//generate a value of energy to remove from availability.
+				float fEnergyLost = 50.0f;		//hard set FOR NOOOOOOOOOOOWWWWWWWW
+				//fitness test with this environmental energy reduction.
+				ft.creatureFitnessTests(allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j), envir[0], fEnergyLost);
 
-				switch (iCreatureSIZE)
+				//if the creature has NOT survived and is NOT alive.
+				if (allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j).isAlive == false)
 				{
-				case VERY_SMALL:
-					//update 'competing' var to apply the relevant size % multiplier.
-					fTempCompetePercent = fTempCompetePercent * envir[0].fVSmall;
-					//get size of the species populations.
-					signed int iTempSpeciesSize = allSpecies.aliveSpeciesVec.at(i).speciesMembership.size();
-					//use 'competing' value to get number of creatures in the species which are going to have competition mechanics applied. 
-					signed int popToCompete = iTempSpeciesSize * static_cast<int>(fTempCompetePercent);
-
-					//loop through the last popToCompete size of the population to run fitness against them with the reduced environmental energy available.
-					for (int j = (allSpecies.aliveSpeciesVec.at(i).speciesMembership.size() - popToCompete); 
-						j < allSpecies.aliveSpeciesVec.at(i).speciesMembership.size(); j++)
-					{
-						//generate a value of energy to remove from availability.
-						float fEnergyLost = 50.0f;		//hard set FOR NOOOOOOOOOOOWWWWWWWW
-						//fitness test with this environmental energy reduction.
-						ft.creatureFitnessTests(allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j), envir[0], fEnergyLost);
-
-						//if the creature has NOT survived and is NOT alive.
-						if (allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j).isAlive == false)
-						{
-							//then remove from species membership...
-							allSpecies.aliveSpeciesVec.at(i).speciesMembership.erase(allSpecies.aliveSpeciesVec.at(i).speciesMembership.begin() + j);
-							j--;
-							//allSpecies.aliveSpeciesVec.at(i).cycleTotalDeadCount++;
-							allSpeciesPtr->aliveSpeciesVec.at(i).cycleTotalDeadCount++;
-							allSpecies.aliveSpeciesVec.at(i).cycleFailedFitnessDeadCount++;
-						}
-					}
-					break;
-
-				case SMALL:
-					//update 'competing' var to apply the relevant size % multiplier.
-					fTempCompetePercent = fTempCompetePercent * envir[0].fSmall;
-					//get size of the species populations.
-					signed int iTempSpeciesSize = allSpecies.aliveSpeciesVec.at(i).speciesMembership.size();
-					//use 'competing' value to get number of creatures in the species which are going to have competition mechanics applied. 
-					signed int popToCompete = iTempSpeciesSize * static_cast<int>(fTempCompetePercent);
-
-					//loop through the last popToCompete size of the population to run fitness against them with the reduced environmental energy available.
-					for (int j = (allSpecies.aliveSpeciesVec.at(i).speciesMembership.size() - popToCompete);
-						j < allSpecies.aliveSpeciesVec.at(i).speciesMembership.size(); j++)
-					{
-						//generate a value of energy to remove from availability.
-						float fEnergyLost = 50.0f;		//hard set FOR NOOOOOOOOOOOWWWWWWWW
-						//fitness test with this environmental energy reduction.
-						ft.creatureFitnessTests(allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j), envir[0], fEnergyLost);
-
-						//if the creature has NOT survived and is NOT alive.
-						if (allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j).isAlive == false)
-						{
-							//then remove from species membership...
-							allSpecies.aliveSpeciesVec.at(i).speciesMembership.erase(allSpecies.aliveSpeciesVec.at(i).speciesMembership.begin() + j);
-							j--;
-							//allSpecies.aliveSpeciesVec.at(i).cycleTotalDeadCount++;
-							allSpeciesPtr->aliveSpeciesVec.at(i).cycleTotalDeadCount++;
-							allSpecies.aliveSpeciesVec.at(i).cycleFailedFitnessDeadCount++;
-						}
-					}
-					break;
-
-				case MEDIUM:
-					//update 'competing' var to apply the relevant size % multiplier.
-					fTempCompetePercent = fTempCompetePercent * envir[0].fMedium;
-					//get size of the species populations.
-					signed int iTempSpeciesSize = allSpecies.aliveSpeciesVec.at(i).speciesMembership.size();
-					//use 'competing' value to get number of creatures in the species which are going to have competition mechanics applied. 
-					signed int popToCompete = iTempSpeciesSize * static_cast<int>(fTempCompetePercent);
-
-					//loop through the last popToCompete size of the population to run fitness against them with the reduced environmental energy available.
-					for (int j = (allSpecies.aliveSpeciesVec.at(i).speciesMembership.size() - popToCompete);
-						j < allSpecies.aliveSpeciesVec.at(i).speciesMembership.size(); j++)
-					{
-						//generate a value of energy to remove from availability.
-						float fEnergyLost = 50.0f;		//hard set FOR NOOOOOOOOOOOWWWWWWWW
-						//fitness test with this environmental energy reduction.
-						ft.creatureFitnessTests(allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j), envir[0], fEnergyLost);
-
-						//if the creature has NOT survived and is NOT alive.
-						if (allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j).isAlive == false)
-						{
-							//then remove from species membership...
-							allSpecies.aliveSpeciesVec.at(i).speciesMembership.erase(allSpecies.aliveSpeciesVec.at(i).speciesMembership.begin() + j);
-							j--;
-							//allSpecies.aliveSpeciesVec.at(i).cycleTotalDeadCount++;
-							allSpeciesPtr->aliveSpeciesVec.at(i).cycleTotalDeadCount++;
-							allSpecies.aliveSpeciesVec.at(i).cycleFailedFitnessDeadCount++;
-						}
-					}
-					break;
-
-				case LARGE:
-					//update 'competing' var to apply the relevant size % multiplier.
-					fTempCompetePercent = fTempCompetePercent * envir[0].fLarge;
-					//get size of the species populations.
-					signed int iTempSpeciesSize = allSpecies.aliveSpeciesVec.at(i).speciesMembership.size();
-					//use 'competing' value to get number of creatures in the species which are going to have competition mechanics applied. 
-					signed int popToCompete = iTempSpeciesSize * static_cast<int>(fTempCompetePercent);
-
-					//loop through the last popToCompete size of the population to run fitness against them with the reduced environmental energy available.
-					for (int j = (allSpecies.aliveSpeciesVec.at(i).speciesMembership.size() - popToCompete);
-						j < allSpecies.aliveSpeciesVec.at(i).speciesMembership.size(); j++)
-					{
-						//generate a value of energy to remove from availability.
-						float fEnergyLost = 50.0f;		//hard set FOR NOOOOOOOOOOOWWWWWWWW
-						//fitness test with this environmental energy reduction.
-						ft.creatureFitnessTests(allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j), envir[0], fEnergyLost);
-
-						//if the creature has NOT survived and is NOT alive.
-						if (allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j).isAlive == false)
-						{
-							//then remove from species membership...
-							allSpecies.aliveSpeciesVec.at(i).speciesMembership.erase(allSpecies.aliveSpeciesVec.at(i).speciesMembership.begin() + j);
-							j--;
-							//allSpecies.aliveSpeciesVec.at(i).cycleTotalDeadCount++;
-							allSpeciesPtr->aliveSpeciesVec.at(i).cycleTotalDeadCount++;
-							allSpecies.aliveSpeciesVec.at(i).cycleFailedFitnessDeadCount++;
-						}
-					}
-					break;
-
-				case VERY_LARGE:
-					//update 'competing' var to apply the relevant size % multiplier.
-					fTempCompetePercent = fTempCompetePercent * envir[0].fVLarge;
-					//get size of the species populations.
-					signed int iTempSpeciesSize = allSpecies.aliveSpeciesVec.at(i).speciesMembership.size();
-					//use 'competing' value to get number of creatures in the species which are going to have competition mechanics applied. 
-					signed int popToCompete = iTempSpeciesSize * static_cast<int>(fTempCompetePercent);
-
-					//loop through the last popToCompete size of the population to run fitness against them with the reduced environmental energy available.
-					for (int j = (allSpecies.aliveSpeciesVec.at(i).speciesMembership.size() - popToCompete);
-						j < allSpecies.aliveSpeciesVec.at(i).speciesMembership.size(); j++)
-					{
-						//generate a value of energy to remove from availability.
-						float fEnergyLost = 50.0f;		//hard set FOR NOOOOOOOOOOOWWWWWWWW
-						//fitness test with this environmental energy reduction.
-						ft.creatureFitnessTests(allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j), envir[0], fEnergyLost);
-
-						//if the creature has NOT survived and is NOT alive.
-						if (allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j).isAlive == false)
-						{
-							//then remove from species membership...
-							allSpecies.aliveSpeciesVec.at(i).speciesMembership.erase(allSpecies.aliveSpeciesVec.at(i).speciesMembership.begin() + j);
-							j--;
-							//allSpecies.aliveSpeciesVec.at(i).cycleTotalDeadCount++;
-							allSpeciesPtr->aliveSpeciesVec.at(i).cycleTotalDeadCount++;
-							allSpecies.aliveSpeciesVec.at(i).cycleFailedFitnessDeadCount++;
-						}
-					}
-					break;
+					//then remove from species membership...
+					allSpecies.aliveSpeciesVec.at(i).speciesMembership.erase(allSpecies.aliveSpeciesVec.at(i).speciesMembership.begin() + j);
+					j--;
+					//allSpecies.aliveSpeciesVec.at(i).cycleTotalDeadCount++;
+					allSpeciesPtr->aliveSpeciesVec.at(i).cycleTotalDeadCount++;
+					allSpecies.aliveSpeciesVec.at(i).cycleFailedFitnessDeadCount++;
 				}
 			}
-
-			break;
-
-		case CRITICAL:
-			//critical == 60% of population experiences a reduction of available energy, as competing for food.
-			//effects split between creature sizes, smallest taking biggest brunt, largest the least.
-			//V.Small = 45% of total | Small = 25% | Medium = 15% | Large = 10% | V.Large = 5%
-			//these of 60% is...
-			//V.Small = 27.0% of total | Small = 15.0% | Medium = 9.0% | Large = 6.0% | V.Large = 3.0%
-			float competing = 1.0f * envir[0].fCriticalState;
-
-
-			break;
-		
-		case FAMINE:
-			//famine == 100% of population experiences a reduction in available energy, as competing for food.
-			//which members of population will be effected?
-			//effects split between creature sizes, smallest taking biggest brunt, largest the least.
-			//V.Small = 45% of total | Small = 25% | Medium = 15% | Large = 10% | V.Large = 5%
-			float competing = 1.0f * envir[0].fFamineState;
-
-
-			break;
 		}
 #pragma endregion
-
 
 #pragma region FITNESS_TESTS
 		//SURVIVAL TEST STAGE...

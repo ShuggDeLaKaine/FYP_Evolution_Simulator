@@ -26,6 +26,7 @@ struct Environment
 	inline float getOxygenRate() { return oxygenationRate; }		//!< get oxygenation rate.
 	inline int   getEnvironmentID() { return ID; }					//!< get the environmental id.
 
+	/*
 	float fVSmall = 0.45f;			//!< % of very small creature size populations to have competition mechanics applied to.
 	float fSmall  = 0.25f;			//!< % of small creature size populations to have competition mechanics applied to.
 	float fMedium = 0.15f;			//!< % of medium creature size populations to have competition mechanics applied to.
@@ -35,6 +36,7 @@ struct Environment
 	float fPressuredState = 0.3f;	//!< % of overall populations to have competition mechanics applied to if environmental status is PRESSURED.
 	float fCriticalState = 0.6f;	//!< % of overall populations to have competition mechanics applied to if environmental status is CRITICAL.
 	float fFamineState = 1.0f;		//!< % of overall populations to have competition mechanics applied to if environmental status is FAMINE.
+	*/
 
 	float minRange;					//!< range of 
 	float maxRange;					//!< range of 

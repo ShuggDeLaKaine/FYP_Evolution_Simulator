@@ -15,7 +15,7 @@ Mutation mut;									//!< ref to Mutation class.
 Selection sel;									//!< ref to Selection class.
 Crossover cross;								//!< ref to Crossover class.
 Display ds;										//!< ref to Display class.
-Competition com;								//!< ref to Competition class.
+Competition comp;								//!< ref to Competition class.
 
 SpeciesInfo si;									//!< ref to Species Info struct.
 AllSpecies as;									//!< ref to All Species struct.
@@ -30,9 +30,9 @@ const uint32_t STARTING_POP = 100;				//!< once creatures chosen after seed stag
 const float seedMutIntensity = 0.5f;			//!< mutation intensity during the seed stage, used for first populations of creatures.
 bool bSuccessfulSeed = false;					//!< bool to take whether the seed stage has been successful.
 
-float fCriticalMultiplier  = 1.5f;				//!< multiplier for environment capacity/creature weight comparisons.
-float fPressuredMultiplier = 1.25f;				//!< multiplier for environment capacity/creature weight comparisons.
-float fAbundanceMultiplier = 0.75f;				//!< multiplier for environment capacity/creature weight comparisons.
+//float fCriticalMultiplier  = 1.5f;				//!< multiplier for environment capacity/creature weight comparisons.
+//float fPressuredMultiplier = 1.25f;				//!< multiplier for environment capacity/creature weight comparisons.
+//float fAbundanceMultiplier = 0.75f;				//!< multiplier for environment capacity/creature weight comparisons.
 
 uint32_t tempPosition = 0;						//!< holds the position within an array or vector.
 
