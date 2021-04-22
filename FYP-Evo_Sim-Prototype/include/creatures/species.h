@@ -16,6 +16,9 @@ struct SpeciesInfo
 
 	std::vector<Creature> speciesMembership;	//!< vector of all creatures that are members of this species.
 	uint32_t currentMembers;					//!< number of current members that are alive in the species.
+	uint32_t previousMembers;					//!< number of last cycles membership.
+	uint32_t startCycleMembers;					//!< number of last cycles membership.
+	uint32_t endCycleMembers;					//!< number of last cycles membership.
 	uint32_t cycleOffspringCount;				//!< 
 	uint32_t cycleTotalDeadCount;				//!< 
 	uint32_t cycleFailedFitnessDeadCount;		//!< 
@@ -63,6 +66,9 @@ public:
 	void addCreatureToSpecies(Creature creature, SpeciesInfo& species);		//!< add a creature to a species.
 	void checkSpeciesDivergence();//****TO-DO****	//!< check membership gene stacks against species gene stack to see if creature has diverged.
 
+	void startCycleMemberships(AllSpecies &allSpec);
+	void endCycleMemberships(AllSpecies &allSpec);
+	void resetCycleCounts(AllSpecies &allSpec);
 	void updateSpeciesMembershipCounts(SpeciesInfo& species);		//!< update species membership, adding new members and removing 'dead' ones.
 
 	std::vector<float> getSeedGeneStack(SpeciesInfo species);		//!< get the species initial seed population gene stack.

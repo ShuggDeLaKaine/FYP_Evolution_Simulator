@@ -18,7 +18,7 @@ struct Environment
 	EnvironmentalStatus currentStatus;	//!< the current status the environment is in.
 	float fEnvironmentCapacity = 0.0f;	//!< capacity for combined population mass.
 	float fPopulationWeight = 0.0f;		//!< combined weight of all the creatures.
-	float fCapacityMultiplier = 100.0f;	//!< multiplier for getting environmentalCapacity, multiple this my energyAvailable.
+	float fCapacityMultiplier = 10.0f;	//!< multiplier for getting environmentalCapacity, multiple this my energyAvailable.
 	float fWeightOffset = 100.0f;		//!< offset to +/- population weight to environmental capacity, to give status' of SUSTAINABLE and PRESSURED.
 
 	inline float getEnergyAvailable() { return energyAvailable; }	//!< get energyAvailable.

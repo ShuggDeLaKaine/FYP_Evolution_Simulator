@@ -31,6 +31,8 @@ void Species::addCreatureToSpecies(Creature creature, SpeciesInfo & species)
 
 void Species::updateSpeciesMembershipCounts(SpeciesInfo& species)
 {
+	//set previous and current memberships.
+	species.previousMembers = species.currentMembers;
 	species.currentMembers = species.speciesMembership.size();
 }
 
@@ -44,6 +46,29 @@ void Species::checkSpeciesDivergence()
 	//work out what distance between a diverging member and the population average would be considered as diverging.
 	//this will need testing.
 
+}
+
+void Species::startCycleMemberships(AllSpecies &allSpec)
+{
+	for (int i = 0; i < allSpec.aliveSpeciesVec.size(); i++)
+		allSpec.aliveSpeciesVec.at(i).startCycleMembers = allSpec.aliveSpeciesVec.at(i).speciesMembership.size();
+}
+
+void Species::endCycleMemberships(AllSpecies &allSpec)
+{
+	for (int i = 0; i < allSpec.aliveSpeciesVec.size(); i++)
+		allSpec.aliveSpeciesVec.at(i).endCycleMembers = allSpec.aliveSpeciesVec.at(i).speciesMembership.size();
+}
+
+void Species::resetCycleCounts(AllSpecies & allSpec)
+{
+	//reset all the cycle counters as a new cycle about to begin.
+	for(int i = 0; i < allSpec.aliveSpeciesVec.size(); i++)
+	{
+		allSpec.aliveSpeciesVec.at(i).cycleTotalDeadCount = 0;
+		allSpec.aliveSpeciesVec.at(i).cycleFailedFitnessDeadCount = 0;
+		allSpec.aliveSpeciesVec.at(i).cycleOldAgeDeadCount = 0;
+	}
 }
 
 std::vector<float>  Species::getSeedGeneStack(SpeciesInfo species)

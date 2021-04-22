@@ -94,53 +94,36 @@ float Competition::getPopulationToCompete(int speciesMembershipSize, int sizeGen
 		fToCompetePercent *= fVSmall;
 		//get final population number to compete by multiplying membership size by percentage to compete value.
 		iFinalPopToCompete = speciesMembershipSize * static_cast<int>(fToCompetePercent);
+		break;
+
 	case SMALL:
 		//update 'competing' var to apply the relevant size % multiplier.
 		fToCompetePercent *= fSmall;
 		//get final population number to compete by multiplying membership size by percentage to compete value.
 		iFinalPopToCompete = speciesMembershipSize * static_cast<int>(fToCompetePercent);
+		break;
+
 	case MEDIUM:
 		//update 'competing' var to apply the relevant size % multiplier.
 		fToCompetePercent *= fMedium;
 		//get final population number to compete by multiplying membership size by percentage to compete value.
-		iFinalPopToCompete = speciesMembershipSize * static_cast<int>(fToCompetePercent);
+		iFinalPopToCompete = speciesMembershipSize * fToCompetePercent;
+		break;
+
 	case LARGE:
 		//update 'competing' var to apply the relevant size % multiplier.
 		fToCompetePercent *= fLarge;
 		//get final population number to compete by multiplying membership size by percentage to compete value.
 		iFinalPopToCompete = speciesMembershipSize * static_cast<int>(fToCompetePercent);
+		break;
+
 	case VERY_LARGE:
 		//update 'competing' var to apply the relevant size % multiplier.
 		fToCompetePercent *= fVLarge;
 		//get final population number to compete by multiplying membership size by percentage to compete value.
 		iFinalPopToCompete = speciesMembershipSize * static_cast<int>(fToCompetePercent);
+		break;
 	}
 
 	return iFinalPopToCompete;
 }
-
-
-
-
-
-/*
-case CRITICAL:
-	//critical == 60% of population experiences a reduction of available energy, as competing for food.
-	//effects split between creature sizes, smallest taking biggest brunt, largest the least.
-	//V.Small = 45% of total | Small = 25% | Medium = 15% | Large = 10% | V.Large = 5%
-	//these of 60% is...
-	//V.Small = 27.0% of total | Small = 15.0% | Medium = 9.0% | Large = 6.0% | V.Large = 3.0%
-	float competing = 1.0f * envir[0].fCriticalState;
-
-	break;
-
-
-case FAMINE:
-	//famine == 100% of population experiences a reduction in available energy, as competing for food.
-	//which members of population will be effected?
-	//effects split between creature sizes, smallest taking biggest brunt, largest the least.
-	//V.Small = 45% of total | Small = 25% | Medium = 15% | Large = 10% | V.Large = 5%
-	float competing = 1.0f * envir[0].fFamineState;
-
-	break;
-*/

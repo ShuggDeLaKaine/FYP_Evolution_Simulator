@@ -20,9 +20,11 @@ public:
 	void getEnvironmentStatus(Environment &environment);
 	float getPopulationToCompete(int speciesMembershipSize, int sizeGeneElement);
 
-	float fToCompetePercent = 1.0f;
-	int iCreatureSIZE = 0;
-	int iFinalPopToCompete = 0;
+
+private:
+	float fToCompetePercent = 1.0f;			//!< 
+	int iCreatureSIZE = 0;					//!< 
+	int iFinalPopToCompete = 0;				//!< 
 
 	float fCriticalMultiplier = 1.5f;		//!< multiplier for environment capacity/creature weight comparisons.
 	float fPressuredMultiplier = 1.25f;		//!< multiplier for environment capacity/creature weight comparisons.
@@ -37,8 +39,5 @@ public:
 	float fPressuredState = 0.3f;			//!< % of overall populations to have competition mechanics applied to if environmental status is PRESSURED.
 	float fCriticalState = 0.6f;			//!< % of overall populations to have competition mechanics applied to if environmental status is CRITICAL.
 	float fFamineState = 1.0f;				//!< % of overall populations to have competition mechanics applied to if environmental status is FAMINE.
-
-private:
-
 
 };

@@ -134,7 +134,10 @@ int main()
 
 	//loop through species and match with species ID, 
 	for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
+	{
 		ds.displaySpeciesPopulationInfo(allSpecies.aliveSpeciesVec.at(i));
+		std::cout << std::endl;
+	}
 
 	std::cout << std::endl;
 #pragma endregion
@@ -154,65 +157,33 @@ int main()
 		//clear the temp population vector, to refill again.
 		vecTempPopulation.clear();
 
-		//keeping an tally of which life cycle it is.
-		std::cout << std::endl << "AFTER CYCLE: " << i + 1 << std::endl ;
 
-#pragma region WEIGHT_CALCULATIONS_&_ENVIRONMENTAL_STATUS_SETTING
-		//POPULATION WEIGHT CALCULATIONS.
+		//update the start of cycle species numbers.
+		sp.startCycleMemberships(allSpecies);
+		//reset the species cycle counts.
+		sp.resetCycleCounts(allSpecies);
 
-		//FOR TESTING...
-		//envir[0].fPopulationWeight = 500.0f;		//for ABUNDANCE
-		//envir[0].fPopulationWeight = 900.0f;		//for SUSTAINABLE
-		//envir[0].fPopulationWeight = 1100.0f;		//for PRESSURED
-		//envir[0].fPopulationWeight = 1400.0f;		//for CRITICAL
-		//envir[0].fPopulationWeight = 1700.0f;		//for FAMINE
 
-		//update the combined weight of all creatures.
+		//***NEW CYCLE*** - take a 1 off life spans.
 		for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
 		{
 			//iterate through creatures within the species
 			for (int j = 0; j < allSpecies.aliveSpeciesVec.at(i).speciesMembership.size(); j++)
 			{
-				envir[0].fPopulationWeight += allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j).creatureWeight;
-			}
-		}
-		//ENVIRONMENT STATUS SETTING.
-		comp.setEnvironmentalStatus(envir[0]);
-
-#pragma endregion
-
-#pragma region COMPETITION_STAGE
-		//get the environmental status that currently in.
-		comp.getEnvironmentStatus(envir[0]);
-
-		//iterate through the species.
-		for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
-		{
-			//get the population to compete, factoring creature size.
-			float popToCompete = comp.getPopulationToCompete(allSpecies.aliveSpeciesVec.at(i).speciesMembership.size(), allSpecies.aliveSpeciesVec.at(i).seedGeneStack.at(8));
-
-			//loop through the popToCompete size of the population, run fitness tests with the reduced environmental energy available.
-			for (int j = (allSpecies.aliveSpeciesVec.at(i).speciesMembership.size() - popToCompete);
-				j < allSpecies.aliveSpeciesVec.at(i).speciesMembership.size(); j++)
-			{
-				//generate a value of energy to remove from availability.
-				float fEnergyLost = 50.0f;		//hard set FOR NOOOOOOOOOOOWWWWWWWW
-				//fitness test with this environmental energy reduction.
-				ft.creatureFitnessTests(allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j), envir[0], fEnergyLost);
-
-				//if the creature has NOT survived and is NOT alive.
-				if (allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j).isAlive == false)
+				//check whether lifespan 0 or less, if so, remove from temp population.
+				if (allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j).lifeSpan <= 0)
 				{
 					//then remove from species membership...
 					allSpecies.aliveSpeciesVec.at(i).speciesMembership.erase(allSpecies.aliveSpeciesVec.at(i).speciesMembership.begin() + j);
 					j--;
-					//allSpecies.aliveSpeciesVec.at(i).cycleTotalDeadCount++;
-					allSpeciesPtr->aliveSpeciesVec.at(i).cycleTotalDeadCount++;
-					allSpecies.aliveSpeciesVec.at(i).cycleFailedFitnessDeadCount++;
+					allSpecies.aliveSpeciesVec.at(i).cycleTotalDeadCount++;
+					allSpecies.aliveSpeciesVec.at(i).cycleOldAgeDeadCount++;
 				}
 			}
 		}
-#pragma endregion
+
+		//keeping an tally of which life cycle it is.
+		std::cout << std::endl << "AFTER CYCLE: " << i + 1 << std::endl ;
 
 #pragma region FITNESS_TESTS
 		//SURVIVAL TEST STAGE...
@@ -240,6 +211,65 @@ int main()
 			}
 			//update the species membership count.
 			sp.updateSpeciesMembershipCounts(allSpecies.aliveSpeciesVec.at(i));
+		}
+#pragma endregion
+
+#pragma region WEIGHT_CALCULATIONS_&_ENVIRONMENTAL_STATUS_SETTING
+		//POPULATION WEIGHT CALCULATIONS.
+
+		//FOR TESTING...
+		envir[0].fPopulationWeight = 500.0f;		//for ABUNDANCE
+		//envir[0].fPopulationWeight = 900.0f;		//for SUSTAINABLE
+		//envir[0].fPopulationWeight = 1100.0f;		//for PRESSURED
+		//envir[0].fPopulationWeight = 1400.0f;		//for CRITICAL
+		//envir[0].fPopulationWeight = 1700.0f;		//for FAMINE
+
+		/*
+		//update the combined weight of all creatures.
+		for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
+		{
+			//iterate through creatures within the species
+			for (int j = 0; j < allSpecies.aliveSpeciesVec.at(i).speciesMembership.size(); j++)
+			{
+				envir[0].fPopulationWeight += allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j).creatureWeight;
+			}
+		}
+		*/
+		//ENVIRONMENT STATUS SETTING.
+		comp.setEnvironmentalStatus(envir[0]);
+
+#pragma endregion
+
+#pragma region COMPETITION_STAGE
+		//get the environmental status that currently in.
+		comp.getEnvironmentStatus(envir[0]);
+
+		//iterate through the species.
+		for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
+		{
+			//get the population to compete, factoring creature size.
+			int iPopToCompete = comp.getPopulationToCompete(allSpecies.aliveSpeciesVec.at(i).speciesMembership.size(), allSpecies.aliveSpeciesVec.at(i).seedGeneStack.at(8));
+
+			//loop through the popToCompete size of the population, run fitness tests with the reduced environmental energy available.
+			for (int j = (allSpecies.aliveSpeciesVec.at(i).speciesMembership.size() - iPopToCompete);
+				j < allSpecies.aliveSpeciesVec.at(i).speciesMembership.size(); j++)
+			{
+				//generate a value of energy to remove from availability.
+				float fEnergyLost = 50.0f;		//hard set FOR NOOOOOOOOOOOWWWWWWWW
+				//fitness test with this environmental energy reduction.
+				ft.creatureFitnessTests(allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j), envir[0], fEnergyLost);
+
+				//if the creature has NOT survived and is NOT alive.
+				if (allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j).isAlive == false)
+				{
+					//then remove from species membership...
+					allSpecies.aliveSpeciesVec.at(i).speciesMembership.erase(allSpecies.aliveSpeciesVec.at(i).speciesMembership.begin() + j);
+					j--;
+					//allSpecies.aliveSpeciesVec.at(i).cycleTotalDeadCount++;
+					allSpeciesPtr->aliveSpeciesVec.at(i).cycleTotalDeadCount++;
+					allSpecies.aliveSpeciesVec.at(i).cycleFailedFitnessDeadCount++;
+				}
+			}
 		}
 #pragma endregion
 
@@ -350,6 +380,9 @@ int main()
 
 #pragma endregion
 
+		//update the end of cycle species numbers.
+		sp.endCycleMemberships(allSpecies);
+
 #pragma region SPECIES_UPDATES
 		//UPDATE AND DISPLAY SPECIES DATA
 		//loop through species and match with the species ID, 
@@ -374,25 +407,7 @@ int main()
 #pragma endregion
 
 
-		//***END OF CYCLE*** 
-		//****QUESTION**** DO THIS HERE OR AT THE BEGINNING OF THE TURN... MESSING WITH END POPULATIONS HERE... MAYBE BETTER AT THE BEGINNING OF LOOP... CAN DO ALONGSIDE POPULATION WEIGHT CALCULATIONS.
-		//take a 1 off life spans, so go through species one by one.
-		for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
-		{
-			//iterate through creatures within the species
-			for (int j = 0; j < allSpecies.aliveSpeciesVec.at(i).speciesMembership.size(); j++)
-			{
-				//check whether lifespan 0 or less, if so, remove from temp population.
-				if (allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j).lifeSpan <= 0)
-				{
-					//then remove from species membership...
-					allSpecies.aliveSpeciesVec.at(i).speciesMembership.erase(allSpecies.aliveSpeciesVec.at(i).speciesMembership.begin() + j);
-					j--;
-					allSpecies.aliveSpeciesVec.at(i).cycleTotalDeadCount++;
-					allSpecies.aliveSpeciesVec.at(i).cycleOldAgeDeadCount++;
-				}
-			}
-		}
+
 		//update all the full, alive and extinct species lists.
 		sp.updateAllSpecies(allSpecies);
 		

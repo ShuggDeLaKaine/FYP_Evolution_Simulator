@@ -39,6 +39,6 @@ private:
 	std::vector<std::pair<float, std::vector<float>>> selectionTable;	//!< vector of pairs, contains a float (for the threshold score) and another vector of floats (for the gene stack of the creature). 
 	std::vector<std::pair<float, std::vector<float>>> toReproduceTable;		//!< vector of floats vectors, containing the gene stack information for those creatures which will reproduce.
 	
-	float selectionPercentage = 25.0f;
+	float selectionPercentage = 30.0f;
 	uint32_t percentToReproduce;
 };

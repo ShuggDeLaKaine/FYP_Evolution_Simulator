@@ -31,14 +31,13 @@ void Display::displaySurvivedPercentage(const Environment envir, int alive, int 
 
 void Display::displaySpeciesBirthDeathRates(SpeciesInfo species)
 {
-	/*
-	std::cout << "SPECIES " << species.speciesID << " offspring count this cycle is: " << species.cycleOffspringCount << std::endl;
-	std::cout << "SPECIES " << species.speciesID << " total death count this cycle is: " << species.cycleTotalDeadCount << "; " << 
-		species.cycleFailedFitnessDeadCount << " by failed Fitness Tests and " << species.cycleOldAgeDeadCount << " from old age." << std::endl;
-	*/
-	int result = species.cycleOffspringCount - species.cycleTotalDeadCount;
-	std::cout << "Change: " << result << ". Offspring: " << species.cycleOffspringCount << ". Total Deaths: " << species.cycleTotalDeadCount 
-		<< ". Fitness Failed: "<< species.cycleFailedFitnessDeadCount << ". Old Age: " << species.cycleOldAgeDeadCount << std::endl;
+	int result = species.endCycleMembers - species.startCycleMembers;
+	species.currentMembers = species.speciesMembership.size();
+	std::cout << "Change: " << result;
+	std::cout << ". Offspring: " << species.cycleOffspringCount;
+	std::cout << ". Total Deaths: " << species.cycleTotalDeadCount;
+	std::cout << ". Fitness Failed: " << species.cycleFailedFitnessDeadCount;
+	std::cout << ". Old Age: " << species.cycleOldAgeDeadCount << std::endl;
 }
 
 void Display::displaySpeciesPopulationInfo(SpeciesInfo species)
