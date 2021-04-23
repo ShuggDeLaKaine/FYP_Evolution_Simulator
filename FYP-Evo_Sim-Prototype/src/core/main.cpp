@@ -310,8 +310,8 @@ int main()
 			tempGeneStack.reserve(vecOffspringPopulation.at(i).geneStack.size());
 			tempGeneStack.assign(vecOffspringPopulation.at(i).geneStack.begin(), vecOffspringPopulation.at(i).geneStack.end());
 
-			//iterate through the tempGeneStack array. -3 on the size below so it does NOT mutate the final 3 elements, which are creature size, lifespan and id.
-			for(int j = 0; j < (tempGeneStack.size() - 3); j++)
+			//iterate through the tempGeneStack array. -4 on the size below so it does NOT mutate the final 4 elements, which are creature weight, creature size, lifespan and id.
+			for(int j = 0; j < (tempGeneStack.size() - 4); j++)
 			{
 				//run a mutation chance test on each element in vector, if it comes back true
 				if (mut.mutationTest(mutChance) == true)

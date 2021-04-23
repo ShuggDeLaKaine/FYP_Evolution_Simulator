@@ -25,22 +25,6 @@ struct Environment
 	inline float getTemperature() { return temperature; }			//!< get temperature.
 	inline float getOxygenRate() { return oxygenationRate; }		//!< get oxygenation rate.
 	inline int   getEnvironmentID() { return ID; }					//!< get the environmental id.
-
-	/*
-	float fVSmall = 0.45f;			//!< % of very small creature size populations to have competition mechanics applied to.
-	float fSmall  = 0.25f;			//!< % of small creature size populations to have competition mechanics applied to.
-	float fMedium = 0.15f;			//!< % of medium creature size populations to have competition mechanics applied to.
-	float fLarge  = 0.10f;			//!< % of large creature size populations to have competition mechanics applied to.
-	float fVLarge = 0.05f;			//!< % of very large creature size populations to have competition mechanics applied to.
-									
-	float fPressuredState = 0.3f;	//!< % of overall populations to have competition mechanics applied to if environmental status is PRESSURED.
-	float fCriticalState = 0.6f;	//!< % of overall populations to have competition mechanics applied to if environmental status is CRITICAL.
-	float fFamineState = 1.0f;		//!< % of overall populations to have competition mechanics applied to if environmental status is FAMINE.
-	*/
-
-	float minRange;					//!< range of 
-	float maxRange;					//!< range of 
-
 };
 
 /*	\class EnvironmentCreation
@@ -53,25 +37,25 @@ public:
 	~EnvironmentCreation();			//!< default deconstructor.
 
 	void environmentCreation(Environment& envir, float energyMin, float energyMax, float tempMin, 
-							 float tempMax, float oxygenMin, float oxygenMax);		//!< 
+							 float tempMax, float oxygenMin, float oxygenMax);		//!< generates a randomised environment.
 
-	uint32_t count = 0;							//!< 
+	uint32_t count = 0;							//!< count for environments.
 private:
 	inline float setEnergyAvailable(float min, float max) { 
 		energy = genFunc->uniformFloatBetween(min, max);
-		return energy; }						//!< 
+		return energy; }						//!< sets energy, randomised between min and max.
 	inline float setTemperature(float min, float max) { 
 		temp = genFunc->uniformFloatBetween(min, max);
-		return temp; }							//!< 
+		return temp; }							//!< sets temperature, randomised between min and max.
 	inline float setOxygenRate(float min, float max) { 
 		oxy = genFunc->uniformFloatBetween(min, max);
-		return oxy; }							//!< 
+		return oxy; }							//!< sets oxygen, randomised between min and max.
 	inline int   setEnvironmentID() { 
 		
-		return id; }							//!< 
+		return id; }							//!< sets the environments id.
 	inline float setEnvironmentalCapacity(float energyAvail, float multiplier) {
 		cap = energyAvail * multiplier;
-		return cap; }							//!<
+		return cap; }							//!< sets environmental capacity, multiplies energy by multiplier.
 
 	std::shared_ptr<GeneralFunctions> genFunc;	//!< ref to General Functions class.
 	float energy;								//!< holder for named var.

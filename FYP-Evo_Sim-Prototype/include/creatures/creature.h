@@ -59,22 +59,22 @@ struct Creature
 
 struct CreatureSettings
 {
-	float energyCentre = 300.0f;		//!< 
-	float energyGauss = 100.0f;			//!< 
-	float idealTempCentre = 15.0f;		//!< 
-	float idealTempGuass = 5.0f;		//!< 
-	float idealTempRangeMin = 0.25f;	//!< 
-	float idealTempRangeMax = 2.0f;		//!< 
-	float tolTempRangeMin = 0.5f;		//!< 
-	float tolTempRangeMax = 4.0f;		//!< 
-	float oxyCentre = 50.0f;			//!< 
-	float oxyGauss = 25.0f;				//!< 
-	float oxyRangeMin = 1.0f;			//!< 
-	float oxyRangeMax = 25.0f;			//!< 
-	float offspringMin = 2.0f;			//!< 
-	float offspringMax = 12.0f;			//!< 
-	uint32_t lifeMin = 1;				//!< 
-	uint32_t lifeMax = 6;				//!< 
+	float energyCentre = 400.0f;		//!< setting var for creature creation, centre point for energy.
+	float energyGauss = 150.0f;			//!< setting var for creature creation, gaussian range value for energy.
+	float idealTempCentre = 15.0f;		//!< setting var for creature creation, centre point for ideal temperature.
+	float idealTempGuass = 5.0f;		//!< setting var for creature creation, gaussian range for ideal temperature.
+	float idealTempRangeMin = 0.25f;	//!< setting var for creature creation, ideal temp min range.
+	float idealTempRangeMax = 2.0f;		//!< setting var for creature creation, ideal temp max range.
+	float tolTempRangeMin = 0.5f;		//!< setting var for creature creation, tolerated temp min range.
+	float tolTempRangeMax = 4.0f;		//!< setting var for creature creation, tolerated temp max range.
+	float oxyCentre = 50.0f;			//!< setting var for creature creation, centre point for oxygen.
+	float oxyGauss = 25.0f;				//!< setting var for creature creation, gaussian range for oxygen.
+	float oxyRangeMin = 1.0f;			//!< setting var for creature creation, oxygen min.
+	float oxyRangeMax = 25.0f;			//!< setting var for creature creation, oxygen max.
+	float offspringMin = 2.0f;			//!< setting var for creature creation, offspring litter size min.
+	float offspringMax = 12.0f;			//!< setting var for creature creation, offspring litter size max.
+	uint32_t lifeMin = 1;				//!< setting var for creature creation, min life span.
+	uint32_t lifeMax = 6;				//!< setting var for creature creation, max life span.
 };
 
 /*	\class CreatureCreation
@@ -90,15 +90,15 @@ public:
 		float idealTempRangeMin, float idealTempRangeMax, float tolTempRangeMin, float tolTempRangeMax, float oxyCentre, float oxyGauss,
 		float oxyRangeMin, float oxyRangeMax, float offspringMin, float offspringMax, uint32_t lifeMin, uint32_t lifeMax);				//!< create a creature, used in the seeding stage to randomly create creatures.
 
-	Creature createCreatureFromGeneStack(std::vector<float> newGeneStack);		//!< creates a creature from a geneStack.
-	void updateCreature(Creature &creature);	//!< update creatures variables with the new gene stack.
+	Creature createCreatureFromGeneStack(std::vector<float> newGeneStack);	//!< creates a creature from a geneStack.
+	void updateCreature(Creature &creature);								//!< update creatures variables with the new gene stack.
 	void addToGeneStack(std::vector<float>& geneStack, float newElement);	//!< adds an element to a gene stack.
 
-	void duplicateCreature(std::vector<Creature> &tempPopulationVec, Creature creatToDup);	//!< duplicate a creature.
+	void duplicateCreature(std::vector<Creature> &tempPopulationVec, Creature creatToDup);							//!< duplicate a creature.
 	void duplicatePopulationVectors(std::vector<Creature> &toPopulation, std::vector<Creature> &fromPopulation);	//!< move the temp vector into the main vector.
 
 	void passCreatureElement(const Creature sourceArray[], int sourceElement, Creature destinationArray[], int destinationSize);	//!< pass an arrays element.
-	void passCreatureArray(const Creature sourceArray[], Creature destinationArray[], uint32_t size);	//!< pass the creatures array on.
+	void passCreatureArray(const Creature sourceArray[], Creature destinationArray[], uint32_t size);								//!< pass the creatures array on.
 
 	float resetVariable(float minLow, float minHigh, float maxLow, float maxHigh);		//!< reset a variable.
 	void printCreatureVariables(const Creature creature);								//!< print the creatures variables to console.
