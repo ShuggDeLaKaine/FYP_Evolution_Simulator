@@ -719,7 +719,7 @@ for (int i = 1; i < environmentSize; i++)
 	printCreatureVariables(creat[12]);
 	*/
 	/*
-	//TESTING --- new passing by reference functions working as required.
+	//TESTING --- passing by reference functions working as required.
 	std::cout << "PRE-FITNESS TESTS --- Creature 2 is alive = ";
 	if (creat[1].isAlive == true)
 		std::cout << "TRUE" << std::endl;
@@ -738,6 +738,7 @@ for (int i = 1; i < environmentSize; i++)
 	else
 		std::cout << "ERROR --- no value" << std::endl;
 	*/
+
 	/*
 	std::cout << "Testing of energy, temperature & oxygenation levels." << std::endl;
 	//TESTING - energy levels.
