@@ -49,12 +49,10 @@ struct Creature
 
 	uint32_t creatureNumber;		//!< creation number within species.
 
-	//TO BRING IN.
-	//creatureSize;					//!< the 'size' of creature, used in weight, competetion, lifespan and litterSize mechanics.
 	CreatureSize creatureSize;		//!< the size of the creature, determines life span, weight, litterSize; initialised to VERY_SMALL.
 	float creatureWeight = 0.1f;	//!< the 'weight' of an individual creature on the environment it is in, initialised to a genetic 0.1f.
-	float litterSize = 3.0f;		//!< a float, if 5.45f, will definitely have 5 offspring and a 45% chance of 6.
-	int32_t lifeSpan = 3;			//!< if survives fitness tests, how many life spans the creature can survive. if 5.45, will definitely live 5 cycles, 45% chance to live 6.
+	float litterSize = 4.0f;		//!< a float, if 5.45f, will definitely have 5 offspring and a 45% chance of 6.
+	int32_t lifeSpan = 4;			//!< if survives fitness tests, how many life spans the creature can survive. if 5.45, will definitely live 5 cycles, 45% chance to live 6.
 };
 
 struct CreatureSettings

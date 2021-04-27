@@ -34,3 +34,16 @@ void EnvironmentCreation::environmentCreation(Environment& envir, float energyMi
 	envir.ID = count;
 	std::cout << "set environments ID to: " << envir.ID << std::endl;
 }
+
+
+void Environment::updatePopulationWeight(AllSpecies allSpecies)
+{
+	for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
+	{
+		//iterate through creatures within the species
+		for (int j = 0; j < allSpecies.aliveSpeciesVec.at(i).speciesMembership.size(); j++)
+		{
+			fPopulationWeight += allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j).creatureWeight;
+		}
+	}
+}

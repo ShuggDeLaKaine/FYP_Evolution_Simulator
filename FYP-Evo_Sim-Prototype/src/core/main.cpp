@@ -82,8 +82,8 @@ int main()
 						if (i == speciesPool[k].speciesID)
 						{
 							//MUTATE SPECIES STARTING POPULATIONS TO GIVE SOME VARIETY 
-							//-3 on the size below so it does NOT mutate the final 3 elements, which are creature size, lifespan and id.
-							for (int l = 0; l < (seedPopulationPool[i].geneStack.size() - 3); l++)
+							//-4 on the size below so it does NOT mutate the final 3 elements, which arem creature weight, creature size, lifespan and id.
+							for (int l = 0; l < (seedPopulationPool[i].geneStack.size() - 4); l++)
 							{
 								//and mutate each value in its gene stack slightly.
 								mut.mutationIntensity(seedMutIntensity, seedPopulationPool[i].geneStack.at(l), envir[0].mutationModifier);
@@ -218,14 +218,17 @@ int main()
 		//POPULATION WEIGHT CALCULATIONS.
 
 		//FOR TESTING...
-		envir[0].fPopulationWeight = 500.0f;		//for ABUNDANCE
+		//envir[0].fPopulationWeight = 500.0f;		//for ABUNDANCE
 		//envir[0].fPopulationWeight = 900.0f;		//for SUSTAINABLE
 		//envir[0].fPopulationWeight = 1100.0f;		//for PRESSURED
 		//envir[0].fPopulationWeight = 1400.0f;		//for CRITICAL
 		//envir[0].fPopulationWeight = 1700.0f;		//for FAMINE
 
-		/*
+		
 		//update the combined weight of all creatures.
+		envir[0].updatePopulationWeight(allSpecies);
+
+		/*
 		for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
 		{
 			//iterate through creatures within the species
@@ -235,6 +238,7 @@ int main()
 			}
 		}
 		*/
+
 		//ENVIRONMENT STATUS SETTING.
 		comp.setEnvironmentalStatus(envir[0]);
 

@@ -17,12 +17,12 @@ struct SpeciesInfo
 	std::vector<Creature> speciesMembership;	//!< vector of all creatures that are members of this species.
 	uint32_t currentMembers;					//!< number of current members that are alive in the species.
 	uint32_t previousMembers;					//!< number of last cycles membership.
-	uint32_t startCycleMembers;					//!< number of last cycles membership.
-	uint32_t endCycleMembers;					//!< number of last cycles membership.
-	uint32_t cycleOffspringCount;				//!< 
-	uint32_t cycleTotalDeadCount;				//!< 
-	uint32_t cycleFailedFitnessDeadCount;		//!< 
-	uint32_t cycleOldAgeDeadCount;				//!< 
+	uint32_t startCycleMembers;					//!< membership at start of cycle.
+	uint32_t endCycleMembers;					//!< membership at end of cycle.
+	uint32_t cycleOffspringCount;				//!< count of offspring this cycle.
+	uint32_t cycleTotalDeadCount;				//!< count of total dead this cycle.
+	uint32_t cycleFailedFitnessDeadCount;		//!< count of dead due to failed fitness test this cycle.
+	uint32_t cycleOldAgeDeadCount;				//!< count of dead due to old age this cycle.
 		
 	uint32_t test = 0;					
 

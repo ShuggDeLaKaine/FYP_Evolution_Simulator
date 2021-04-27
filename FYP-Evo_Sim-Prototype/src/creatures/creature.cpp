@@ -27,7 +27,7 @@ void CreatureCreation::creatureCreation(Creature & creature, float energyCentre,
 		//set creature weight, life span and litter size.
 		creature.creatureWeight = multiplier(creature.creatureWeight, 0.2f);
 		creature.lifeSpan = 1;	//As very small, hard set to 1, as that is all a very small creature should live for.
-		creature.litterSize = multiplier(creature.litterSize, 3.0f);
+		creature.litterSize = multiplier(creature.litterSize, 2.5f);
 		fStartEnergy = multiplier(fStartEnergy, 100.0f);	//CHANGE TO A RANDOM RANGE.
 		break;
 	case SMALL:
@@ -52,7 +52,7 @@ void CreatureCreation::creatureCreation(Creature & creature, float energyCentre,
 	case VERY_LARGE:
 		//set creature weight, life span and litter size.
 		creature.creatureWeight = multiplier(creature.creatureWeight, 1.8f);
-		creature.lifeSpan = multiplier(creature.lifeSpan, 3.0f);	
+		creature.lifeSpan = multiplier(creature.lifeSpan, 2.5f);	
 		creature.litterSize = 1.0f;	//As very large, hard set to 1, as that is all avery large creatures litter size should be.
 		fStartEnergy = multiplier(fStartEnergy, 500.0f);	//CHANGE TO A RANDOM RANGE.
 		break;
