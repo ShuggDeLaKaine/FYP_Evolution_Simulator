@@ -1,0 +1,65 @@
+[System]
+Name='FIS2_Testing'
+Type='mamdani'
+Version=2.0
+NumInputs=2
+NumOutputs=1
+NumRules=20
+AndMethod='prod'
+OrMethod='max'
+ImpMethod='prod'
+AggMethod='max'
+DefuzzMethod='centroid'
+
+[Input1]
+Name='light'
+Range=[0 100]
+NumMFs=5
+MF1='no_light':'trapmf',[0 0 0 1]
+MF2='low_light':'pimf',[0 0.5 30 55]
+MF3='moderate_light':'gaussmf',[15 55]
+MF4='high_light':'pimf',[60 85 99 100]
+MF5='complete_light':'smf',[98 100]
+
+[Input2]
+Name='alt_heat'
+Range=[-5 30]
+NumMFs=4
+MF1='none':'trapmf',[-1 -0.5 0.5 1]
+MF2='cold_current':'gbellmf',[4.5 12 -5]
+MF3='warm_current':'pimf',[0 1 10 20]
+MF4='thermal_vents':'smf',[10 20]
+
+[Output1]
+Name='heat'
+Range=[-5 50]
+NumMFs=7
+MF1='freezing':'trapmf',[-5 -5 0 0]
+MF2='cold':'trapmf',[0 0.5 2 3]
+MF3='cool':'pimf',[1 3 6 11]
+MF4='temperate':'gbellmf',[6.6 4 13]
+MF5='warm':'gbellmf',[7 4 24]
+MF6='hot':'gbellmf',[5 4 34]
+MF7='very_hot':'smf',[35 40]
+
+[Rules]
+1 1, 2 (1) : 1
+1 2, 2 (1) : 1
+1 3, 3 (1) : 1
+1 4, 5 (1) : 1
+2 1, 2 (1) : 1
+2 2, 2 (1) : 1
+2 3, 3 (1) : 1
+2 4, 6 (1) : 1
+3 1, 3 (1) : 1
+3 2, 2 (1) : 1
+3 3, 4 (1) : 1
+3 4, 6 (1) : 1
+4 1, 4 (1) : 1
+4 2, 3 (1) : 1
+4 3, 5 (1) : 1
+4 4, 7 (1) : 1
+5 1, 5 (1) : 1
+5 2, 4 (1) : 1
+5 3, 6 (1) : 1
+5 4, 7 (1) : 1

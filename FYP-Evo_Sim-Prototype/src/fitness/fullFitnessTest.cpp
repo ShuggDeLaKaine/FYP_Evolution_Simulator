@@ -35,7 +35,8 @@ void FullFitnessTest::creatureFitnessTests(CREAT &creature, Environment& environ
 void FullFitnessTest::creatureFitnessTests(CREAT & creature, Environment & environment, float energyReduction)
 {
 	//take the energy reduction from the available energy in the environment.
-	environment.energyAvailable = environment.energyAvailable - energyReduction;
+	//environment.energyAvailable = environment.energyAvailable - energyReduction;
+	float fCompeteAvailableEnergy = environment.energyAvailable - energyReduction;
 
 	//check that the creature is alive to do checks on in the first place.
 	if (creature.isAlive)
@@ -57,7 +58,7 @@ void FullFitnessTest::creatureFitnessTests(CREAT & creature, Environment & envir
 				//test three - energy fitness test.
 				creature.finalEnergyDemand = oxyFF.multiplier(creature.initialEnergyDemand, creature.oxyTol);
 				creature.finalEnergyDemand = tempFF.multiplier(creature.initialEnergyDemand, creature.tempTol, creature.tempIdeal);
-				creature.isAlive = energyFF.fitnessTest(creature.finalEnergyDemand, environment.energyAvailable);
+				creature.isAlive = energyFF.fitnessTest(creature.finalEnergyDemand, fCompeteAvailableEnergy);	//change here, using the updated fTempEnergy.
 			}
 		}
 

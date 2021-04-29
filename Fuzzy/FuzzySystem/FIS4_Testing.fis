@@ -1,0 +1,73 @@
+[System]
+Name='FIS4_Testing'
+Type='mamdani'
+Version=2.0
+NumInputs=2
+NumOutputs=1
+NumRules=26
+AndMethod='prod'
+OrMethod='max'
+ImpMethod='prod'
+AggMethod='max'
+DefuzzMethod='lom'
+
+[Input1]
+Name='energy'
+Range=[0 1000]
+NumMFs=5
+MF1='barren':'zmf',[10 100]
+MF2='sparse':'gbellmf',[135 4 200]
+MF3='moderate':'gbellmf',[150 4 480]
+MF4='abundant':'gbellmf',[145 4 760]
+MF5='eden':'smf',[850 950]
+
+[Input2]
+Name='oxygen'
+Range=[0 100]
+NumMFs=6
+MF1='death_zone':'zmf',[0.25 1]
+MF2='very_low':'gbellmf',[12 2.5 10]
+MF3='low':'gbellmf',[14 3 30]
+MF4='moderate':'gbellmf',[14 3 55]
+MF5='high':'gbellmf',[14 3 78]
+MF6='very_high':'smf',[83 92]
+
+[Output1]
+Name='survive_score'
+Range=[-100 100]
+NumMFs=7
+MF1='impossible':'zmf',[-98 -95]
+MF2='very_low':'gaussmf',[25 -80]
+MF3='low':'gaussmf',[25 -40]
+MF4='possible':'gaussmf',[25 0]
+MF5='high':'gaussmf',[25 40]
+MF6='very_high':'gaussmf',[25 80]
+MF7='guaranteed':'smf',[95 98]
+
+[Rules]
+0 1, 1 (1) : 1
+1 2, 2 (1) : 1
+1 3, 2 (1) : 1
+1 4, 2 (1) : 1
+1 5, 2 (1) : 1
+1 6, 2 (1) : 1
+2 2, 2 (1) : 1
+2 3, 3 (1) : 1
+2 4, 3 (1) : 1
+2 5, 4 (1) : 1
+2 6, 4 (1) : 1
+3 2, 3 (1) : 1
+3 3, 4 (1) : 1
+3 4, 4 (1) : 1
+3 5, 5 (1) : 1
+3 6, 5 (1) : 1
+4 2, 4 (1) : 1
+4 3, 5 (1) : 1
+4 4, 6 (1) : 1
+4 5, 6 (1) : 1
+4 6, 7 (1) : 1
+5 2, 5 (1) : 1
+5 3, 6 (1) : 1
+5 4, 6 (1) : 1
+5 5, 7 (1) : 1
+5 6, 7 (1) : 1

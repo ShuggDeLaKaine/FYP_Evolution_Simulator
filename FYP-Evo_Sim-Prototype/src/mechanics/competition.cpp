@@ -84,44 +84,48 @@ void Competition::getEnvironmentStatus(Environment &environment)
 //void Competition::getCreatureSize(AllSpecies speciesList, int sizeGeneElement)
 float Competition::getPopulationToCompete(int speciesMembershipSize, int sizeGeneElement)
 {
-	//iCreatureSIZE = sizeGeneElement;
+	float tempPercent = fToCompetePercent;
 
-	//switch (iCreatureSIZE)
 	switch (sizeGeneElement)
 	{
 	case VERY_SMALL:
 		//update 'competing' var to apply the relevant size % multiplier.
-		fToCompetePercent *= fVSmall;
+		//fToCompetePercent *= fVSmall;
+		tempPercent *= fVSmall;
 		//get final population number to compete by multiplying membership size by percentage to compete value.
-		iFinalPopToCompete = speciesMembershipSize * static_cast<int>(fToCompetePercent);
+		iFinalPopToCompete = speciesMembershipSize * tempPercent;
 		break;
 
 	case SMALL:
 		//update 'competing' var to apply the relevant size % multiplier.
-		fToCompetePercent *= fSmall;
+		//fToCompetePercent *= fSmall;
+		tempPercent *= fSmall;
 		//get final population number to compete by multiplying membership size by percentage to compete value.
-		iFinalPopToCompete = speciesMembershipSize * static_cast<int>(fToCompetePercent);
+		iFinalPopToCompete = speciesMembershipSize * tempPercent;
 		break;
 
 	case MEDIUM:
 		//update 'competing' var to apply the relevant size % multiplier.
-		fToCompetePercent *= fMedium;
+		//fToCompetePercent *= fMedium;
+		tempPercent *= fMedium;
 		//get final population number to compete by multiplying membership size by percentage to compete value.
-		iFinalPopToCompete = speciesMembershipSize * fToCompetePercent;
+		iFinalPopToCompete = speciesMembershipSize * tempPercent;
 		break;
 
 	case LARGE:
 		//update 'competing' var to apply the relevant size % multiplier.
-		fToCompetePercent *= fLarge;
+		//fToCompetePercent *= fLarge;
+		tempPercent *= fLarge;
 		//get final population number to compete by multiplying membership size by percentage to compete value.
-		iFinalPopToCompete = speciesMembershipSize * static_cast<int>(fToCompetePercent);
+		iFinalPopToCompete = speciesMembershipSize * tempPercent;
 		break;
 
 	case VERY_LARGE:
 		//update 'competing' var to apply the relevant size % multiplier.
-		fToCompetePercent *= fVLarge;
+		//fToCompetePercent *= fVLarge;
+		tempPercent *= fVLarge;
 		//get final population number to compete by multiplying membership size by percentage to compete value.
-		iFinalPopToCompete = speciesMembershipSize * static_cast<int>(fToCompetePercent);
+		iFinalPopToCompete = speciesMembershipSize * tempPercent;
 		break;
 	}
 

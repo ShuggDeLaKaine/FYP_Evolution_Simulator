@@ -35,7 +35,7 @@ void EnvironmentCreation::environmentCreation(Environment& envir, float energyMi
 	std::cout << "set environments ID to: " << envir.ID << std::endl;
 }
 
-
+/*
 void Environment::updatePopulationWeight(AllSpecies allSpecies)
 {
 	for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
@@ -47,3 +47,4 @@ void Environment::updatePopulationWeight(AllSpecies allSpecies)
 		}
 	}
 }
+*/

@@ -1,0 +1,73 @@
+[System]
+Name='FIS5_Testing'
+Type='mamdani'
+Version=2.0
+NumInputs=2
+NumOutputs=1
+NumRules=25
+AndMethod='min'
+OrMethod='max'
+ImpMethod='min'
+AggMethod='max'
+DefuzzMethod='mom'
+
+[Input1]
+Name='popullant'
+Range=[0 100]
+NumMFs=5
+MF1='no_pollution':'zmf',[0 3]
+MF2='low_pollution':'gbellmf',[17.5 3 15]
+MF3='moderate_pollution':'gaussmf',[15 50]
+MF4='high_pollution':'gbellmf',[17.5 3 85]
+MF5='complete_pollution':'smf',[95 100]
+
+[Input2]
+Name='survive_score'
+Range=[-100 100]
+NumMFs=7
+MF1='impossible':'zmf',[-98 -95]
+MF2='very_low':'gaussmf',[25 -80]
+MF3='low':'gaussmf',[25 -40]
+MF4='possible':'gaussmf',[25 0]
+MF5='high':'gaussmf',[25 40]
+MF6='very_high':'gaussmf',[25 80]
+MF7='guaranteed':'smf',[95 98]
+
+[Output1]
+Name='survive_score'
+Range=[-100 100]
+NumMFs=7
+MF1='impossible':'zmf',[-98 -95]
+MF2='very_low':'gaussmf',[25 -80]
+MF3='low':'gaussmf',[25 -40]
+MF4='possible':'gaussmf',[25 0]
+MF5='high':'gaussmf',[25 40]
+MF6='very_high':'gaussmf',[25 80]
+MF7='guaranteed':'smf',[95 98]
+
+[Rules]
+5 1, 1 (1) : 2
+1 2, 2 (1) : 1
+1 3, 3 (1) : 1
+1 4, 4 (1) : 1
+1 5, 5 (1) : 1
+1 6, 6 (1) : 1
+1 7, 7 (1) : 1
+2 2, 1 (1) : 1
+2 3, 2 (1) : 1
+2 4, 3 (1) : 1
+2 5, 4 (1) : 1
+2 6, 5 (1) : 1
+2 7, 6 (1) : 1
+3 2, 1 (1) : 1
+3 3, 1 (1) : 1
+3 4, 2 (1) : 1
+3 5, 3 (1) : 1
+3 6, 4 (1) : 1
+3 7, 5 (1) : 1
+4 2, 1 (1) : 1
+4 3, 1 (1) : 1
+4 4, 1 (1) : 1
+4 5, 2 (1) : 1
+4 6, 3 (1) : 1
+4 7, 4 (1) : 1

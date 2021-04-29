@@ -5,10 +5,10 @@
 int main()
 {
 #pragma region ENVIRONMENTS
-	//'BAAAAAAD' Testing Environment.
-	envir[0].energyAvailable = 100.0f;
-	envir[0].temperature = 6.0f;
-	envir[0].oxygenationRate = 20.0f;
+	//'Default' Testing Environment.
+	envir[0].energyAvailable = 150.0f;
+	envir[0].temperature = 12.0f;
+	envir[0].oxygenationRate = 25.0f;
 	envir[0].fEnvironmentCapacity = envir[0].energyAvailable * envir[0].fCapacityMultiplier;
 	envir[0].ID = 1;
 #pragma endregion
@@ -16,7 +16,6 @@ int main()
 	genFunc.reset(new GeneralFunctions);
 	genFunc->start();
 
-	//SpeciesInfo* speciesPtr = &allSpecies.aliveSpeciesVec;
 	AllSpecies* allSpeciesPtr = &allSpecies;
 
 	uint32_t populationSize = (sizeof(seedPopulationPool) / sizeof(*seedPopulationPool));
@@ -27,8 +26,6 @@ int main()
 		bSuccessfulSeed = true;
 	else
 		bSuccessfulSeed = false;
-
-
 
 #pragma region SEED_POPULATION_STAGE
 	do {
@@ -207,7 +204,15 @@ int main()
 					allSpecies.aliveSpeciesVec.at(i).cycleFailedFitnessDeadCount++;
 				}
 				//good time to reduce life spans by 1 as before the offspring and won't risk preemptively reducing offsprings life spans.
-				allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j).lifeSpan -= 1;
+				//need a check to make sure species membership has a value to begin with, if none will throw of of bounds.
+				if(allSpecies.aliveSpeciesVec.at(i).speciesMembership.size() > 0)
+				{
+					//need a check to see if j is -1, can throw things out of range here, if so change to hardcode to element 0, otherwise keep at j.
+					if (j < 0)					
+						allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(0).lifeSpan -= 1;
+					else
+						allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j).lifeSpan -= 1;
+				}
 			}
 			//update the species membership count.
 			sp.updateSpeciesMembershipCounts(allSpecies.aliveSpeciesVec.at(i));
@@ -224,23 +229,38 @@ int main()
 		//envir[0].fPopulationWeight = 1400.0f;		//for CRITICAL
 		//envir[0].fPopulationWeight = 1700.0f;		//for FAMINE
 
-		
-		//update the combined weight of all creatures.
-		envir[0].updatePopulationWeight(allSpecies);
 
-		/*
-		for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
+		//reset the population weight, ready to be weighed again.
+		envir[0].fPopulationWeight = 0.0f;
+
+		if(allSpecies.aliveSpeciesVec.size() != 0)
 		{
-			//iterate through creatures within the species
-			for (int j = 0; j < allSpecies.aliveSpeciesVec.at(i).speciesMembership.size(); j++)
+			//iterate through per species.
+			for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
 			{
-				envir[0].fPopulationWeight += allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j).creatureWeight;
+				float fSpeciesWeight = allSpecies.aliveSpeciesVec.at(i).speciesGeneStack.at(7); //element 7 of gene stack is species creature weight.
+				int iSpeciesSize = allSpecies.aliveSpeciesVec.at(i).speciesMembership.size();
+				float fTotalSpeciesWeight = iSpeciesSize * fSpeciesWeight;
+				//add to the total combined population weight.
+				envir[0].fPopulationWeight += fTotalSpeciesWeight;
 			}
-		}
-		*/
+		} 
+
+		std::cout << "Total Creature Weight is: " << envir[0].fPopulationWeight << std::endl;
 
 		//ENVIRONMENT STATUS SETTING.
 		comp.setEnvironmentalStatus(envir[0]);
+		std::cout << "Current Environmental Status is: ";
+		if(envir[0].currentStatus == 0)
+			std::cout << "ABUNDANCE" << std::endl;
+		else if(envir[0].currentStatus == 1)
+			std::cout << "SUSTAINABLE" << std::endl;
+		else if (envir[0].currentStatus == 2)
+			std::cout << "PRESSURED" << std::endl;
+		else if (envir[0].currentStatus == 3)
+			std::cout << "CRITICAL" << std::endl;
+		else if (envir[0].currentStatus == 4)
+			std::cout << "FAMINE" << std::endl;
 
 #pragma endregion
 
@@ -259,7 +279,17 @@ int main()
 				j < allSpecies.aliveSpeciesVec.at(i).speciesMembership.size(); j++)
 			{
 				//generate a value of energy to remove from availability.
-				float fEnergyLost = 50.0f;		//hard set FOR NOOOOOOOOOOOWWWWWWWW
+				//float fEnergyLost = 50.0f;		//hard set FOR NOOOOOOOOOOOWWWWWWWW
+				float fEnergyLost = allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j).finalEnergyDemand;
+				if (envir[0].currentStatus != FAMINE)
+				{
+					fEnergyLost = fEnergyLost * 2.0f;		//a 200% penalty of creatures energy demand.
+				}
+				else
+				{
+					float fFamineMulti = genFunc->uniformFloatBetween(4.0f, 8.0f);
+					fEnergyLost = fEnergyLost * fFamineMulti;
+				}
 				//fitness test with this environmental energy reduction.
 				ft.creatureFitnessTests(allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j), envir[0], fEnergyLost);
 
@@ -283,6 +313,17 @@ int main()
 		//loop through the different species. 
 		for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
 		{
+			//FIRST get the % of species population to reproduce.
+			//check if in environmental status... 
+			if (envir[0].currentStatus == FAMINE)
+				sel.selectionPercentage = sel.selectionPercentage * 0.2f;	//FAMINE state reduce parent seletion by 80%.
+			else if(envir[0].currentStatus == CRITICAL)
+				sel.selectionPercentage = sel.selectionPercentage * 0.5f;	//CRITICAL state reduce parent seletion by 50%.
+			else if (envir[0].currentStatus == PRESSURED)
+				sel.selectionPercentage = sel.selectionPercentage * 0.8f;	//PRESSURED state reduce parent seletion by 20%.
+			else
+				sel.selectionPercentage = 30.0f;
+
 			//clear tempReproduce vec, fill with selected paired parents gene stacks.
 			tempReproduce.clear();
 			tempReproduce = sel.parentSelection(allSpecies.aliveSpeciesVec.at(i));
@@ -383,9 +424,10 @@ int main()
 		vecOffspringPopulation.clear();
 
 #pragma endregion
-
 		//update the end of cycle species numbers.
 		sp.endCycleMemberships(allSpecies);
+		//update all the full, alive and extinct species lists.
+		sp.updateAllSpecies(allSpecies);
 
 #pragma region SPECIES_UPDATES
 		//UPDATE AND DISPLAY SPECIES DATA
@@ -410,11 +452,6 @@ int main()
 		}
 #pragma endregion
 
-
-
-		//update all the full, alive and extinct species lists.
-		sp.updateAllSpecies(allSpecies);
-		
 		//update species membership counts
 		for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
 			sp.updateSpeciesMembershipCounts(allSpecies.aliveSpeciesVec.at(i));
@@ -436,4 +473,3 @@ int main()
 	std::cout << std::endl << std::endl << "                    ********    SIMULATION ENDED    ********" << std::endl;
 	genFunc->stop();
 }
-
