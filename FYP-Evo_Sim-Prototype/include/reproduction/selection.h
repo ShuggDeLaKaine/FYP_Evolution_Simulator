@@ -15,9 +15,7 @@ struct greater
 	bool operator()(T const &a, T const &b) const { return a > b; }
 };
 
-/*	\class Selection
-*	\brief Class...
-*/
+
 class Selection
 {
 public:

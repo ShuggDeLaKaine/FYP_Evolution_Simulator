@@ -97,11 +97,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\Resources\OpenGL\GLEW\include\GL;C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\Resources\OpenGL\GLFW\include\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>fuzzylite.dll</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\Resources\OpenGL\GLEW\lib\Release\Win32;C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\Resources\OpenGL\GLFW\lib-vc2015</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32s.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -130,13 +132,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\Resources\OpenGL\GLEW\include\GL;C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\Resources\OpenGL\GLFW\include\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>fuzzylite.dll</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\Resources\OpenGL\GLEW\lib\Release\Win32;C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\Resources\OpenGL\GLFW\lib-vc2015</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32s.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -169,12 +173,10 @@
     <ClCompile Include="src\fitness\fullFitnessTest.cpp" />
     <ClCompile Include="src\fitness\oxygenFitnessTest.cpp" />
     <ClCompile Include="src\fitness\temperatureFitnessTest.cpp" />
-    <ClCompile Include="savedCode.cpp" />
     <ClCompile Include="src\mechanics\competition.cpp" />
     <ClCompile Include="src\reproduction\crossover.cpp" />
     <ClCompile Include="src\reproduction\elitismSelection.cpp" />
     <ClCompile Include="src\reproduction\mutation.cpp" />
-    <ClCompile Include="src\reproduction\rouletteSelection.cpp" />
     <ClCompile Include="src\reproduction\selection.cpp" />
     <ClCompile Include="src\reproduction\verusSelection.cpp" />
     <ClCompile Include="tests.cpp" />
@@ -198,9 +200,13 @@
     <ClInclude Include="include\reproduction\crossover.h" />
     <ClInclude Include="include\reproduction\elitismSelection.h" />
     <ClInclude Include="include\reproduction\mutation.h" />
-    <ClInclude Include="include\reproduction\rouletteSelection.h" />
     <ClInclude Include="include\reproduction\selection.h" />
     <ClInclude Include="include\reproduction\verusSelection.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="glew32.dll" />
+    <None Include="include\core\glew32.dll" />
+    <None Include="src\core\glew32.dll" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -30,9 +30,7 @@ struct Environment
 	inline int   getEnvironmentID() { return ID; }					//!< get the environmental id.
 };
 
-/*	\class EnvironmentCreation
-*	\brief Class...
-*/
+
 class EnvironmentCreation
 {
 public:

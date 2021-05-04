@@ -9,9 +9,6 @@
 #include "creatures/species.h"
 
 
-/*	\class Competition
-*	\brief Class...
-*/
 class Competition
 {
 public:
@@ -20,9 +17,9 @@ public:
 	float getPopulationToCompete(int speciesMembershipSize, int sizeGeneElement);
 
 private:
-	float fToCompetePercent = 1.0f;			//!< 
-	int iCreatureSIZE = 0;					//!< 
-	int iFinalPopToCompete = 0;				//!< 
+	float fToCompetePercent = 1.0f;			 
+	int iCreatureSIZE = 0;					 
+	int iFinalPopToCompete = 0;				
 
 	float fCriticalMultiplier  = 1.5f;		//!< multiplier for environment capacity/creature weight comparisons.
 	float fPressuredMultiplier = 1.25f;		//!< multiplier for environment capacity/creature weight comparisons.

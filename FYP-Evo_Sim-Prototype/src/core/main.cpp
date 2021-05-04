@@ -287,7 +287,7 @@ int main()
 				}
 				else
 				{
-					float fFamineMulti = genFunc->uniformFloatBetween(4.0f, 8.0f);
+					float fFamineMulti = genFunc->uniformFloatBetween(4.0f, 8.0f);	//much larger penalty between 400-800% for famine conditions.
 					fEnergyLost = fEnergyLost * fFamineMulti;
 				}
 				//fitness test with this environmental energy reduction.
@@ -345,9 +345,6 @@ int main()
 
 #pragma region MUTATION_STAGE
 		//MUTATION STAGE - ran on the offspring population as they are the only ones who need to be mutation checks ran on them.
-		float mutChance = 2.5f;
-		float mutInten = 2.5f;
-
 		for (int i = 0; i < vecOffspringPopulation.size(); i++)
 		{
 			//clear, reserve size and assign current creatures gene stack to a temporary gene stack.

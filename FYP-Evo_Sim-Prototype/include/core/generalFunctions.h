@@ -6,9 +6,6 @@
 #include "system.h"
 
 
-/*	\class GeneralFunctions
-*	\brief Class...
-*/
 class	GeneralFunctions : public System
 {
 public:

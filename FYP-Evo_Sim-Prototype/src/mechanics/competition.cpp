@@ -90,7 +90,6 @@ float Competition::getPopulationToCompete(int speciesMembershipSize, int sizeGen
 	{
 	case VERY_SMALL:
 		//update 'competing' var to apply the relevant size % multiplier.
-		//fToCompetePercent *= fVSmall;
 		tempPercent *= fVSmall;
 		//get final population number to compete by multiplying membership size by percentage to compete value.
 		iFinalPopToCompete = speciesMembershipSize * tempPercent;
@@ -98,7 +97,6 @@ float Competition::getPopulationToCompete(int speciesMembershipSize, int sizeGen
 
 	case SMALL:
 		//update 'competing' var to apply the relevant size % multiplier.
-		//fToCompetePercent *= fSmall;
 		tempPercent *= fSmall;
 		//get final population number to compete by multiplying membership size by percentage to compete value.
 		iFinalPopToCompete = speciesMembershipSize * tempPercent;
@@ -106,7 +104,6 @@ float Competition::getPopulationToCompete(int speciesMembershipSize, int sizeGen
 
 	case MEDIUM:
 		//update 'competing' var to apply the relevant size % multiplier.
-		//fToCompetePercent *= fMedium;
 		tempPercent *= fMedium;
 		//get final population number to compete by multiplying membership size by percentage to compete value.
 		iFinalPopToCompete = speciesMembershipSize * tempPercent;
@@ -122,7 +119,6 @@ float Competition::getPopulationToCompete(int speciesMembershipSize, int sizeGen
 
 	case VERY_LARGE:
 		//update 'competing' var to apply the relevant size % multiplier.
-		//fToCompetePercent *= fVLarge;
 		tempPercent *= fVLarge;
 		//get final population number to compete by multiplying membership size by percentage to compete value.
 		iFinalPopToCompete = speciesMembershipSize * tempPercent;

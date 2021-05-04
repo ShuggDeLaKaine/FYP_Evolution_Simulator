@@ -5,7 +5,7 @@
 
 CreatureCreation::~CreatureCreation()
 {
-	//***NEED TO*** kill that shared pointer to the genFuncs 
+	
 
 }
 

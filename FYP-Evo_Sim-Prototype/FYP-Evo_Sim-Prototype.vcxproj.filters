@@ -60,9 +60,6 @@
     <ClCompile Include="src\creatures\creature.cpp">
       <Filter>code\src</Filter>
     </ClCompile>
-    <ClCompile Include="savedCode.cpp">
-      <Filter>code\src</Filter>
-    </ClCompile>
     <ClCompile Include="src\fitness\fullFitnessTest.cpp">
       <Filter>code\src</Filter>
     </ClCompile>
@@ -82,9 +79,6 @@
       <Filter>code\src</Filter>
     </ClCompile>
     <ClCompile Include="src\reproduction\elitismSelection.cpp">
-      <Filter>code\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\reproduction\rouletteSelection.cpp">
       <Filter>code\src</Filter>
     </ClCompile>
     <ClCompile Include="src\reproduction\verusSelection.cpp">
@@ -146,9 +140,6 @@
     <ClInclude Include="include\reproduction\selection.h">
       <Filter>code\include</Filter>
     </ClInclude>
-    <ClInclude Include="include\reproduction\rouletteSelection.h">
-      <Filter>code\include</Filter>
-    </ClInclude>
     <ClInclude Include="include\reproduction\elitismSelection.h">
       <Filter>code\include</Filter>
     </ClInclude>
@@ -161,5 +152,10 @@
     <ClInclude Include="include\mechanics\competition.h">
       <Filter>code\include</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\core\glew32.dll" />
+    <None Include="include\core\glew32.dll" />
+    <None Include="glew32.dll" />
   </ItemGroup>
 </Project>
