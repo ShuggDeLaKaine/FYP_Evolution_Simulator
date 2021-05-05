@@ -22,8 +22,6 @@ struct Environment
 	float fCapacityMultiplier = 10.0f;	//!< multiplier for getting environmentalCapacity, multiple this my energyAvailable.
 	float fWeightOffset = 100.0f;		//!< offset to +/- population weight to environmental capacity, to give status' of SUSTAINABLE and PRESSURED.
 
-	//void updatePopulationWeight(AllSpecies allSpecies);		//!< function to update the combined weight of the population in the environment.
-
 	inline float getEnergyAvailable() { return energyAvailable; }	//!< get energyAvailable.
 	inline float getTemperature() { return temperature; }			//!< get temperature.
 	inline float getOxygenRate() { return oxygenationRate; }		//!< get oxygenation rate.

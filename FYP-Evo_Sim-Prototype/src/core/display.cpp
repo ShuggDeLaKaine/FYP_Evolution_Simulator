@@ -47,7 +47,6 @@ void Display::displaySpeciesPopulationInfo(SpeciesInfo species)
 		std::cout << "WARNING... Species " << species.speciesID << " currentMembers NOT equal to .size() of vector speciesMembership";
 	else
 		//number of current alive members and members overall.
-		//std::cout << "SPECIES " << species.speciesID << " has " << species.currentMembers << " current members. " << std::endl;
 		std::cout << "SPECIES " << species.speciesID << " has " << species.speciesMembership.size() << " current members. ";
 }
 
@@ -93,6 +92,22 @@ void Display::displayGeneStackInfo(SpeciesInfo species, std::vector<float> geneS
 void Display::displayGeneStackChange(SpeciesInfo species, std::vector<float> geneStackSeed, std::vector<float> geneStackCurrent)
 {
 	std::cout << std::endl << "SPECIES " << species.speciesID << " -- DIFFERENCE in SEED to END Gene Stacks:" << std::endl;
+
+	int creatSize = static_cast<int>(geneStackCurrent.at(8));
+	std::cout << "Creature Size: ";
+	if (creatSize == 0)
+		std::cout << "VERY SMALL" << std::endl;
+	else if (creatSize == 1)
+		std::cout << "SMALL" << std::endl;
+	else if (creatSize == 2)
+		std::cout << "MEDIUM" << std::endl;
+	else if (creatSize == 3)
+		std::cout << "LARGE" << std::endl;
+	else if (creatSize == 4)
+		std::cout << "VERY LARGE" << std::endl;
+	else
+		std::cout << "???" << std::endl;
+
 	std::cout << "Energy Demand: " << genFunc->roundFloat(geneStackCurrent.at(0) - geneStackSeed.at(0)) << std::endl;
 	std::cout << "Ideal Temperature: " << genFunc->roundFloat(geneStackCurrent.at(1) - geneStackSeed.at(1)) << std::endl;
 	std::cout << "Ideal Temperature Range: " << genFunc->roundFloat(geneStackCurrent.at(2) - geneStackSeed.at(2)) << std::endl;

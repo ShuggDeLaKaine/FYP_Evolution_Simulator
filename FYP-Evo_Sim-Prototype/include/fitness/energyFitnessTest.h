@@ -3,9 +3,6 @@
 #include "fitnessFunctions.h"
 
 
-/*	\class EnergyFitnessTest
-*	\brief Class...
-*/
 class EnergyFitnessTest : public FitnessFunctions
 {
 public:

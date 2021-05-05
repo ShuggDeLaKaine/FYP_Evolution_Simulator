@@ -10,9 +10,7 @@
 
 typedef struct Creature CREAT;
 
-/*	\class FullFitnessTest
-*	\brief Class...
-*/
+
 class FullFitnessTest
 {
 public:

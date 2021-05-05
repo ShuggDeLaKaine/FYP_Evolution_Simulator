@@ -5,9 +5,7 @@
 #include "core/generalFunctions.h"
 
 
-/*	\class Display
-*	\brief Class...
-*/
+
 class Display
 {
 public:

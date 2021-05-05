@@ -3,7 +3,7 @@
 
 Species::Species()
 {
-	//as.fullSpeciesList.clear();
+	
 }
 
 void Species::createNewSpecies(SpeciesInfo & species, std::vector<float> & geneStack, uint32_t creatureID)

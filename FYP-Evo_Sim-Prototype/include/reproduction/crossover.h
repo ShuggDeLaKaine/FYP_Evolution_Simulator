@@ -6,9 +6,6 @@
 #include "creatures/creature.h"
 
 
-/*	\class Crossover
-*	\brief Class...
-*/
 class Crossover
 {
 public:

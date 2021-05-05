@@ -42,8 +42,6 @@ int main()
 			cc.addToGeneStack(seedPopulationPool[i].geneStack, seedPopulationPool[i].creatureID);
 		}
 
-		//std::cout << std::endl << "SEED POPULATION STAGE" << std::endl;
-
 		//loop through this population and run the fitness tests against them to determine which of the seed population will survive and populate the start population.
 		for (int i = 0; i < populationSize; i++)
 		{
@@ -106,8 +104,6 @@ int main()
 		sp.updateAllSpecies(allSpecies);
 
 		//loop through and update the membership counts of each species.
-		//for (int i = 0; i < allSpecies.fullSpeciesVec.size(); i++)
-		//	sp.updateSpeciesMembershipCounts(allSpecies.fullSpeciesVec.at(i));
 		for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
 			sp.updateSpeciesMembershipCounts(allSpecies.aliveSpeciesVec.at(i));
 
@@ -123,21 +119,28 @@ int main()
 	//			                           ************    FIRST POPULATION STAGE    ************
 		//update the CURRENT population vector from the temporary population vector.
 	cc.duplicatePopulationVectors(vecCurrentPopulation, vecTempPopulation);
-
-	//display required information about survival and populations.
-	///ds.displaySurvivedPercentage(envir[0], isAlive, populationSize);
-
-	/*
-	//loop through species and match with species ID, 
-	for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
-	{
-		ds.displaySpeciesPopulationInfo(allSpecies.aliveSpeciesVec.at(i));
-		std::cout << std::endl;
-	}
-	*/
 	std::cout << std::endl;
 #pragma endregion
 
+#pragma region USER_INPUT_CYCLES
+	std::cout << "Please choose how many LIFE CYCLES you would like to simulation to run..." << std::endl;
+	std::cout << "If unsure, 10, 15 or 20 are suggested as appropriate life cycles to run." << std::endl;
+	int num;
+	std::cin >> num;
+	if(!num)
+	{
+		LIFE_CYCLES = 10;
+	}
+	else if (num > 0 && num <= 100)
+	{
+		LIFE_CYCLES = num;
+	}
+	else if (num > 100)
+	{
+		std::cout << "More than 100 life cycles is a long simulations, set to 100" << std::endl;
+		LIFE_CYCLES = 100;
+	}
+#pragma endregion
 
 //                                 ************    MAIN PART - LIFE CYCLE STAGE    ************
 	//iterate over life cycles...
@@ -241,9 +244,6 @@ int main()
 		} 
 		//ENVIRONMENT STATUS SETTING.
 		comp.setEnvironmentalStatus(envir[0]);
-		
-		//std::cout << "Total Creature Weight is: " << envir[0].fPopulationWeight << std::endl;
-
 #pragma endregion
 
 #pragma region COMPETITION_STAGE
@@ -261,7 +261,6 @@ int main()
 				j < allSpecies.aliveSpeciesVec.at(i).speciesMembership.size(); j++)
 			{
 				//generate a value of energy to remove from availability.
-				//float fEnergyLost = 50.0f;		//hard set FOR NOOOOOOOOOOOWWWWWWWW
 				float fEnergyLost = allSpecies.aliveSpeciesVec.at(i).speciesMembership.at(j).finalEnergyDemand;
 				if (envir[0].currentStatus != FAMINE)
 				{
@@ -290,7 +289,6 @@ int main()
 #pragma endregion
 
 #pragma region REPRODUCTION_STAGE
-
 		//********   SELECTION, CROSSOVER AND OFFSPRING CREATION STAGE   ********
 		//loop through the different species. 
 		for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
@@ -367,7 +365,6 @@ int main()
 		}
 
 		//add these offspring to their relevant species.
-		///ABSTRACT THE BELOW FUNCTION TO SOMETHING TO SO WITH SPECIES.
 		//ADD CREATURE TO RELEVANT SPECIES.
 		//iterate through current population and assign to relevant species.
 		for (int i = 0; i < vecOffspringPopulation.size(); i++)
@@ -419,11 +416,6 @@ int main()
 			//update species data, such as species average gene stack.
 			sp.updateSpeciesGeneStack(allSpecies.aliveSpeciesVec.at(i));
 			sp.updateSpeciesMembershipCounts(allSpecies.aliveSpeciesVec.at(i));
-
-			//display species data.
-			//ds.displaySpeciesPopulationInfo(allSpecies.aliveSpeciesVec.at(i));
-			//ds.displaySpeciesBirthDeathRates(allSpecies.aliveSpeciesVec.at(i));
-			//ds.displayGeneStackInfo(allSpecies.aliveSpeciesVec.at(i), allSpecies.aliveSpeciesVec.at(i).speciesGeneStack);
 		}
 #pragma endregion
 
@@ -431,25 +423,40 @@ int main()
 		for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
 			sp.updateSpeciesMembershipCounts(allSpecies.aliveSpeciesVec.at(i));
 
-
 		ds.cycleDisplay(i, allSpecies, envir[0]);
 		//********    END OF CYCLE - ABOUT TO REPEAT    ********
 	}
 
-	
 	std::cout << std::endl << std::endl << std::endl << "                            CYCLES OVER" << std::endl;
 	//TESTING --- display each species seed and end gene stacks.
+	std::cout << "THE MOST SUCCESSFUL SPECIES" << std::endl;
 	for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
 	{
-		ds.displayGeneStackChange(allSpecies.aliveSpeciesVec.at(i), allSpecies.aliveSpeciesVec.at(i).seedGeneStack,
-			allSpecies.aliveSpeciesVec.at(i).speciesGeneStack);
-		//display species data.
-		ds.displaySpeciesPopulationInfo(allSpecies.aliveSpeciesVec.at(i));	
-		std::cout << std::endl;
+		int count = 0;
+		if(allSpecies.aliveSpeciesVec.at(i).speciesMembership.size() >= 1000) {
+			ds.displayGeneStackChange(allSpecies.aliveSpeciesVec.at(i), allSpecies.aliveSpeciesVec.at(i).seedGeneStack,
+				allSpecies.aliveSpeciesVec.at(i).speciesGeneStack);
+			//display species data.
+			ds.displaySpeciesPopulationInfo(allSpecies.aliveSpeciesVec.at(i));	
+			std::cout << std::endl;
+			count++;
+		}
+
+		if (count == 0) 
+		{
+			if (allSpecies.aliveSpeciesVec.at(i).speciesMembership.size() >= 500) 
+			{
+				ds.displayGeneStackChange(allSpecies.aliveSpeciesVec.at(i), allSpecies.aliveSpeciesVec.at(i).seedGeneStack,
+					allSpecies.aliveSpeciesVec.at(i).speciesGeneStack);
+				//display species data.
+				ds.displaySpeciesPopulationInfo(allSpecies.aliveSpeciesVec.at(i));
+				std::cout << std::endl;
+				count++;
+			}
+		}
 	}
 	
 	std::cout << std::endl << std::endl << "                    ********    SIMULATION ENDED    ********" << std::endl;
 	genFunc->stop();
 }
-
 

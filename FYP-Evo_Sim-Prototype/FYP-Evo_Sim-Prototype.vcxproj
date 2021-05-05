@@ -177,10 +177,8 @@
     <ClCompile Include="src\fitness\temperatureFitnessTest.cpp" />
     <ClCompile Include="src\mechanics\competition.cpp" />
     <ClCompile Include="src\reproduction\crossover.cpp" />
-    <ClCompile Include="src\reproduction\elitismSelection.cpp" />
     <ClCompile Include="src\reproduction\mutation.cpp" />
     <ClCompile Include="src\reproduction\selection.cpp" />
-    <ClCompile Include="src\reproduction\verusSelection.cpp" />
     <ClCompile Include="tests.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -200,10 +198,8 @@
     <ClInclude Include="include\fitness\temperatureFitnessTest.h" />
     <ClInclude Include="include\mechanics\competition.h" />
     <ClInclude Include="include\reproduction\crossover.h" />
-    <ClInclude Include="include\reproduction\elitismSelection.h" />
     <ClInclude Include="include\reproduction\mutation.h" />
     <ClInclude Include="include\reproduction\selection.h" />
-    <ClInclude Include="include\reproduction\verusSelection.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

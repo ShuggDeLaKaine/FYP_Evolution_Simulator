@@ -75,9 +75,7 @@ struct CreatureSettings
 	uint32_t lifeMax = 6;				//!< setting var for creature creation, max life span.
 };
 
-/*	\class CreatureCreation
-*	\brief Class...
-*/
+
 class CreatureCreation
 {
 public:

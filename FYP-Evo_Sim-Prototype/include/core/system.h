@@ -6,9 +6,7 @@
 
 enum class SystemSignal { None = 0 };
 
-/** \class Interface
-*	\brief A class for all systems.
-*/
+
 class System
 {
 public:

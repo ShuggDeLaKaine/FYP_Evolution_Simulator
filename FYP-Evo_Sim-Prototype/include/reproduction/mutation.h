@@ -5,9 +5,6 @@
 #include "environments/environment.h"
 
 
-/*	\class Mutation
-*	\brief Class...
-*/
 class Mutation
 {
 public:

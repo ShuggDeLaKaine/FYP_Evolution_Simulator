@@ -11,8 +11,7 @@ Mutation::Mutation()
 }
 
 Mutation::~Mutation()
-{
-	//***NEED TO*** kill that shared pointer to the genFuncs 
+{ 
 
 }
 

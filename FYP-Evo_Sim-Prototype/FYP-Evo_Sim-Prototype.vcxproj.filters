@@ -78,12 +78,6 @@
     <ClCompile Include="src\reproduction\selection.cpp">
       <Filter>code\src</Filter>
     </ClCompile>
-    <ClCompile Include="src\reproduction\elitismSelection.cpp">
-      <Filter>code\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\reproduction\verusSelection.cpp">
-      <Filter>code\src</Filter>
-    </ClCompile>
     <ClCompile Include="src\reproduction\crossover.cpp">
       <Filter>code\src</Filter>
     </ClCompile>
@@ -138,12 +132,6 @@
       <Filter>code\include</Filter>
     </ClInclude>
     <ClInclude Include="include\reproduction\selection.h">
-      <Filter>code\include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\reproduction\elitismSelection.h">
-      <Filter>code\include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\reproduction\verusSelection.h">
       <Filter>code\include</Filter>
     </ClInclude>
     <ClInclude Include="include\reproduction\crossover.h">

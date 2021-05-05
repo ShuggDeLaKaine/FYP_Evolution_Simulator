@@ -35,7 +35,6 @@ void FullFitnessTest::creatureFitnessTests(CREAT &creature, Environment& environ
 void FullFitnessTest::creatureFitnessTests(CREAT & creature, Environment & environment, float energyReduction)
 {
 	//take the energy reduction from the available energy in the environment.
-	//environment.energyAvailable = environment.energyAvailable - energyReduction;
 	float fCompeteAvailableEnergy = environment.energyAvailable - energyReduction;
 
 	//check that the creature is alive to do checks on in the first place.

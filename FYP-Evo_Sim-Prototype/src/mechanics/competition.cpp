@@ -111,7 +111,6 @@ float Competition::getPopulationToCompete(int speciesMembershipSize, int sizeGen
 
 	case LARGE:
 		//update 'competing' var to apply the relevant size % multiplier.
-		//fToCompetePercent *= fLarge;
 		tempPercent *= fLarge;
 		//get final population number to compete by multiplying membership size by percentage to compete value.
 		iFinalPopToCompete = speciesMembershipSize * tempPercent;

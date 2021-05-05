@@ -3,9 +3,6 @@
 #include <stdint.h>
 
 
-/*	\class FitnessFunctions
-*	\brief Class...
-*/
 class FitnessFunctions
 {
 public:
