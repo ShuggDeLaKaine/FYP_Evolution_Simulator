@@ -127,15 +127,14 @@ int main()
 	//display required information about survival and populations.
 	///ds.displaySurvivedPercentage(envir[0], isAlive, populationSize);
 
-	std::cout << std::endl << "FIRST POPULATION" << std::endl;
-
+	/*
 	//loop through species and match with species ID, 
 	for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
 	{
 		ds.displaySpeciesPopulationInfo(allSpecies.aliveSpeciesVec.at(i));
 		std::cout << std::endl;
 	}
-
+	*/
 	std::cout << std::endl;
 #pragma endregion
 
@@ -144,22 +143,29 @@ int main()
 	//iterate over life cycles...
 	for (int i = 0; i < LIFE_CYCLES; i++)
 	{
-		/*
-		for(int j = 0; j < allSpecies.aliveSpeciesVec.size(); j++)
-		{
-			std::cout << "START OF CYCLE " << i << std::endl;
-			std::cout << "Species " << allSpecies.aliveSpeciesVec.at(j).speciesID <<" - Test value is: " << allSpecies.aliveSpeciesVec.at(j).test << std::endl;
-		}
-		*/
 		//clear the temp population vector, to refill again.
 		vecTempPopulation.clear();
-
 
 		//update the start of cycle species numbers.
 		sp.startCycleMemberships(allSpecies);
 		//reset the species cycle counts.
 		sp.resetCycleCounts(allSpecies);
 
+		if (i == 0)
+		{
+			std::cout << std::endl << "THE FIRST POPULATION" << std::endl;
+			//total number of species 
+			std::cout << "Total Number of Alive Species: " << allSpecies.aliveSpeciesVec.size() << std::endl;
+
+			int totalCreatures = 0;
+			for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
+				totalCreatures += allSpecies.aliveSpeciesVec.at(i).currentMembers;
+
+			ds.setLastCreatureNumber(totalCreatures);
+
+			std::cout << "Total Number of Creatures: " << totalCreatures << std::endl;
+		}
+		
 
 		//***NEW CYCLE*** - take a 1 off life spans.
 		for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
@@ -178,9 +184,6 @@ int main()
 				}
 			}
 		}
-
-		//keeping an tally of which life cycle it is.
-		std::cout << std::endl << "AFTER CYCLE: " << i + 1 << std::endl ;
 
 #pragma region FITNESS_TESTS
 		//SURVIVAL TEST STAGE...
@@ -221,15 +224,6 @@ int main()
 
 #pragma region WEIGHT_CALCULATIONS_&_ENVIRONMENTAL_STATUS_SETTING
 		//POPULATION WEIGHT CALCULATIONS.
-
-		//FOR TESTING...
-		//envir[0].fPopulationWeight = 500.0f;		//for ABUNDANCE
-		//envir[0].fPopulationWeight = 900.0f;		//for SUSTAINABLE
-		//envir[0].fPopulationWeight = 1100.0f;		//for PRESSURED
-		//envir[0].fPopulationWeight = 1400.0f;		//for CRITICAL
-		//envir[0].fPopulationWeight = 1700.0f;		//for FAMINE
-
-
 		//reset the population weight, ready to be weighed again.
 		envir[0].fPopulationWeight = 0.0f;
 
@@ -245,22 +239,10 @@ int main()
 				envir[0].fPopulationWeight += fTotalSpeciesWeight;
 			}
 		} 
-
-		std::cout << "Total Creature Weight is: " << envir[0].fPopulationWeight << std::endl;
-
 		//ENVIRONMENT STATUS SETTING.
 		comp.setEnvironmentalStatus(envir[0]);
-		std::cout << "Current Environmental Status is: ";
-		if(envir[0].currentStatus == 0)
-			std::cout << "ABUNDANCE" << std::endl;
-		else if(envir[0].currentStatus == 1)
-			std::cout << "SUSTAINABLE" << std::endl;
-		else if (envir[0].currentStatus == 2)
-			std::cout << "PRESSURED" << std::endl;
-		else if (envir[0].currentStatus == 3)
-			std::cout << "CRITICAL" << std::endl;
-		else if (envir[0].currentStatus == 4)
-			std::cout << "FAMINE" << std::endl;
+		
+		//std::cout << "Total Creature Weight is: " << envir[0].fPopulationWeight << std::endl;
 
 #pragma endregion
 
@@ -381,10 +363,6 @@ int main()
 				vecOffspringPopulation.erase(vecOffspringPopulation.begin() + i);
 				//vector would have skrunk, begin i back down with it.
 				i--;
-				//update testing vars.
-				///BELOW DON'T WORK, SHOULDN'T BE HERE, THE (i) ISN'T EVEN FOR THE aliveSpeciesVec, GOES WAY OUT OF RANGE.
-				//allSpecies.aliveSpeciesVec.at(i).cycleTotalDeadCount++;
-				//allSpecies.aliveSpeciesVec.at(i).cycleFailedFitnessDeadCount++;
 			}
 		}
 
@@ -443,8 +421,8 @@ int main()
 			sp.updateSpeciesMembershipCounts(allSpecies.aliveSpeciesVec.at(i));
 
 			//display species data.
-			ds.displaySpeciesPopulationInfo(allSpecies.aliveSpeciesVec.at(i));
-			ds.displaySpeciesBirthDeathRates(allSpecies.aliveSpeciesVec.at(i));
+			//ds.displaySpeciesPopulationInfo(allSpecies.aliveSpeciesVec.at(i));
+			//ds.displaySpeciesBirthDeathRates(allSpecies.aliveSpeciesVec.at(i));
 			//ds.displayGeneStackInfo(allSpecies.aliveSpeciesVec.at(i), allSpecies.aliveSpeciesVec.at(i).speciesGeneStack);
 		}
 #pragma endregion
@@ -453,9 +431,12 @@ int main()
 		for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
 			sp.updateSpeciesMembershipCounts(allSpecies.aliveSpeciesVec.at(i));
 
+
+		ds.cycleDisplay(i, allSpecies, envir[0]);
 		//********    END OF CYCLE - ABOUT TO REPEAT    ********
 	}
 
+	
 	std::cout << std::endl << std::endl << std::endl << "                            CYCLES OVER" << std::endl;
 	//TESTING --- display each species seed and end gene stacks.
 	for (int i = 0; i < allSpecies.aliveSpeciesVec.size(); i++)
@@ -463,10 +444,12 @@ int main()
 		ds.displayGeneStackChange(allSpecies.aliveSpeciesVec.at(i), allSpecies.aliveSpeciesVec.at(i).seedGeneStack,
 			allSpecies.aliveSpeciesVec.at(i).speciesGeneStack);
 		//display species data.
-		ds.displaySpeciesPopulationInfo(allSpecies.aliveSpeciesVec.at(i));	///ISSUE HERE, NUMBERS AREN'T CORRECT.
+		ds.displaySpeciesPopulationInfo(allSpecies.aliveSpeciesVec.at(i));	
 		std::cout << std::endl;
 	}
-
+	
 	std::cout << std::endl << std::endl << "                    ********    SIMULATION ENDED    ********" << std::endl;
 	genFunc->stop();
 }
+
+

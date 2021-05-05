@@ -21,7 +21,11 @@ public:
 	void displayGeneStackInfo(SpeciesInfo species, std::vector<float> geneStack);	//!< display gene stack information.
 	void displayGeneStackChange(SpeciesInfo species, std::vector<float> geneStackSeed, std::vector<float> geneStackCurrent);	//!< display difference value in gene stacks.
 
+	void cycleDisplay(uint32_t cycleNum, AllSpecies allspec, Environment envir);
+
+	inline void setLastCreatureNumber(int lastNumber) { lastCycleCreatureNumber = lastNumber; };
 private:
+	int lastCycleCreatureNumber = 0;			//!<
 	CreatureCreation cc;						//!< ref to creature creation.
 	SpeciesInfo si;								//!< ref to species info.
 	std::shared_ptr<GeneralFunctions> genFunc;	//!< ref to general functions.

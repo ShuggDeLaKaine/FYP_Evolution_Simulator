@@ -72,18 +72,18 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\FYP-Evo_Sim-Prototype\include;$(IncludePath)</IncludePath>
-    <SourcePath>C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\FYP-Evo_Sim-Prototype\src;$(SourcePath)</SourcePath>
-    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\FYP-Evo_Sim-Prototype\include</IncludePath>
+    <SourcePath>$(SolutionDir)\FYP-Evo_Sim-Prototype\src</SourcePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\FYP-Evo_Sim-Prototype\include;$(IncludePath)</IncludePath>
-    <SourcePath>C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\FYP-Evo_Sim-Prototype\src;$(SourcePath)</SourcePath>
-    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\FYP-Evo_Sim-Prototype\include</IncludePath>
+    <SourcePath>$(SolutionDir)\FYP-Evo_Sim-Prototype\src</SourcePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -97,13 +97,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\Resources\OpenGL\GLEW\include\GL;C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\Resources\OpenGL\GLFW\include\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\Resources\OpenGL\GLEW\lib\Release\Win32;C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\Resources\OpenGL\GLFW\lib-vc2015</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32s.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -132,15 +133,16 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\Resources\OpenGL\GLEW\include\GL;C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\Resources\OpenGL\GLFW\include\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\Resources\OpenGL\GLEW\lib\Release\Win32;C:\Users\tomho\OneDrive\Documents\University\Year_3\_Final_Year_Development_Project\Tom_Hodgson\Development\Code\FYP-Evo_Sim-Prototype\Resources\OpenGL\GLFW\lib-vc2015</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32s.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -202,11 +204,6 @@
     <ClInclude Include="include\reproduction\mutation.h" />
     <ClInclude Include="include\reproduction\selection.h" />
     <ClInclude Include="include\reproduction\verusSelection.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="glew32.dll" />
-    <None Include="include\core\glew32.dll" />
-    <None Include="src\core\glew32.dll" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

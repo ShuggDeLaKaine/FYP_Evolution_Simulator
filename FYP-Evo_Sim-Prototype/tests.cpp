@@ -10,6 +10,15 @@ TEST()
 
 */
 
+
+
+//FOR TESTING...
+//envir[0].fPopulationWeight = 500.0f;		//for ABUNDANCE
+//envir[0].fPopulationWeight = 900.0f;		//for SUSTAINABLE
+//envir[0].fPopulationWeight = 1100.0f;		//for PRESSURED
+//envir[0].fPopulationWeight = 1400.0f;		//for CRITICAL
+//envir[0].fPopulationWeight = 1700.0f;		//for FAMINE
+
 /* //ESPECIALLY USEFUL FOR COMPARING THE HIGHEST DIFFERENCE TO THE MUTATION INTENSITY.
 	//testing mutation chance & intensity functions.
 	float testRuns = 1000000;

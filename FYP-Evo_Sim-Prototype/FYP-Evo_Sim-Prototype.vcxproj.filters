@@ -153,9 +153,4 @@
       <Filter>code\include</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="src\core\glew32.dll" />
-    <None Include="include\core\glew32.dll" />
-    <None Include="glew32.dll" />
-  </ItemGroup>
 </Project>
