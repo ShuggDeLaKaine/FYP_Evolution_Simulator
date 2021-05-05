@@ -124,12 +124,14 @@ int main()
 
 #pragma region USER_INPUT_CYCLES
 	std::cout << "Please choose how many LIFE CYCLES you would like to simulation to run..." << std::endl;
-	std::cout << "If unsure, 10, 15 or 20 are suggested as appropriate life cycles to run." << std::endl;
+	std::cout << "If unsure, 20 is suggested as appropriate life cycles to run." << std::endl;
 	int num;
 	std::cin >> num;
-	if(!num)
+	if(!std::cin)
 	{
-		LIFE_CYCLES = 10;
+		std::cout << "Not an integar, set to 20 life cycles" << std::endl;
+		LIFE_CYCLES = 20;
+		std::cin.ignore();	//clear the buffer for the previously entered line.
 	}
 	else if (num > 0 && num <= 100)
 	{
@@ -140,6 +142,7 @@ int main()
 		std::cout << "More than 100 life cycles is a long simulations, set to 100" << std::endl;
 		LIFE_CYCLES = 100;
 	}
+	std::cin.ignore();	//clear the buffer for the previously entered line.
 #pragma endregion
 
 //                                 ************    MAIN PART - LIFE CYCLE STAGE    ************
