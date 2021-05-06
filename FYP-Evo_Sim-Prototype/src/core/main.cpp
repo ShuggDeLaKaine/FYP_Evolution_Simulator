@@ -1,5 +1,10 @@
 /** \file main.cpp */
 #include "core/main.h"
+#include <stdlib.h>
+
+#ifdef _WIN32
+#define WINPAUSE system("pause")
+#endif
 
 
 int main()
@@ -461,5 +466,7 @@ int main()
 	
 	std::cout << std::endl << std::endl << "                    ********    SIMULATION ENDED    ********" << std::endl;
 	genFunc->stop();
+	WINPAUSE;
+	return 0;
 }
 
